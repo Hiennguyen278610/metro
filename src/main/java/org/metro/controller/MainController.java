@@ -31,8 +31,8 @@ public class MainController implements MouseInputListener {
             frame.showThongKeContent();
         } else if (e.getSource() == frame.getLichTrinhPanel()) {
             frame.showLichTrinhContent();
-        } else if (e.getSource() == frame.getGiaVePanel()) {
-            frame.showGiaVeContent();
+        } else if (e.getSource() == frame.getMuaVePanel()) {
+            frame.showMuaVeContent();
         }
         PanelDangChon = ((JPanel) e.getSource());
         frame.resetPanel();

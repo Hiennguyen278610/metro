@@ -18,11 +18,11 @@ public class MainFrame extends JFrame {
     private JPanel ThongKePanel;
     private JPanel DangXuatPanel;
     private JPanel LichTrinhPanel;
-    private JPanel GiaVePanel;
+    private JPanel MuaVePanel;
     private JPanel TuyenDuongContent;
     private JPanel ThongKeContent;
     private JPanel LichTrinhContent;
-    private JPanel GiaVeContent;
+    private JPanel MuaVeContent;
     private CardLayout cardLayout;
     private JPanel rightPanel;
 
@@ -132,24 +132,24 @@ public class MainFrame extends JFrame {
         LichTrinhIcon.setBounds(20, 20, 40, 40);
         LichTrinhPanel.add(LichTrinhIcon);
 
-        GiaVePanel = new JPanel();
-        GiaVePanel.setBounds(10, 280, 280, 80);
-        GiaVePanel.setLayout(null);
-        GiaVePanel.setBackground(Color.decode("#93BFCF"));
-        GiaVePanel.addMouseListener(controller);
-        ChucNangPanel.add(GiaVePanel);
+        MuaVePanel = new JPanel();
+        MuaVePanel.setBounds(10, 280, 280, 80);
+        MuaVePanel.setLayout(null);
+        MuaVePanel.setBackground(Color.decode("#93BFCF"));
+        MuaVePanel.addMouseListener(controller);
+        ChucNangPanel.add(MuaVePanel);
 
-        JLabel GiaVeLabel = new JLabel("GIÁ VÉ");
+        JLabel GiaVeLabel = new JLabel("MUA VÉ");
         GiaVeLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         GiaVeLabel.setBounds(80, 22, 160, 30);
-        GiaVePanel.add(GiaVeLabel);
+        MuaVePanel.add(GiaVeLabel);
 
         ImageIcon iconGiaVe = new ImageIcon(
                 new ImageIcon("assets/icons/ticket.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
         JLabel GiaVeIcon = new JLabel(iconGiaVe, JLabel.CENTER);
         GiaVeIcon.setForeground(Color.white);
         GiaVeIcon.setBounds(20, 20, 40, 40);
-        GiaVePanel.add(GiaVeIcon);
+        MuaVePanel.add(GiaVeIcon);
 
         DangXuatPanel = new JPanel();
         DangXuatPanel.setBounds(10, 550, 280, 80);
@@ -189,10 +189,10 @@ public class MainFrame extends JFrame {
         LichTrinhContent.setBackground(Color.white);
         rightPanel.add(LichTrinhContent, "Lichtrinh");
 
-        GiaVeContent = new JPanel();
-        GiaVeContent.add(new JLabel("Giave"));
-        GiaVeContent.setBackground(Color.white);
-        rightPanel.add(GiaVeContent, "Giave");
+        MuaVeContent = new JPanel();
+        MuaVeContent.add(new JLabel("Muave"));
+        MuaVeContent.setBackground(Color.white);
+        rightPanel.add(MuaVeContent, "Muave");
     }
 
     public void resetPanel() {
@@ -200,7 +200,7 @@ public class MainFrame extends JFrame {
         ThongKePanel.setBackground(Color.decode("#93BFCF"));
         DangXuatPanel.setBackground(Color.decode("#93BFCF"));
         LichTrinhPanel.setBackground(Color.decode("#93BFCF"));
-        GiaVePanel.setBackground(Color.decode("#93BFCF"));
+        MuaVePanel.setBackground(Color.decode("#93BFCF"));
     }
 
     public static void main(String[] args) {
@@ -238,16 +238,16 @@ public class MainFrame extends JFrame {
         cardLayout.show(this.rightPanel, "Lichtrinh");
     }
 
-    public void showGiaVeContent() {
-        cardLayout.show(this.rightPanel, "Giave");
+    public void showMuaVeContent() {
+        cardLayout.show(this.rightPanel, "Muave");
     }
 
     public JPanel getLichTrinhPanel() {
         return LichTrinhPanel;
     }
 
-    public JPanel getGiaVePanel() {
-        return GiaVePanel;
+    public JPanel getMuaVePanel() {
+        return MuaVePanel;
     }
 
 }

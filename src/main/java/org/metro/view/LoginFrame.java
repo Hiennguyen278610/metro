@@ -20,7 +20,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
 
 public class LoginFrame extends JFrame {
-    private JButton DangNhapButton;
+    private JPanel DangNhapButton;
     private JLabel TaoTaiKhoan;
 
     public LoginFrame() {
@@ -103,9 +103,13 @@ public class LoginFrame extends JFrame {
         HienMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         rightContent.add(HienMatKhau);
 
-        DangNhapButton = new JButton("ĐĂNG NHẬP");
-        DangNhapButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        DangNhapButton.setForeground(Color.white);
+        DangNhapButton = new JPanel();
+        DangNhapButton.setLayout(null);
+        JLabel DangNhapText = new JLabel("ĐĂNG NHẬP");
+        DangNhapText.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        DangNhapText.setForeground(Color.white);
+        DangNhapText.setBounds(95, 10, 200, 30);
+        DangNhapButton.add(DangNhapText);
         DangNhapButton.setBackground(MainColor);
         DangNhapButton.setBounds(60, 330, 310, 50);
         DangNhapButton.addMouseListener(controller);
@@ -217,7 +221,7 @@ public class LoginFrame extends JFrame {
         }
     }
 
-    public JButton getDangNhapButton() {
+    public JPanel getDangNhapButton() {
         return DangNhapButton;
     }
 
