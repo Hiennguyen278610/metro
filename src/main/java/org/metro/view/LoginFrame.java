@@ -4,17 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import org.metro.controller.LoginController;
+import org.metro.util.DatabaseUtils;
+import org.metro.service.UserService;
 
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
@@ -94,7 +88,7 @@ public class LoginFrame extends JFrame {
         JPasswordField MatKhauField = new JPasswordField("Nhập mật khẩu ...");
         rightContent.add(MatKhauField);
         MatKhauField.setBounds(60, 250, 310, 30);
-        MatKhauField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        MatKhauField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         MatKhauField.setForeground(Color.GRAY);
         MatKhauField.setEchoChar((char) 0);
 
@@ -168,7 +162,7 @@ public class LoginFrame extends JFrame {
     private class TaoTaiKhoanDialog extends JDialog {
         public TaoTaiKhoanDialog(JFrame parent) {
             super(parent, "Dang ky", true);
-            setSize(500, 400);
+            setSize(500, 500);
             setLocationRelativeTo(null);
             // setLocationRelativeTo(null);
             this.init();
@@ -188,31 +182,160 @@ public class LoginFrame extends JFrame {
             contentPane.add(TaoTaiKhoanLabel);
 
             JLabel SDTLabel = new JLabel("Số điện thoại:");
-            SDTLabel.setBounds(40, 70, 150, 20);
-            SDTLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            SDTLabel.setForeground(MainColor);
+            SDTLabel.setBounds(100, 60, 200, 30);
+            SDTLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
             contentPane.add(SDTLabel);
 
-            JLabel EmailLabel = new JLabel("Email:");
-            EmailLabel.setBounds(40, 120, 150, 20);
-            EmailLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            contentPane.add(EmailLabel);
+            JLabel TenDangNhapLabel = new JLabel("Tên đăng nhập :");
+            TenDangNhapLabel.setForeground(MainColor);
+            TenDangNhapLabel.setBounds(100, 120, 200, 30);
+            TenDangNhapLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            contentPane.add(TenDangNhapLabel);
 
             JLabel MatKhauLabel = new JLabel("Mật khẩu:");
-            MatKhauLabel.setBounds(40, 170, 150, 20);
-            MatKhauLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            MatKhauLabel.setForeground(MainColor);
+            MatKhauLabel.setBounds(100, 180, 200, 30);
+            MatKhauLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
             contentPane.add(MatKhauLabel);
 
             JLabel NhatLaiMatKhauLabel = new JLabel("Nhập lại mật khẩu:");
-            NhatLaiMatKhauLabel.setBounds(40, 220, 150, 20);
-            NhatLaiMatKhauLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            NhatLaiMatKhauLabel.setForeground(MainColor);
+            NhatLaiMatKhauLabel.setBounds(100, 240, 200, 30);
+            NhatLaiMatKhauLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
             contentPane.add(NhatLaiMatKhauLabel);
 
+            //text field from sign up
+            JTextField SDTField = new JTextField("Nhập số điện thoại....");
+            SDTField.setForeground(Color.GRAY);
+            SDTField.setBounds(100, 90, 300, 30);
+            SDTField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            contentPane.add(SDTField);
+
+            JTextField TenDangNhapField = new JTextField("Nhập tên đăng nhập...");
+            TenDangNhapField.setForeground(Color.GRAY);
+            TenDangNhapField.setBounds(100, 150, 300, 30);
+            TenDangNhapField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            contentPane.add(TenDangNhapField);
+
+            JPasswordField MatKhauField = new JPasswordField("Nhập mật khẩu...");
+            MatKhauField.setForeground(Color.GRAY);
+            MatKhauField.setBounds(100,210,300,30);
+            MatKhauField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            MatKhauField.setEchoChar((char) 0);
+            contentPane.add(MatKhauField);
+
+            JPasswordField NhapLaiMatKhauField = new JPasswordField("Nhập lại mật khẩu...");
+            NhapLaiMatKhauField.setForeground(Color.GRAY);
+            NhapLaiMatKhauField.setBounds(100,270,300,30);
+            NhapLaiMatKhauField.setEchoChar((char) 0);
+            NhapLaiMatKhauField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            contentPane.add(NhapLaiMatKhauField);
+
             JButton DangKyButton = new JButton("ĐĂNG KÝ");
-            DangKyButton.setBounds(170, 270, 160, 40);
+            DangKyButton.setBounds(100, 315, 300, 40);
             DangKyButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
             DangKyButton.setForeground(Color.white);
             DangKyButton.setBackground(MainColor);
             contentPane.add(DangKyButton);
+
+            DangKyButton.addActionListener(e -> {
+                String sodienthoai = SDTField.getText();
+                String tenDangNhap = TenDangNhapField.getText();
+                String matKhau = String.valueOf(MatKhauField.getPassword());
+                String nhaplaimatkhau = String.valueOf(NhapLaiMatKhauField.getPassword());
+
+                if(!matKhau.equals(nhaplaimatkhau)) {
+                    JOptionPane.showMessageDialog(this,"mật khẩu không khớp","Thông báo",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                UserService user = new UserService();
+                boolean check = user.DangKy(tenDangNhap,matKhau);
+
+                if(check) {
+                    JOptionPane.showMessageDialog(this,"Đăng ký thành công ","thông báo",JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                }else {
+                    JOptionPane.showMessageDialog(this,"Đăng ký không thành công","thông báo",JOptionPane.ERROR_MESSAGE);
+                }
+            });
+
+            SDTField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if(SDTField.getText().equals("Nhập số điện thoại....")) {
+                        SDTField.setText("");
+                        SDTField.setForeground(Color.BLACK);
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if(SDTField.getText().equals("")) {
+                        SDTField.setText("Nhập số điện thoại....");
+                        SDTField.setForeground(Color.GRAY);
+                    }
+                }
+            });
+
+            TenDangNhapField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if(TenDangNhapField.getText().equals("Nhập tên đăng nhập...")) {
+                        TenDangNhapField.setText("");
+                        TenDangNhapField.setForeground(Color.BLACK);
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if(TenDangNhapField.getText().equals("")) {
+                        TenDangNhapField.setText("Nhập tên đăng nhập...");
+                        TenDangNhapField.setForeground(Color.GRAY);
+                    }
+                }
+            });
+
+            MatKhauField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if(String.valueOf(MatKhauField.getPassword()).equals("Nhập mật khẩu...")) {
+                        MatKhauField.setText("");
+                        MatKhauField.setForeground(Color.BLACK);
+                        MatKhauField.setEchoChar('*');
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if(String.valueOf(MatKhauField.getPassword()).equals("")) {
+                        MatKhauField.setText("Nhập mật khẩu...");
+                        MatKhauField.setForeground(Color.GRAY);
+                        MatKhauField.setEchoChar((char) 0);
+                    }
+                }
+            });
+
+            NhapLaiMatKhauField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    if(String.valueOf(NhapLaiMatKhauField.getPassword()).equals("Nhập lại mật khẩu...")) {
+                        NhapLaiMatKhauField.setText("");
+                        NhapLaiMatKhauField.setForeground(Color.BLACK);
+                        NhapLaiMatKhauField.setEchoChar('*');
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    if(String.valueOf(NhapLaiMatKhauField.getPassword()).equals("")) {
+                        NhapLaiMatKhauField.setText("Nhập lại mật khẩu...");
+                        NhapLaiMatKhauField.setForeground(Color.GRAY);
+                        NhapLaiMatKhauField.setEchoChar((char) 0);
+                    }
+                }
+            });
         }
     }
 
