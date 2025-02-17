@@ -32,24 +32,20 @@ public class LoginController implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        ((JPanel) e.getSource()).setBackground(Color.decode("#80A6C4"));
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        ((JPanel) e.getSource()).setBackground(Color.decode("#6096B4"));
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         e.getComponent().setCursor(new Cursor(Cursor.HAND_CURSOR));
-        ((JPanel) e.getSource()).setBackground(Color.decode("#6F9FBF"));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         e.getComponent().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        ((JPanel) e.getSource()).setBackground(Color.decode("#6096B4"));
     }
 
     @Override

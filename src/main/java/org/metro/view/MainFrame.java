@@ -28,6 +28,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         setSize(1200, 800);
+        setTitle("Quan ly Metro");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
