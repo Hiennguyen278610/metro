@@ -20,6 +20,12 @@
             <artifactId>material-ui-swing</artifactId>
             <version>1.1.4</version>
         </dependency>
-    </dependencies>
+        <!-- add dependency for MYsql Connector\n-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
 
+    </dependencies>
 </project>
