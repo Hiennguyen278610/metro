@@ -32,12 +32,10 @@ public class LoginController implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        ((JPanel) e.getSource()).setBackground(Color.decode("#80A6C4"));
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        ((JPanel) e.getSource()).setBackground(Color.decode("#6096B4"));
     }
 
     @Override
@@ -48,6 +46,8 @@ public class LoginController implements MouseInputListener {
         } catch (Exception ex) {
             System.err.println("Loi ep kieu: " + ex.getMessage());
         }
+
+
     }
 
     @Override

@@ -14,11 +14,11 @@ import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
 
 public class LoginFrame extends JFrame {
-    private JPanel DangNhapButton;
+    private JButton DangNhapButton;
     private JLabel TaoTaiKhoan;
 
     public LoginFrame() {
-        this.setTitle("Quan ly linh kien dien tu");
+        this.setTitle("Quan ly Metro");
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -38,7 +38,7 @@ public class LoginFrame extends JFrame {
         leftContent.setLayout(null);
 
         ImageIcon iconThuVien = new ImageIcon(
-                new ImageIcon("assets/icons/train-station.png").getImage().getScaledInstance(220, 220,
+                new ImageIcon("../assets/icons/train-station.png").getImage().getScaledInstance(220, 220,
                         Image.SCALE_SMOOTH));
         JLabel ThuVien = new JLabel(iconThuVien, JLabel.CENTER);
         ThuVien.setBounds(70, 100, 220, 220);
@@ -97,13 +97,8 @@ public class LoginFrame extends JFrame {
         HienMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         rightContent.add(HienMatKhau);
 
-        DangNhapButton = new JPanel();
-        DangNhapButton.setLayout(null);
-        JLabel DangNhapText = new JLabel("ĐĂNG NHẬP");
-        DangNhapText.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        DangNhapText.setForeground(Color.white);
-        DangNhapText.setBounds(95, 10, 200, 30);
-        DangNhapButton.add(DangNhapText);
+        DangNhapButton = new JButton("Đăng nhập");
+        DangNhapButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
         DangNhapButton.setBackground(MainColor);
         DangNhapButton.setBounds(60, 330, 310, 50);
         DangNhapButton.addMouseListener(controller);
@@ -344,7 +339,7 @@ public class LoginFrame extends JFrame {
         }
     }
 
-    public JPanel getDangNhapButton() {
+    public JButton getDangNhapButton() {
         return DangNhapButton;
     }
 
