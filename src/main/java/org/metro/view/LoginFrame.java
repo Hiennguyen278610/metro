@@ -7,7 +7,6 @@ import java.awt.Image;
 import javax.swing.*;
 
 import org.metro.controller.LoginController;
-import org.metro.util.DatabaseUtils;
 import org.metro.service.UserService;
 
 import java.awt.event.FocusListener;
