@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -12,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.metro.controller.MainController;
+
+import com.kitfox.svg.app.beans.SVGIcon;
 
 public class MainFrame extends JFrame {
     private JPanel TuyenDuongPanel;
@@ -25,11 +28,18 @@ public class MainFrame extends JFrame {
     private JPanel MuaVeContent;
     private CardLayout cardLayout;
     private JPanel rightPanel;
+    private JPanel navbarPanel;
+    private JPanel ExitButton;
+    private JPanel MinimizeButton;
+    private JLabel ExitIcon;
+    private JLabel MinimizeIcon;
 
     public MainFrame() {
         setSize(1200, 800);
+        setTitle("Quan ly Metro");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setVisible(true);
         this.init();
     }
@@ -38,14 +48,48 @@ public class MainFrame extends JFrame {
         JPanel mainPanel = new JPanel();
         this.setContentPane(mainPanel);
         mainPanel.setLayout(null);
+
+        // Navbar
+        navbarPanel = new JPanel();
+        navbarPanel.setBounds(0, 0, 1200, 40);
+        navbarPanel.setBackground(Color.pink);
+        navbarPanel.setLayout(null);
+        mainPanel.add(navbarPanel);
+
+        ExitButton = new JPanel();
+        ExitButton.setBounds(1160, 0, 40, 40);
+        ExitButton.setBackground(Color.pink);
+        ExitButton.addMouseListener(new MainController(this));
+        navbarPanel.add(ExitButton);
+
+        ExitIcon = new JLabel("X");
+        ExitIcon.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        ExitIcon.setForeground(Color.white);
+        ExitIcon.setBounds(0, 0, 40, 40);
+        ExitButton.add(ExitIcon);
+
+        MinimizeButton = new JPanel();
+        MinimizeButton.setBounds(1120, 0, 40, 40);
+        MinimizeButton.setBackground(Color.pink);
+        MinimizeButton.addMouseListener(new MainController(this));
+        navbarPanel.add(MinimizeButton);
+
+        MinimizeIcon = new JLabel("-");
+        MinimizeIcon.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        MinimizeIcon.setForeground(Color.white);
+        MinimizeIcon.setBounds(0, 0, 40, 40);
+        MinimizeButton.add(MinimizeIcon);
+
+        // Left Panel
         JPanel leftPanel = new JPanel();
-        leftPanel.setBounds(0, 0, 300, 800);
+        leftPanel.setBounds(0, 40, 300, 760);
         leftPanel.setBackground(Color.white);
         leftPanel.setLayout(null);
         mainPanel.add(leftPanel);
 
+        // Right Panel
         rightPanel = new JPanel();
-        rightPanel.setBounds(300, 0, 900, 800);
+        rightPanel.setBounds(300, 40, 900, 760);
         rightPanel.setLayout(null);
         mainPanel.add(rightPanel);
 
@@ -163,11 +207,14 @@ public class MainFrame extends JFrame {
         DangXuatLabel.setBounds(80, 22, 160, 30);
         DangXuatPanel.add(DangXuatLabel);
 
-        ImageIcon iconDangXuat = new ImageIcon(
-                new ImageIcon("assets/icons/previous.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        JLabel DangXuatIcon = new JLabel(iconDangXuat, JLabel.CENTER);
-        DangXuatIcon.setForeground(Color.white);
-        DangXuatIcon.setBounds(20, 20, 40, 40);
+        // Tạo SVGIcon từ file
+        SVGIcon svgIcon = new SVGIcon();
+        svgIcon.setSvgURI(new File("src/main/java/org/metro/assets/icons/back-button.svg").toURI());
+
+        JLabel DangXuatIcon = new JLabel(svgIcon, JLabel.CENTER);
+        // JLabel DangXuatIcon = new JLabel(iconDangXuat, JLabel.CENTER);
+        DangXuatIcon.setForeground(Color.pink);
+        DangXuatIcon.setBounds(0, 0, 40, 40);
         DangXuatPanel.add(DangXuatIcon);
 
         // Phần nội dung bên phải
@@ -248,6 +295,22 @@ public class MainFrame extends JFrame {
 
     public JPanel getMuaVePanel() {
         return MuaVePanel;
+    }
+
+    public JPanel getExitButton() {
+        return ExitButton;
+    }
+
+    public JPanel getMinimizeButton() {
+        return MinimizeButton;
+    }
+
+    public JLabel getExitIcon() {
+        return ExitIcon;
+    }
+
+    public JLabel getMinimizeIcon() {
+        return MinimizeIcon;
     }
 
 }
