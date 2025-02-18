@@ -2,6 +2,7 @@ package org.metro.controller;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Frame;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
@@ -33,6 +34,10 @@ public class MainController implements MouseInputListener {
             frame.showLichTrinhContent();
         } else if (e.getSource() == frame.getMuaVePanel()) {
             frame.showMuaVeContent();
+        } else if (e.getSource() == frame.getExitButton()) {
+            frame.dispose();
+        } else if (e.getSource() == frame.getMinimizeButton()) {
+            frame.setState(Frame.ICONIFIED);
         }
         PanelDangChon = ((JPanel) e.getSource());
         frame.resetPanel();
