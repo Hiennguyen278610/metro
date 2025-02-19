@@ -12,7 +12,7 @@ public class UserController implements ActionListener {
 
     }
 
-    public boolean handleDangKy(String TenDangNhap,String matKhau) {
-        return userService.DangKy(TenDangNhap,matKhau);
-    }
+//    public boolean handleDangKy(String TenDangNhap,String matKhau,String sodienthoai) {
+//        return userService.DangKy(TenDangNhap,matKhau,sodienthoai);
+//    }
 }

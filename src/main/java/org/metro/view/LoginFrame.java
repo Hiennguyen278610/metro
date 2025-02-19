@@ -8,7 +8,6 @@ import javax.swing.*;
 
 import org.metro.Main;
 import org.metro.controller.LoginController;
-import org.metro.util.DatabaseUtils;
 import org.metro.service.UserService;
 
 import java.awt.event.FocusListener;
@@ -280,7 +279,7 @@ public class LoginFrame extends JFrame {
                 }
 
                 UserService user = new UserService();
-                boolean check = user.DangKy(tenDangNhap, matKhau);
+                boolean check = user.DangKy(tenDangNhap, matKhau,sodienthoai);
 
                 if (check) {
                     JOptionPane.showMessageDialog(this, "Đăng ký thành công ", "thông báo",
