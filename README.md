@@ -10,6 +10,7 @@
     5.trong file config.properties thay đổi your_user + your_password của mình vào 
     6.ấn lưu sau đó vào file .gitignore kiểm tra xem có dòng này không ? src/main/resources/config.properties nếu 
     có thì ấn ctrl + s lại là được 
+    7. trong file sql tao database la quanlymetro
 
 ## note
     1.nếu kết nối thành công rồi thì thử git status xong kiểm tra cái src/main/resources/config.properties có hiện không
