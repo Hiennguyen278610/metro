@@ -279,7 +279,7 @@ public class LoginFrame extends JFrame {
                 }
 
                 UserService user = new UserService();
-                boolean check = user.DangKy(tenDangNhap, matKhau);
+                boolean check = user.DangKy(tenDangNhap, matKhau,sodienthoai);
 
                 if (check) {
                     JOptionPane.showMessageDialog(this, "Đăng ký thành công ", "thông báo",
