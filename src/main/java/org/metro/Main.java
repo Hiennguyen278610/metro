@@ -1,5 +1,7 @@
 package org.metro;
 
+import java.awt.Color;
+
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;

@@ -17,6 +17,7 @@ public class MainController implements MouseInputListener {
 
     public MainController(MainFrame frame) {
         this.frame = frame;
+        PanelDangChon = frame.getTuyenDuongPanel();
     }
 
     @Override
@@ -47,12 +48,12 @@ public class MainController implements MouseInputListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        ((JPanel) e.getSource()).setBackground(Color.decode("#80A6C4"));
+        // ((JPanel) e.getSource()).setBackground(Color.decode("#80A6C4"));
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        ((JPanel) e.getSource()).setBackground(Color.decode("#6096B4"));
+        // ((JPanel) e.getSource()).setBackground(Color.decode("#6096B4"));
     }
 
     @Override
