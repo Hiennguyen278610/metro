@@ -6,7 +6,6 @@ import java.awt.Image;
 
 import javax.swing.*;
 
-import org.metro.Main;
 import org.metro.controller.LoginController;
 import org.metro.service.UserService;
 
