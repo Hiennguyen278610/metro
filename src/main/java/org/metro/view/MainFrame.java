@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,7 +13,7 @@ import javax.swing.SwingUtilities;
 
 import org.metro.controller.MainController;
 
-import com.kitfox.svg.app.beans.SVGIcon;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 public class MainFrame extends JFrame {
     private JPanel TuyenDuongPanel;
@@ -40,13 +39,15 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setVisible(true);
         this.init();
+        setVisible(true);
     }
 
     private void init() {
         JPanel mainPanel = new JPanel();
         this.setContentPane(mainPanel);
+        Color MainColor = Color.decode("#6096B4");
+        MainController controller = new MainController(this);
         mainPanel.setLayout(null);
 
         // Navbar
@@ -59,7 +60,7 @@ public class MainFrame extends JFrame {
         ExitButton = new JPanel();
         ExitButton.setBounds(1160, 0, 40, 40);
         ExitButton.setBackground(Color.pink);
-        ExitButton.addMouseListener(new MainController(this));
+        ExitButton.addMouseListener(controller);
         navbarPanel.add(ExitButton);
 
         ExitIcon = new JLabel("X");
@@ -71,7 +72,7 @@ public class MainFrame extends JFrame {
         MinimizeButton = new JPanel();
         MinimizeButton.setBounds(1120, 0, 40, 40);
         MinimizeButton.setBackground(Color.pink);
-        MinimizeButton.addMouseListener(new MainController(this));
+        MinimizeButton.addMouseListener(controller);
         navbarPanel.add(MinimizeButton);
 
         MinimizeIcon = new JLabel("-");
@@ -92,9 +93,6 @@ public class MainFrame extends JFrame {
         rightPanel.setBounds(300, 40, 900, 760);
         rightPanel.setLayout(null);
         mainPanel.add(rightPanel);
-
-        Color MainColor = Color.decode("#6096B4");
-        MainController controller = new MainController(this);
 
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(null);
@@ -124,7 +122,7 @@ public class MainFrame extends JFrame {
         TuyenDuongPanel.addMouseListener(controller);
 
         JLabel TuyenDuongLabel = new JLabel("TUYẾN ĐƯỜNG");
-        TuyenDuongLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        TuyenDuongLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         TuyenDuongLabel.setBounds(80, 22, 160, 30);
         TuyenDuongPanel.add(TuyenDuongLabel);
 
@@ -145,7 +143,7 @@ public class MainFrame extends JFrame {
         ThongKePanel.addMouseListener(controller);
 
         JLabel ThongKeLabel = new JLabel("THỐNG KÊ");
-        ThongKeLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        ThongKeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         ThongKeLabel.setBounds(80, 22, 160, 30);
         ThongKePanel.add(ThongKeLabel);
 
@@ -165,7 +163,7 @@ public class MainFrame extends JFrame {
         ChucNangPanel.add(LichTrinhPanel);
 
         JLabel LichTrinhLabel = new JLabel("LỊCH TRÌNH");
-        LichTrinhLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        LichTrinhLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         LichTrinhLabel.setBounds(80, 22, 160, 30);
         LichTrinhPanel.add(LichTrinhLabel);
 
@@ -184,15 +182,14 @@ public class MainFrame extends JFrame {
         ChucNangPanel.add(MuaVePanel);
 
         JLabel GiaVeLabel = new JLabel("MUA VÉ");
-        GiaVeLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        GiaVeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         GiaVeLabel.setBounds(80, 22, 160, 30);
         MuaVePanel.add(GiaVeLabel);
 
-        ImageIcon iconGiaVe = new ImageIcon(
-                new ImageIcon("assets/icons/ticket.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+        FlatSVGIcon iconGiaVe = new FlatSVGIcon(getClass().getResource("/svg/ticket.svg")).derive(40, 40);
         JLabel GiaVeIcon = new JLabel(iconGiaVe, JLabel.CENTER);
-        GiaVeIcon.setForeground(Color.white);
-        GiaVeIcon.setBounds(20, 20, 40, 40);
+        GiaVeIcon.setForeground(Color.BLACK);
+        GiaVeIcon.setBounds(0, 0, 80, 80);
         MuaVePanel.add(GiaVeIcon);
 
         DangXuatPanel = new JPanel();
@@ -203,18 +200,15 @@ public class MainFrame extends JFrame {
         ChucNangPanel.add(DangXuatPanel);
 
         JLabel DangXuatLabel = new JLabel("ĐĂNG XUẤT");
-        DangXuatLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        DangXuatLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         DangXuatLabel.setBounds(80, 22, 160, 30);
         DangXuatPanel.add(DangXuatLabel);
 
-        // Tạo SVGIcon từ file
-        SVGIcon svgIcon = new SVGIcon();
-        svgIcon.setSvgURI(new File("src/main/java/org/metro/assets/icons/back-button.svg").toURI());
+        FlatSVGIcon iconDangXuat = new FlatSVGIcon(getClass().getResource("/svg/arrow-back.svg")).derive(30, 30);
 
-        JLabel DangXuatIcon = new JLabel(svgIcon, JLabel.CENTER);
-        // JLabel DangXuatIcon = new JLabel(iconDangXuat, JLabel.CENTER);
-        DangXuatIcon.setForeground(Color.pink);
-        DangXuatIcon.setBounds(0, 0, 40, 40);
+        JLabel DangXuatIcon = new JLabel(iconDangXuat, JLabel.CENTER);
+        DangXuatIcon.setForeground(Color.BLACK);
+        DangXuatIcon.setBounds(0, 0, 80, 80);
         DangXuatPanel.add(DangXuatIcon);
 
         // Phần nội dung bên phải
