@@ -5,6 +5,7 @@ import java.awt.Cursor;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
@@ -18,6 +19,11 @@ public class MainController implements MouseInputListener {
     public MainController(MainFrame frame) {
         this.frame = frame;
         PanelDangChon = frame.getTuyenDuongPanel();
+    }
+
+    public MainController(MainFrame frame, JPanel PanelDangChon) {
+        this.frame = frame;
+        this.PanelDangChon = frame.getTuyenDuongPanel();
     }
 
     @Override
@@ -59,15 +65,19 @@ public class MainController implements MouseInputListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         e.getComponent().setCursor(new Cursor(Cursor.HAND_CURSOR));
-        if (e.getSource() != PanelDangChon)
+        if (e.getSource() != PanelDangChon) {
             ((JPanel) e.getSource()).setBackground(Color.decode("#6096B4"));
+            ((JLabel) ((JPanel) e.getSource()).getComponent(0)).setForeground(Color.decode("#ffffff"));
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         e.getComponent().setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        if (e.getSource() != PanelDangChon)
+        if (e.getSource() != PanelDangChon) {
             ((JPanel) e.getSource()).setBackground(Color.decode("#93BFCF"));
+            ((JLabel) ((JPanel) e.getSource()).getComponent(0)).setForeground(Color.decode("#000000"));
+        }
     }
 
     @Override
