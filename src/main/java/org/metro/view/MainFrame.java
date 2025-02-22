@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 
 import org.metro.controller.MainController;
 
@@ -45,9 +46,10 @@ public class MainFrame extends JFrame {
 
     private void init() {
         JPanel mainPanel = new JPanel();
+        TuyenDuongPanel = new JPanel();
         this.setContentPane(mainPanel);
         Color MainColor = Color.decode("#6096B4");
-        MainController controller = new MainController(this);
+        MainController controller = new MainController(this, this.getTuyenDuongPanel());
         mainPanel.setLayout(null);
 
         // Navbar
@@ -95,35 +97,48 @@ public class MainFrame extends JFrame {
         mainPanel.add(rightPanel);
 
         JPanel titlePanel = new JPanel();
+        titlePanel.setBorder(new LineBorder(Color.black, 2));
         titlePanel.setLayout(null);
-        titlePanel.setBackground(MainColor);
+        titlePanel.setBackground(Color.decode("#BDCDD6"));
         titlePanel.setBounds(0, 0, 300, 100);
 
-        JLabel metroLabel = new JLabel("<html><div style='text-align: center;'>QUẢN LÝ VẬN HÀNH<br>METRO</div></html>");
-        metroLabel.setForeground(Color.white);
-        metroLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        metroLabel.setBounds(30, 14, 270, 80);
+        FlatSVGIcon avatarIcon = new FlatSVGIcon(getClass().getResource("/svg/avatar.svg")).derive(60, 60);
 
-        titlePanel.add(metroLabel);
+        JLabel avatarLabel = new JLabel(avatarIcon, JLabel.CENTER);
+        avatarLabel.setBounds(0, 0, 100, 100);
+        titlePanel.add(avatarLabel);
+
+        JLabel TenNguoiDungLabel = new JLabel("Ten nguoi dung", JLabel.LEADING);
+        TenNguoiDungLabel.setForeground(Color.black);
+        TenNguoiDungLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        TenNguoiDungLabel.setBounds(100, 0, 200, 80);
+
+        JLabel ChucVuLabel = new JLabel("Vai tro", JLabel.LEADING);
+        ChucVuLabel.setForeground(Color.black);
+        ChucVuLabel.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        ChucVuLabel.setBounds(100, 20, 200, 90);
+
+        titlePanel.add(ChucVuLabel);
+        titlePanel.add(TenNguoiDungLabel);
         leftPanel.add(titlePanel);
 
         JPanel ChucNangPanel = new JPanel();
         ChucNangPanel.setBackground(Color.decode("#BDCDD6"));
-        ChucNangPanel.setBounds(0, 100, 300, 700);
+        ChucNangPanel.setBounds(0, 100, 300, 660);
         ChucNangPanel.setLayout(null);
         leftPanel.add(ChucNangPanel);
 
-        TuyenDuongPanel = new JPanel();
-        TuyenDuongPanel.setBounds(10, 10, 280, 80);
+        TuyenDuongPanel.setBounds(0, 0, 300, 60);
         TuyenDuongPanel.setLayout(null);
         TuyenDuongPanel.setBackground(Color.decode("#6096B4"));
         ChucNangPanel.add(TuyenDuongPanel);
 
         TuyenDuongPanel.addMouseListener(controller);
 
-        JLabel TuyenDuongLabel = new JLabel("TUYẾN ĐƯỜNG");
+        JLabel TuyenDuongLabel = new JLabel("TUYẾN ĐƯỜNG", JLabel.LEADING);
         TuyenDuongLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        TuyenDuongLabel.setBounds(80, 22, 160, 30);
+        TuyenDuongLabel.setForeground(Color.white);
+        TuyenDuongLabel.setBounds(80, 0, 160, 60);
         TuyenDuongPanel.add(TuyenDuongLabel);
 
         ImageIcon iconTuyenDuong = new ImageIcon(
@@ -135,16 +150,16 @@ public class MainFrame extends JFrame {
         TuyenDuongPanel.add(TuyenDuongIcon);
 
         ThongKePanel = new JPanel();
-        ThongKePanel.setBounds(10, 100, 280, 80);
+        ThongKePanel.setBounds(0, 60, 300, 60);
         ThongKePanel.setLayout(null);
         ThongKePanel.setBackground(Color.decode("#93BFCF"));
         ChucNangPanel.add(ThongKePanel);
 
         ThongKePanel.addMouseListener(controller);
 
-        JLabel ThongKeLabel = new JLabel("THỐNG KÊ");
+        JLabel ThongKeLabel = new JLabel("THỐNG KÊ", JLabel.LEADING);
         ThongKeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        ThongKeLabel.setBounds(80, 22, 160, 30);
+        ThongKeLabel.setBounds(80, 0, 160, 60);
         ThongKePanel.add(ThongKeLabel);
 
         ImageIcon iconThongKe = new ImageIcon(
@@ -156,15 +171,15 @@ public class MainFrame extends JFrame {
         ThongKePanel.add(ThongKeIcon);
 
         LichTrinhPanel = new JPanel();
-        LichTrinhPanel.setBounds(10, 190, 280, 80);
+        LichTrinhPanel.setBounds(0, 120, 300, 60);
         LichTrinhPanel.setLayout(null);
         LichTrinhPanel.setBackground(Color.decode("#93BFCF"));
         LichTrinhPanel.addMouseListener(controller);
         ChucNangPanel.add(LichTrinhPanel);
 
-        JLabel LichTrinhLabel = new JLabel("LỊCH TRÌNH");
+        JLabel LichTrinhLabel = new JLabel("LỊCH TRÌNH", JLabel.LEADING);
         LichTrinhLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        LichTrinhLabel.setBounds(80, 22, 160, 30);
+        LichTrinhLabel.setBounds(80, 0, 160, 60);
         LichTrinhPanel.add(LichTrinhLabel);
 
         ImageIcon iconLichTrinh = new ImageIcon(
@@ -175,40 +190,40 @@ public class MainFrame extends JFrame {
         LichTrinhPanel.add(LichTrinhIcon);
 
         MuaVePanel = new JPanel();
-        MuaVePanel.setBounds(10, 280, 280, 80);
+        MuaVePanel.setBounds(0, 180, 300, 60);
         MuaVePanel.setLayout(null);
         MuaVePanel.setBackground(Color.decode("#93BFCF"));
         MuaVePanel.addMouseListener(controller);
         ChucNangPanel.add(MuaVePanel);
 
-        JLabel GiaVeLabel = new JLabel("MUA VÉ");
+        JLabel GiaVeLabel = new JLabel("MUA VÉ", JLabel.LEADING);
         GiaVeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        GiaVeLabel.setBounds(80, 22, 160, 30);
+        GiaVeLabel.setBounds(80, 0, 160, 60);
         MuaVePanel.add(GiaVeLabel);
 
         FlatSVGIcon iconGiaVe = new FlatSVGIcon(getClass().getResource("/svg/ticket.svg")).derive(40, 40);
         JLabel GiaVeIcon = new JLabel(iconGiaVe, JLabel.CENTER);
-        GiaVeIcon.setForeground(Color.BLACK);
-        GiaVeIcon.setBounds(0, 0, 80, 80);
+        GiaVeIcon.setForeground(Color.white);
+        GiaVeIcon.setBounds(0, 0, 60, 60);
         MuaVePanel.add(GiaVeIcon);
 
         DangXuatPanel = new JPanel();
-        DangXuatPanel.setBounds(10, 550, 280, 80);
+        DangXuatPanel.setBounds(0, 600, 300, 60);
         DangXuatPanel.setLayout(null);
         DangXuatPanel.setBackground(Color.decode("#93BFCF"));
         DangXuatPanel.addMouseListener(controller);
         ChucNangPanel.add(DangXuatPanel);
 
-        JLabel DangXuatLabel = new JLabel("ĐĂNG XUẤT");
+        JLabel DangXuatLabel = new JLabel("ĐĂNG XUẤT", JLabel.LEADING);
         DangXuatLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        DangXuatLabel.setBounds(80, 22, 160, 30);
+        DangXuatLabel.setBounds(80, 0, 160, 60);
         DangXuatPanel.add(DangXuatLabel);
 
         FlatSVGIcon iconDangXuat = new FlatSVGIcon(getClass().getResource("/svg/arrow-back.svg")).derive(30, 30);
 
         JLabel DangXuatIcon = new JLabel(iconDangXuat, JLabel.CENTER);
-        DangXuatIcon.setForeground(Color.BLACK);
-        DangXuatIcon.setBounds(0, 0, 80, 80);
+        DangXuatIcon.setForeground(Color.WHITE);
+        DangXuatIcon.setBounds(0, 0, 60, 60);
         DangXuatPanel.add(DangXuatIcon);
 
         // Phần nội dung bên phải
