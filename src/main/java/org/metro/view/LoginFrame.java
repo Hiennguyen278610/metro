@@ -2,13 +2,13 @@ package org.metro.view;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 
 import javax.swing.*;
 
-import org.metro.Main;
 import org.metro.controller.LoginController;
 import org.metro.service.UserService;
+
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
@@ -65,12 +65,10 @@ public class LoginFrame extends JFrame {
         leftContent.setBounds(0, 0, 350, 600);
         leftContent.setLayout(null);
 
-        ImageIcon iconThuVien = new ImageIcon(
-                new ImageIcon("src/main/java/org/metro/assets/icons/train-station.png").getImage().getScaledInstance(220, 220,
-                        Image.SCALE_SMOOTH));
-        JLabel ThuVien = new JLabel(iconThuVien, JLabel.CENTER);
-        ThuVien.setBounds(70, 120, 220, 220);
-        leftContent.add(ThuVien);
+        FlatSVGIcon iconMetro = new FlatSVGIcon(getClass().getResource("/svg/metro.svg")).derive(220, 220);
+        JLabel Metro = new JLabel(iconMetro, JLabel.CENTER);
+        Metro.setBounds(70, 120, 220, 220);
+        leftContent.add(Metro);
 
         JLabel title = new JLabel("<html><div style='text-align: center;'>QUẢN LÝ VẬN HÀNH<br>METRO</div></html>");
         title.setFont(new Font("Segoe UI", Font.BOLD, 26));
@@ -123,6 +121,16 @@ public class LoginFrame extends JFrame {
         HienMatKhau.setBounds(60, 310, 140, 30);
         HienMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         rightContent.add(HienMatKhau);
+
+        HienMatKhau.addActionListener(e -> {
+            if (HienMatKhau.isSelected()) {
+                if (String.valueOf(MatKhauField.getPassword()).equals("Nhập mật khẩu ..."))
+                    MatKhauField.setText(""); // Xóa placeholder khi focus
+                MatKhauField.setEchoChar((char) 0);
+            } else {
+                MatKhauField.setEchoChar('*');
+            }
+        });
 
         DangNhapButton = new JButton("ĐĂNG NHẬP");
         DangNhapButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -192,7 +200,6 @@ public class LoginFrame extends JFrame {
             super(parent, "Dang ky", true);
             setSize(500, 500);
             setLocationRelativeTo(null);
-            // setLocationRelativeTo(null);
             this.init();
         }
 
@@ -279,7 +286,7 @@ public class LoginFrame extends JFrame {
                 }
 
                 UserService user = new UserService();
-                boolean check = user.DangKy(tenDangNhap, matKhau,sodienthoai);
+                boolean check = user.DangKy(tenDangNhap, matKhau, sodienthoai);
 
                 if (check) {
                     JOptionPane.showMessageDialog(this, "Đăng ký thành công ", "thông báo",
