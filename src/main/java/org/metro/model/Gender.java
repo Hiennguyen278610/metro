@@ -1,4 +1,4 @@
-package org.metro.model.DTO;
+package org.metro.model;
 
 public enum Gender {
     MALE,
