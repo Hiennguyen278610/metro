@@ -28,7 +28,6 @@ public class MenuTaskbar extends JPanel {
         nhanVien = new NhanVien();
         nhanVien.initComponent();
 
-        // Tạo nút hoặc label cho User
         JLabel userLabel = new JLabel("User");
         userLabel.setIcon(new ImageIcon("path/to/user-icon.svg")); // Thêm icon nếu cần
         userLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -42,12 +41,11 @@ public class MenuTaskbar extends JPanel {
             }
         });
 
-        // Thêm label vào giao diện
         this.add(userLabel);
 
-        // Thêm các panel khác vào menu nếu cần
+
         JLabel khachHangLabel = new JLabel("Khách hàng");
-        khachHangLabel.setIcon(new ImageIcon("path/to/customer-icon.svg")); // Thêm icon nếu cần
+        khachHangLabel.setIcon(new ImageIcon("path/to/customer-icon.svg"));
         khachHangLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         khachHangLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -58,7 +56,7 @@ public class MenuTaskbar extends JPanel {
         this.add(khachHangLabel);
 
         JLabel nhanVienLabel = new JLabel("Nhân viên");
-        nhanVienLabel.setIcon(new ImageIcon("path/to/staff-icon.svg")); // Thêm icon nếu cần
+        nhanVienLabel.setIcon(new ImageIcon("path/to/staff-icon.svg"));
         nhanVienLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         nhanVienLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -70,7 +68,6 @@ public class MenuTaskbar extends JPanel {
     }
 
     private void showCustomerPanel() {
-        // Hiển thị panel Khách hàng
         JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         mainFrame.getContentPane().removeAll();
         mainFrame.add(khachHang);
@@ -79,7 +76,6 @@ public class MenuTaskbar extends JPanel {
     }
 
     private void showKhachHangPanel() {
-        // Hiển thị panel Khách hàng (có thể trùng với showCustomerPanel)
         JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         mainFrame.getContentPane().removeAll();
         mainFrame.add(khachHang);
@@ -88,7 +84,7 @@ public class MenuTaskbar extends JPanel {
     }
 
     private void showNhanVienPanel() {
-        // Hiển thị panel Nhân viên
+
         JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         mainFrame.getContentPane().removeAll();
         mainFrame.add(nhanVien);

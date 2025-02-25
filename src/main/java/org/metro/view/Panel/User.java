@@ -9,7 +9,6 @@ public class User extends JPanel {
     public void initComponent(){
         this.setBackground(BackgroundColor);
 
-        // Thêm các thành phần khác vào panel User nếu cần
         JLabel userLabel = new JLabel("User");
         this.add(userLabel);
     }
