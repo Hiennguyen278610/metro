@@ -41,6 +41,8 @@ public class MainController implements MouseInputListener {
             frame.showLichTrinhContent();
         } else if (e.getSource() == frame.getMuaVePanel()) {
             frame.showMuaVeContent();
+        } else if (e.getSource() == frame.getMuaVePanel()) {
+            frame.showMuaVeContent();
         } else if (e.getSource() == frame.getExitButton()) {
             frame.dispose();
         } else if (e.getSource() == frame.getMinimizeButton()) {

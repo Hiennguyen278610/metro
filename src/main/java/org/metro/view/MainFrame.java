@@ -15,6 +15,7 @@ import javax.swing.border.LineBorder;
 import org.metro.controller.MainController;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import org.metro.view.Component.MenuTaskbar;
 
 public class MainFrame extends JFrame {
     private JPanel TuyenDuongPanel;
@@ -249,6 +250,12 @@ public class MainFrame extends JFrame {
         MuaVeContent.add(new JLabel("Muave"));
         MuaVeContent.setBackground(Color.white);
         rightPanel.add(MuaVeContent, "Muave");
+
+
+        // Thêm MenuTaskbar vào giao diện
+        MenuTaskbar menuTaskbar = new MenuTaskbar();
+        menuTaskbar.setBounds(0, 40, 300, 760); // Điều chỉnh kích thước và vị trí
+        mainPanel.add(menuTaskbar);
     }
 
     public void resetPanel() {
@@ -279,7 +286,9 @@ public class MainFrame extends JFrame {
     public JPanel getDangXuatPanel() {
         return DangXuatPanel;
     }
-
+    public void showUserContent() {
+        cardLayout.show(this.rightPanel, "User");
+    }
     public void showTuyenDuongContent() {
         // CardLayout cardLayout = (CardLayout) this.getContentPane().getLayout();
         cardLayout.show(this.rightPanel, "Tuyenduong");
@@ -301,6 +310,7 @@ public class MainFrame extends JFrame {
     public JPanel getLichTrinhPanel() {
         return LichTrinhPanel;
     }
+
 
     public JPanel getMuaVePanel() {
         return MuaVePanel;
