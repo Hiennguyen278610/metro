@@ -1,7 +1,7 @@
 show databases;
 
 use quanlymetro;
-
+create database quanlymetro;
 
 create table users (
     username varchar(50),
