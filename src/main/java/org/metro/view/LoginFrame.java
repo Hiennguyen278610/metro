@@ -2,6 +2,7 @@ package org.metro.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 
 import javax.swing.*;
 
@@ -11,6 +12,8 @@ import org.metro.service.UserService;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.FocusEvent;
 
 public class LoginFrame extends JFrame {
@@ -98,39 +101,48 @@ public class LoginFrame extends JFrame {
 
         JTextField TenDangNhapField = new JTextField("Nhập tên đăng nhập...");
         rightContent.add(TenDangNhapField);
-        TenDangNhapField.setBounds(60, 210, 310, 30);
+        TenDangNhapField.setBounds(60, 210, 310, 40);
         TenDangNhapField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         TenDangNhapField.setForeground(Color.GRAY);
 
         JLabel MatKhauLabel = new JLabel(
                 "Mật khẩu");
         MatKhauLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        MatKhauLabel.setBounds(60, 250, 200, 30);
+        MatKhauLabel.setBounds(60, 260, 200, 30);
         MatKhauLabel.setForeground(MainColor);
         rightContent.add(MatKhauLabel);
 
+        //layout chua password field + icon an hien 
+        JLayeredPane matkhauPane = new JLayeredPane(); // layout cho phep cac phan tu xep chong len nhau 
+        matkhauPane.setBounds(60, 290, 310, 50);
+
         JPasswordField MatKhauField = new JPasswordField("Nhập mật khẩu ...");
-        rightContent.add(MatKhauField);
-        MatKhauField.setBounds(60, 280, 310, 30);
+        MatKhauField.setBounds(0, 0, 310, 40);
+        // rightContent.add(MatKhauField);
+        // MatKhauField.setBounds(60, 280, 310, 30);
         MatKhauField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         MatKhauField.setForeground(Color.GRAY);
         MatKhauField.setEchoChar((char) 0);
 
-        JCheckBox HienMatKhau = new JCheckBox("Hiện mật khẩu");
-        HienMatKhau.setBackground(Color.white);
-        HienMatKhau.setBounds(60, 310, 140, 30);
-        HienMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        rightContent.add(HienMatKhau);
+        //icon an hien
+        ImageIcon openEye = new ImageIcon(new ImageIcon("src/main/java/org/metro/assets/icons/view.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        JLabel openEyeLabel = new JLabel(openEye);
+        openEyeLabel.setVisible(true);
+        openEyeLabel.setBounds(270,5,30,30);
 
-        HienMatKhau.addActionListener(e -> {
-            if (HienMatKhau.isSelected()) {
-                if (String.valueOf(MatKhauField.getPassword()).equals("Nhập mật khẩu ..."))
-                    MatKhauField.setText(""); // Xóa placeholder khi focus
-                MatKhauField.setEchoChar((char) 0);
-            } else {
-                MatKhauField.setEchoChar('*');
-            }
-        });
+        ImageIcon closeEye = new ImageIcon(new ImageIcon("src/main/java/org/metro/assets/icons/hide.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        JLabel closeEyeLabel = new JLabel(closeEye);
+        closeEyeLabel.setVisible(false);
+        closeEyeLabel.setBounds(270, 5, 30, 30);
+
+        matkhauPane.add(MatKhauField,JLayeredPane.DEFAULT_LAYER);
+        matkhauPane.add(openEyeLabel,JLayeredPane.PALETTE_LAYER);
+        matkhauPane.add(closeEyeLabel,JLayeredPane.PALETTE_LAYER);
+
+        rightContent.add(matkhauPane);
+
+        //goi function
+        showPassword(MatKhauField, openEyeLabel, closeEyeLabel);
 
         DangNhapButton = new JButton("ĐĂNG NHẬP");
         DangNhapButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -374,6 +386,30 @@ public class LoginFrame extends JFrame {
                 }
             });
         }
+    }
+
+    //ham hien thi mat khau 
+    public static void showPassword(JPasswordField pf,JLabel show,JLabel hide) {
+        hide.setVisible(false);
+        show.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pf.setEchoChar((char) 0);
+                show.setVisible(false);
+                hide.setVisible(true);
+                pf.requestFocusInWindow();
+            }
+        });
+
+        hide.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pf.setEchoChar('*');
+                hide.setVisible(false);
+                show.setVisible(true);
+                pf.requestFocusInWindow();
+            }
+        });
     }
 
     public JButton getDangNhapButton() {
