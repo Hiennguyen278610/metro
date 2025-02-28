@@ -1,9 +1,6 @@
 package org.metro.view;
 
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Image;
+import java.awt.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -12,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
+import org.metro.Main;
 import org.metro.controller.MainController;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -35,6 +33,9 @@ public class MainFrame extends JFrame {
     private JLabel ExitIcon;
     private JLabel MinimizeIcon;
 
+    public JPanel MainContent;
+    private MenuTaskbar menuTaskbar;
+
     public MainFrame() {
         setSize(1200, 800);
         setTitle("Quan ly Metro");
@@ -46,6 +47,8 @@ public class MainFrame extends JFrame {
     }
 
     private void init() {
+
+
         JPanel mainPanel = new JPanel();
         TuyenDuongPanel = new JPanel();
         this.setContentPane(mainPanel);
@@ -251,12 +254,22 @@ public class MainFrame extends JFrame {
         MuaVeContent.setBackground(Color.white);
         rightPanel.add(MuaVeContent, "Muave");
 
+        // ĐỂ RÕ RÀNG VÀ DỄ PHÂN QUYỀN THÌ CODE THEO KIỂU NÀY NHA AE
 
         // Thêm MenuTaskbar vào giao diện
-        MenuTaskbar menuTaskbar = new MenuTaskbar();
-        menuTaskbar.setBounds(0, 40, 300, 760); // Điều chỉnh kích thước và vị trí
-        mainPanel.add(menuTaskbar);
+        MenuTaskbar menuTaskbar = new MenuTaskbar(this);
+        menuTaskbar.setBounds(0, 500, 300, 240); // Điều chỉnh kích thước và vị trí
+//        mainPanel.add(menuTaskbar);
+        this.add(menuTaskbar, BorderLayout.WEST);
     }
+
+    public void setPanel(JPanel pn){
+        rightPanel.removeAll();
+        rightPanel.add(pn, BorderLayout.CENTER);
+        rightPanel.revalidate();
+        rightPanel.repaint();
+    }
+
 
     public void resetPanel() {
         TuyenDuongPanel.setBackground(Color.decode("#93BFCF"));
@@ -311,7 +324,6 @@ public class MainFrame extends JFrame {
         return LichTrinhPanel;
     }
 
-
     public JPanel getMuaVePanel() {
         return MuaVePanel;
     }
@@ -323,6 +335,7 @@ public class MainFrame extends JFrame {
     public JPanel getMinimizeButton() {
         return MinimizeButton;
     }
+
 
     public JLabel getExitIcon() {
         return ExitIcon;
