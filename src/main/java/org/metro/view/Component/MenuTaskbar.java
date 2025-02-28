@@ -1,9 +1,7 @@
 package org.metro.view.Component;
 
 import org.metro.view.MainFrame;
-import org.metro.view.Panel.KhachHang;
-import org.metro.view.Panel.User;
-import org.metro.view.Panel.NhanVien;
+import org.metro.view.Panel.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,83 +10,92 @@ import java.awt.event.MouseEvent;
 
 public class MenuTaskbar extends JPanel {
 
-    User user;
-    KhachHang khachHang;
-    NhanVien nhanVien;
+    private MainFrame mainFrame;
+    String[][] getSt = {
+            {"Khách hàng", "customer.svg", "khachhang"},
+            {"Nhân viên", "staff.svg", "nhanvien"},
+            {"Tài khoản", "account.svg", "taikhoan"},
+            {"Phân quyền", "permission.svg", "nhomquyen"},
+    };
+    public itemTaskbar[] listItem;
+    JPanel pnCenter;
 
-    public MenuTaskbar() {
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Sắp xếp theo chiều dọc
+    Color FontColor = new Color(0, 0, 0);
+    Color DefaultColor = new Color(148,183,205);
+    Color HoverFontColor = new Color(200, 222, 231);
+    Color HoverBackgroundColor = new Color(80,138,170);
 
-        user = new User();
-        user.initComponent();
+    public MenuTaskbar(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+        initComponent();
+    }
 
-        khachHang = new KhachHang();
-        khachHang.initComponent();
+    public void initComponent() {
+        listItem = new itemTaskbar[getSt.length];
+        this.setBackground(DefaultColor);
+        this.setOpaque(true);
+        this.setLayout(new BorderLayout(0, 0));
 
-        nhanVien = new NhanVien();
-        nhanVien.initComponent();
+        pnCenter = new JPanel();
+        pnCenter.setPreferredSize(new Dimension(300, 240));
+        pnCenter.setBackground(DefaultColor);
+        pnCenter.setLayout(new GridLayout(getSt.length, 1, 0, 0)); // Không có khoảng cách giữa các hàng
+        this.add(pnCenter, BorderLayout.CENTER); // Thêm pnCenter vào MenuTaskbar
 
-        JLabel userLabel = new JLabel("User");
-        userLabel.setIcon(new ImageIcon("path/to/user-icon.svg")); // Thêm icon nếu cần
-        userLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // Khởi tạo các itemTaskbar
+        for (int i = 0; i < getSt.length; i++) {
+            listItem[i] = new itemTaskbar(getSt[i][1], getSt[i][0]);
+            listItem[i].setVisible(true);
+            pnCenter.add(listItem[i]);
+        }
 
-        // Thêm sự kiện click
-        userLabel.addMouseListener(new MouseAdapter() {
+        // Thêm MouseListener cho từng mục
+        listItem[0].addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                MainFrame mainFrame = (MainFrame) SwingUtilities.getWindowAncestor(MenuTaskbar.this);
-                mainFrame.showUserContent();
+            public void mousePressed(MouseEvent e) {
+                pnMenuTaskbarMousePress(e); // Cập nhật giao diện
+                KhachHang khachHang = new KhachHang();
+                mainFrame.setPanel(khachHang); // Hiển thị panel Khách hàng
             }
         });
 
-        this.add(userLabel);
-
-
-        JLabel khachHangLabel = new JLabel("Khách hàng");
-        khachHangLabel.setIcon(new ImageIcon("path/to/customer-icon.svg"));
-        khachHangLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        khachHangLabel.addMouseListener(new MouseAdapter() {
+        listItem[1].addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                showKhachHangPanel();
+            public void mousePressed(MouseEvent e) {
+                pnMenuTaskbarMousePress(e);
+                NhanVien nhanVien = new NhanVien();
+                mainFrame.setPanel(nhanVien); // Hiển thị panel Nhân viên
             }
         });
-        this.add(khachHangLabel);
 
-        JLabel nhanVienLabel = new JLabel("Nhân viên");
-        nhanVienLabel.setIcon(new ImageIcon("path/to/staff-icon.svg"));
-        nhanVienLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        nhanVienLabel.addMouseListener(new MouseAdapter() {
+        listItem[2].addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                showNhanVienPanel();
+            public void mousePressed(MouseEvent e) {
+                pnMenuTaskbarMousePress(e);
+                TaiKhoan taiKhoan = new TaiKhoan();
+                mainFrame.setPanel(taiKhoan); // Hiển thị panel Tài khoản
             }
         });
-        this.add(nhanVienLabel);
+
+        listItem[3].addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                pnMenuTaskbarMousePress(e);
+                PhanQuyen phanQuyen = new PhanQuyen();
+                mainFrame.setPanel(phanQuyen); // Hiển thị panel Phân quyền
+            }
+        });
     }
 
-    private void showCustomerPanel() {
-        JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        mainFrame.getContentPane().removeAll();
-        mainFrame.add(khachHang);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
-    private void showKhachHangPanel() {
-        JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        mainFrame.getContentPane().removeAll();
-        mainFrame.add(khachHang);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
-    private void showNhanVienPanel() {
-
-        JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        mainFrame.getContentPane().removeAll();
-        mainFrame.add(nhanVien);
-        mainFrame.revalidate();
-        mainFrame.repaint();
+    public void pnMenuTaskbarMousePress(MouseEvent e) {
+        for (int i = 0; i < getSt.length; i++) {
+            if (e.getSource() == listItem[i]) {
+                listItem[i].setBackground(HoverBackgroundColor);
+                listItem[i].pnlContent.setForeground(HoverFontColor); // Cập nhật màu chữ
+            } else {
+                listItem[i].setBackground(DefaultColor);
+                listItem[i].pnlContent.setForeground(FontColor);
+            }
+        }
     }
 }
