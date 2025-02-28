@@ -18,13 +18,8 @@ public class MainController implements MouseInputListener {
 
     public MainController(MainFrame frame) {
         this.frame = frame;
-        PanelDangChon = frame.getTuyenDuongPanel();
     }
 
-    public MainController(MainFrame frame, JPanel PanelDangChon) {
-        this.frame = frame;
-        this.PanelDangChon = frame.getTuyenDuongPanel();
-    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -33,17 +28,7 @@ public class MainController implements MouseInputListener {
             new LoginFrame();
             return;
         }
-        if (e.getSource() == frame.getTuyenDuongPanel()) {
-            frame.showTuyenDuongContent();
-        } else if (e.getSource() == frame.getThongKePanel()) {
-            frame.showThongKeContent();
-        } else if (e.getSource() == frame.getLichTrinhPanel()) {
-            frame.showLichTrinhContent();
-        } else if (e.getSource() == frame.getMuaVePanel()) {
-            frame.showMuaVeContent();
-        } else if (e.getSource() == frame.getMuaVePanel()) {
-            frame.showMuaVeContent();
-        } else if (e.getSource() == frame.getExitButton()) {
+        if (e.getSource() == frame.getExitButton()) {
             frame.dispose();
         } else if (e.getSource() == frame.getMinimizeButton()) {
             frame.setState(Frame.ICONIFIED);

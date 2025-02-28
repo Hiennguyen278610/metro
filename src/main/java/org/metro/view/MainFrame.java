@@ -17,15 +17,7 @@ import org.metro.view.Component.MenuTaskbar;
 
 public class MainFrame extends JFrame {
     private JPanel TuyenDuongPanel;
-    private JPanel ThongKePanel;
     private JPanel DangXuatPanel;
-    private JPanel LichTrinhPanel;
-    private JPanel MuaVePanel;
-    private JPanel TuyenDuongContent;
-    private JPanel ThongKeContent;
-    private JPanel LichTrinhContent;
-    private JPanel MuaVeContent;
-    private CardLayout cardLayout;
     private JPanel rightPanel;
     private JPanel navbarPanel;
     private JPanel ExitButton;
@@ -53,7 +45,7 @@ public class MainFrame extends JFrame {
         TuyenDuongPanel = new JPanel();
         this.setContentPane(mainPanel);
         Color MainColor = Color.decode("#6096B4");
-        MainController controller = new MainController(this, this.getTuyenDuongPanel());
+        MainController controller = new MainController(this);
         mainPanel.setLayout(null);
 
         // Navbar
@@ -97,7 +89,7 @@ public class MainFrame extends JFrame {
         // Right Panel
         rightPanel = new JPanel();
         rightPanel.setBounds(300, 40, 900, 760);
-        rightPanel.setLayout(null);
+        rightPanel.setLayout(new BorderLayout());
         mainPanel.add(rightPanel);
 
         JPanel titlePanel = new JPanel();
@@ -126,142 +118,35 @@ public class MainFrame extends JFrame {
         titlePanel.add(TenNguoiDungLabel);
         leftPanel.add(titlePanel);
 
+        // JPanel ChucNangPanel
         JPanel ChucNangPanel = new JPanel();
         ChucNangPanel.setBackground(Color.decode("#BDCDD6"));
         ChucNangPanel.setBounds(0, 100, 300, 660);
-        ChucNangPanel.setLayout(null);
+        ChucNangPanel.setLayout(new BorderLayout());
         leftPanel.add(ChucNangPanel);
 
-        TuyenDuongPanel.setBounds(0, 0, 300, 60);
-        TuyenDuongPanel.setLayout(null);
-        TuyenDuongPanel.setBackground(Color.decode("#6096B4"));
-        ChucNangPanel.add(TuyenDuongPanel);
+        // Thêm MenuTaskbar vào CENTER
+        MenuTaskbar menuTaskbar = new MenuTaskbar(this);
+        menuTaskbar.setBorder(new LineBorder(Color.black, 2));
+        ChucNangPanel.add(menuTaskbar, BorderLayout.CENTER);
 
-        TuyenDuongPanel.addMouseListener(controller);
-
-        JLabel TuyenDuongLabel = new JLabel("TUYẾN ĐƯỜNG", JLabel.LEADING);
-        TuyenDuongLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        TuyenDuongLabel.setForeground(Color.white);
-        TuyenDuongLabel.setBounds(80, 0, 160, 60);
-        TuyenDuongPanel.add(TuyenDuongLabel);
-
-        ImageIcon iconTuyenDuong = new ImageIcon(
-                new ImageIcon("assets/icons/route.png").getImage().getScaledInstance(40, 40,
-                        Image.SCALE_SMOOTH));
-        JLabel TuyenDuongIcon = new JLabel(iconTuyenDuong, JLabel.CENTER);
-        TuyenDuongIcon.setForeground(Color.white);
-        TuyenDuongIcon.setBounds(20, 20, 40, 40);
-        TuyenDuongPanel.add(TuyenDuongIcon);
-
-        ThongKePanel = new JPanel();
-        ThongKePanel.setBounds(0, 60, 300, 60);
-        ThongKePanel.setLayout(null);
-        ThongKePanel.setBackground(Color.decode("#93BFCF"));
-        ChucNangPanel.add(ThongKePanel);
-
-        ThongKePanel.addMouseListener(controller);
-
-        JLabel ThongKeLabel = new JLabel("THỐNG KÊ", JLabel.LEADING);
-        ThongKeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        ThongKeLabel.setBounds(80, 0, 160, 60);
-        ThongKePanel.add(ThongKeLabel);
-
-        ImageIcon iconThongKe = new ImageIcon(
-                new ImageIcon("assets/icons/diagram.png").getImage().getScaledInstance(40, 40,
-                        Image.SCALE_SMOOTH));
-        JLabel ThongKeIcon = new JLabel(iconThongKe, JLabel.CENTER);
-        ThongKeIcon.setForeground(Color.white);
-        ThongKeIcon.setBounds(20, 20, 40, 40);
-        ThongKePanel.add(ThongKeIcon);
-
-        LichTrinhPanel = new JPanel();
-        LichTrinhPanel.setBounds(0, 120, 300, 60);
-        LichTrinhPanel.setLayout(null);
-        LichTrinhPanel.setBackground(Color.decode("#93BFCF"));
-        LichTrinhPanel.addMouseListener(controller);
-        ChucNangPanel.add(LichTrinhPanel);
-
-        JLabel LichTrinhLabel = new JLabel("LỊCH TRÌNH", JLabel.LEADING);
-        LichTrinhLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        LichTrinhLabel.setBounds(80, 0, 160, 60);
-        LichTrinhPanel.add(LichTrinhLabel);
-
-        ImageIcon iconLichTrinh = new ImageIcon(
-                new ImageIcon("assets/icons/train.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        JLabel LichTrinhIcon = new JLabel(iconLichTrinh, JLabel.CENTER);
-        LichTrinhIcon.setForeground(Color.white);
-        LichTrinhIcon.setBounds(20, 20, 40, 40);
-        LichTrinhPanel.add(LichTrinhIcon);
-
-        MuaVePanel = new JPanel();
-        MuaVePanel.setBounds(0, 180, 300, 60);
-        MuaVePanel.setLayout(null);
-        MuaVePanel.setBackground(Color.decode("#93BFCF"));
-        MuaVePanel.addMouseListener(controller);
-        ChucNangPanel.add(MuaVePanel);
-
-        JLabel GiaVeLabel = new JLabel("MUA VÉ", JLabel.LEADING);
-        GiaVeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        GiaVeLabel.setBounds(80, 0, 160, 60);
-        MuaVePanel.add(GiaVeLabel);
-
-        FlatSVGIcon iconGiaVe = new FlatSVGIcon(getClass().getResource("/svg/ticket.svg")).derive(40, 40);
-        JLabel GiaVeIcon = new JLabel(iconGiaVe, JLabel.CENTER);
-        GiaVeIcon.setForeground(Color.white);
-        GiaVeIcon.setBounds(0, 0, 60, 60);
-        MuaVePanel.add(GiaVeIcon);
-
+        // DangXuatPanel
         DangXuatPanel = new JPanel();
-        DangXuatPanel.setBounds(0, 600, 300, 60);
-        DangXuatPanel.setLayout(null);
+        DangXuatPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Căn trái nội dung
         DangXuatPanel.setBackground(Color.decode("#93BFCF"));
         DangXuatPanel.addMouseListener(controller);
-        ChucNangPanel.add(DangXuatPanel);
-
-        JLabel DangXuatLabel = new JLabel("ĐĂNG XUẤT", JLabel.LEADING);
-        DangXuatLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        DangXuatLabel.setBounds(80, 0, 160, 60);
-        DangXuatPanel.add(DangXuatLabel);
 
         FlatSVGIcon iconDangXuat = new FlatSVGIcon(getClass().getResource("/svg/arrow-back.svg")).derive(30, 30);
-
         JLabel DangXuatIcon = new JLabel(iconDangXuat, JLabel.CENTER);
-        DangXuatIcon.setForeground(Color.WHITE);
-        DangXuatIcon.setBounds(0, 0, 60, 60);
+        JLabel DangXuatLabel = new JLabel("ĐĂNG XUẤT");
+        DangXuatLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
         DangXuatPanel.add(DangXuatIcon);
+        DangXuatPanel.add(DangXuatLabel);
 
-        // Phần nội dung bên phải
-        cardLayout = new CardLayout();
-        rightPanel.setLayout(cardLayout);
+        ChucNangPanel.add(DangXuatPanel, BorderLayout.SOUTH); // Thêm vào SOUTH
 
-        TuyenDuongContent = new JPanel();
-        TuyenDuongContent.add(new JLabel("Tuyenduong"));
-        TuyenDuongContent.setBackground(Color.white);
-        rightPanel.add(TuyenDuongContent, "Tuyenduong");
 
-        ThongKeContent = new JPanel();
-        ThongKeContent.add(new JLabel("Thongke"));
-        ThongKeContent.setBackground(Color.white);
-        rightPanel.add(ThongKeContent, "Thongke");
-
-        LichTrinhContent = new JPanel();
-        LichTrinhContent.add(new JLabel("Lichtrinh"));
-        LichTrinhContent.setBackground(Color.white);
-        rightPanel.add(LichTrinhContent, "Lichtrinh");
-
-        MuaVeContent = new JPanel();
-        MuaVeContent.add(new JLabel("Muave"));
-        MuaVeContent.setBackground(Color.white);
-        rightPanel.add(MuaVeContent, "Muave");
-
-        // ĐỂ RÕ RÀNG VÀ DỄ PHÂN QUYỀN THÌ CODE THEO KIỂU NÀY NHA AE
-
-        // Thêm MenuTaskbar vào giao diện
-        MenuTaskbar menuTaskbar = new MenuTaskbar(this);
-        menuTaskbar.setBounds(0, 360, 300, 240); // Điều chỉnh kích thước và vị trí
-//        mainPanel.add(menuTaskbar);
-//        this.add(menuTaskbar, BorderLayout.WEST);
-        ChucNangPanel.add(menuTaskbar, BorderLayout.WEST);
     }
 
 
@@ -274,11 +159,6 @@ public class MainFrame extends JFrame {
 
 
     public void resetPanel() {
-        TuyenDuongPanel.setBackground(Color.decode("#93BFCF"));
-        ThongKePanel.setBackground(Color.decode("#93BFCF"));
-        DangXuatPanel.setBackground(Color.decode("#93BFCF"));
-        LichTrinhPanel.setBackground(Color.decode("#93BFCF"));
-        MuaVePanel.setBackground(Color.decode("#93BFCF"));
     }
 
     public static void main(String[] args) {
@@ -290,44 +170,9 @@ public class MainFrame extends JFrame {
         });
     }
 
-    public JPanel getTuyenDuongPanel() {
-        return TuyenDuongPanel;
-    }
-
-    public JPanel getThongKePanel() {
-        return ThongKePanel;
-    }
 
     public JPanel getDangXuatPanel() {
         return DangXuatPanel;
-    }
-    public void showUserContent() {
-        cardLayout.show(this.rightPanel, "User");
-    }
-    public void showTuyenDuongContent() {
-        // CardLayout cardLayout = (CardLayout) this.getContentPane().getLayout();
-        cardLayout.show(this.rightPanel, "Tuyenduong");
-    }
-
-    public void showThongKeContent() {
-        // CardLayout cardLayout = (CardLayout) this.getContentPane().getLayout();
-        cardLayout.show(this.rightPanel, "Thongke");
-    }
-
-    public void showLichTrinhContent() {
-        cardLayout.show(this.rightPanel, "Lichtrinh");
-    }
-
-    public void showMuaVeContent() {
-        cardLayout.show(this.rightPanel, "Muave");
-    }
-
-    public JPanel getLichTrinhPanel() {
-        return LichTrinhPanel;
-    }
-
-    public JPanel getMuaVePanel() {
-        return MuaVePanel;
     }
 
     public JPanel getExitButton() {
