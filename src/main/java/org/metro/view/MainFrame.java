@@ -258,10 +258,12 @@ public class MainFrame extends JFrame {
 
         // Thêm MenuTaskbar vào giao diện
         MenuTaskbar menuTaskbar = new MenuTaskbar(this);
-        menuTaskbar.setBounds(0, 500, 300, 240); // Điều chỉnh kích thước và vị trí
+        menuTaskbar.setBounds(0, 360, 300, 240); // Điều chỉnh kích thước và vị trí
 //        mainPanel.add(menuTaskbar);
-        this.add(menuTaskbar, BorderLayout.WEST);
+//        this.add(menuTaskbar, BorderLayout.WEST);
+        ChucNangPanel.add(menuTaskbar, BorderLayout.WEST);
     }
+
 
     public void setPanel(JPanel pn){
         rightPanel.removeAll();
