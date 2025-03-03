@@ -16,7 +16,7 @@ public class itemTaskbar extends JPanel implements MouseListener {
     Color HoverFontColor = new Color(255, 255, 255);
     Color HoverBackgroundColor = new Color(80, 138, 170);
 
-    JLabel lblIcon, pnlContent;
+    JLabel lblIcon, lblContent;
 
     public itemTaskbar(String linkIcon, String content) {
         this.setOpaque(true);
@@ -39,11 +39,11 @@ public class itemTaskbar extends JPanel implements MouseListener {
         this.add(lblIcon, BorderLayout.WEST); // Thêm icon vào WEST
 
         // Content
-        pnlContent = new JLabel(content);
-        pnlContent.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        pnlContent.setForeground(FontColor);
-        pnlContent.setBorder(new EmptyBorder(0, 40, 0, 0)); // Khoảng cách 10px bên trái
-        this.add(pnlContent, BorderLayout.CENTER); // Thêm nội dung vào CENTER
+        lblContent = new JLabel(content);
+        lblContent.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblContent.setForeground(FontColor);
+        lblContent.setBorder(new EmptyBorder(0, 40, 0, 0));
+        this.add(lblContent, BorderLayout.CENTER); // Thêm nội dung vào CENTER
     }
 
     // Các phương thức MouseListener giữ nguyên
@@ -59,12 +59,12 @@ public class itemTaskbar extends JPanel implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         this.setBackground(HoverBackgroundColor);
-        pnlContent.setForeground(HoverFontColor);
+        lblContent.setForeground(HoverFontColor);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         this.setBackground(DefaultColor);
-        pnlContent.setForeground(FontColor);
+        lblContent.setForeground(FontColor);
     }
 }
