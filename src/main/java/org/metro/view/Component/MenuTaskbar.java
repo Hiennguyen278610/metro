@@ -49,7 +49,6 @@ public class MenuTaskbar extends JPanel {
         pnCenter.setLayout(new GridLayout(getSt.length, 1, 0, 0)); // Không có khoảng cách giữa các hàng
         this.add(pnCenter, BorderLayout.CENTER); // Thêm pnCenter vào MenuTaskbar
 
-        // Khởi tạo các itemTaskbar
         for (int i = 0; i < getSt.length; i++) {
             listItem[i] = new itemTaskbar(getSt[i][1], getSt[i][0]);
             listItem[i].setVisible(true);
@@ -154,10 +153,10 @@ public class MenuTaskbar extends JPanel {
         for (int i = 0; i < getSt.length; i++) {
             if (e.getSource() == listItem[i]) {
                 listItem[i].setBackground(HoverBackgroundColor);
-                listItem[i].pnlContent.setForeground(HoverFontColor); // Cập nhật màu chữ
+                listItem[i].lblContent.setForeground(HoverFontColor); // Cập nhật màu chữ
             } else {
                 listItem[i].setBackground(DefaultColor);
-                listItem[i].pnlContent.setForeground(FontColor);
+                listItem[i].lblContent.setForeground(FontColor);
             }
         }
     }
