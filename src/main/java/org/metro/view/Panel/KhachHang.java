@@ -32,7 +32,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         khachHangTable = new JTable();
         khachHangScrollTable = new JScrollPane();
         dTable = new DefaultTableModel();
-        String[] columnNames = {"ID", "Tên khách hàng", "Số điện thoại", "Tuyến"};
+        String[] columnNames = {"Mã KH", "Tên khách hàng", "Số điện thoại", "Mã tuyến", "Ngày tham gia"};
         dTable.setColumnIdentifiers(columnNames);
         khachHangTable.setModel(dTable);
         khachHangTable.setFocusable(false);
@@ -80,7 +80,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
 
         search.btnReset.addActionListener(e -> {
             search.txtSearchForm.setText("");
-            loadDataTable(listkh);
+            loadDataTable();
         });
 
         String[] actions = {"create", "update", "delete", "detail"};
@@ -103,20 +103,23 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
     }
 
     public KhachHang() {
+        // Đảm bảo dữ liệu được tải trước khi tìm kiếm
+        KhachHangBUS.loadData();
         listkh = KhachHangBUS.search("", "Tất cả");
         initComponent();
         khachHangTable.setDefaultEditor(Object.class, null);
-        loadDataTable(listkh);
+        loadDataTable();
     }
-
-    public void loadDataTable(ArrayList<KhachHangDTO> result) {
+    public void loadDataTable() {
+        listkh = KhachHangBUS.search("", "Tất cả");  // Lấy dữ liệu mới nhất
         dTable.setRowCount(0);
-        for (KhachHangDTO khachHang : result) {
+        for (KhachHangDTO khachHang : listkh) {
             dTable.addRow(new Object[]{
-                    khachHang.getId(),
-                    khachHang.getTen(),
-                    khachHang.getSoDienThoai(),
-                    khachHang.getRouteID()
+                    khachHang.getMaKh(),
+                    khachHang.getTenKh(),
+                    khachHang.getSdt(),
+                    khachHang.getMaTuyen(),
+                    khachHang.getNgayThamGia().toString()
             });
         }
     }
@@ -125,20 +128,74 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         String type = (String) search.cbxChoose.getSelectedItem();
         String txt = search.txtSearchForm.getText();
         listkh = KhachHangBUS.search(txt, type);
-        loadDataTable(listkh);
+        loadDataTable();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == mainFunction.btn.get("create")) {
-            JOptionPane.showMessageDialog(this, "Thêm khách hàng mới");
+            // Gọi dialog để nhập thông tin khách hàng mới
+            showAddKhachHangDialog();
         } else if (e.getSource() == mainFunction.btn.get("update")) {
-            JOptionPane.showMessageDialog(this, "Cập nhật thông tin khách hàng");
+            // Lấy khách hàng được chọn từ bảng và cập nhật
+            int selectedRow = khachHangTable.getSelectedRow();
+            if (selectedRow != -1) {
+                int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
+                showUpdateKhachHangDialog(maKh);
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần cập nhật!");
+            }
         } else if (e.getSource() == mainFunction.btn.get("delete")) {
-            JOptionPane.showMessageDialog(this, "Xóa khách hàng");
+            // Xóa khách hàng được chọn
+            int selectedRow = khachHangTable.getSelectedRow();
+            if (selectedRow != -1) {
+                int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
+                int option = JOptionPane.showConfirmDialog(this,
+                        "Bạn có chắc muốn xóa khách hàng này?",
+                        "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                    if (KhachHangBUS.delete(maKh)) {
+                        JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công!");
+                        // Cập nhật lại danh sách
+                        listkh = KhachHangBUS.search("", "Tất cả");
+                        loadDataTable();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Xóa khách hàng thất bại!");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần xóa!");
+            }
         } else if (e.getSource() == mainFunction.btn.get("detail")) {
-            JOptionPane.showMessageDialog(this, "Xem chi tiết khách hàng");
+            // Hiển thị chi tiết khách hàng
+            int selectedRow = khachHangTable.getSelectedRow();
+            if (selectedRow != -1) {
+                int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
+                KhachHangDTO kh = KhachHangBUS.getById(maKh);
+                if (kh != null) {
+                    showKhachHangDetail(kh);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng để xem chi tiết!");
+            }
         }
+    }
+
+    // Thêm các phương thức hỗ trợ
+    private void showAddKhachHangDialog() {
+        // Code để hiển thị dialog thêm khách hàng mới
+        // Ví dụ, tạo JDialog với các field nhập liệu
+        // và xử lý khi người dùng nhấn nút Thêm
+    }
+
+    private void showUpdateKhachHangDialog(int maKh) {
+        // Code để hiển thị dialog cập nhật thông tin khách hàng
+        // Tương tự như showAddKhachHangDialog nhưng với dữ liệu ban đầu
+    }
+
+    private void showKhachHangDetail(KhachHangDTO kh) {
+        // Code để hiển thị chi tiết khách hàng
+        // Ví dụ, tạo JDialog hiển thị thông tin chi tiết
     }
 
     @Override
