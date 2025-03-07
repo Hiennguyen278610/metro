@@ -32,7 +32,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         khachHangTable = new JTable();
         khachHangScrollTable = new JScrollPane();
         dTable = new DefaultTableModel();
-        String[] columnNames = {"Mã KH", "Tên khách hàng", "Số điện thoại", "Mã tuyến", "Ngày tham gia"};
+        String[] columnNames = { "Mã KH", "Tên khách hàng", "Số điện thoại", "Mã tuyến", "Ngày tham gia" };
         dTable.setColumnIdentifiers(columnNames);
         khachHangTable.setModel(dTable);
         khachHangTable.setFocusable(false);
@@ -41,13 +41,11 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-
         for (int i = 0; i < columnNames.length; i++) {
             khachHangTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
 
         khachHangTable.setAutoCreateRowSorter(true);
-
 
         contentCenter = new JPanel();
         contentCenter.setBackground(new Color(130, 190, 223));
@@ -59,8 +57,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         functionBar.setLayout(new BoxLayout(functionBar, BoxLayout.X_AXIS));
         functionBar.setPreferredSize(new Dimension(0, 50));
 
-
-        search = new IntegratedSearch(new String[]{"Tất cả", "ID", "Tên khách hàng", "Số điện thoại", "Tuyến"});
+        search = new IntegratedSearch(new String[] { "Tất cả", "ID", "Tên khách hàng", "Số điện thoại", "Tuyến" });
         search.cbxChoose.addItemListener(this);
         search.txtSearchForm.addKeyListener(new KeyAdapter() {
             @Override
@@ -83,15 +80,15 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
             loadDataTable();
         });
 
-        String[] actions = {"create", "update", "delete", "detail"};
+        String[] actions = { "create", "update", "delete", "detail" };
         mainFunction = new MainFunction(actions);
-//        mainFunction.setPreferredSize(new Dimension(50, 20));
+        // mainFunction.setPreferredSize(new Dimension(50, 20));
         for (String action : actions) {
             mainFunction.btn.get(action).addActionListener(this);
         }
 
         functionBar.add(mainFunction);
-//        functionBar.add(Box.createHorizontalStrut(1));
+        // functionBar.add(Box.createHorizontalStrut(1));
         JPanel combinedPanel = new JPanel();
         combinedPanel.setLayout(new BorderLayout());
         combinedPanel.add(search, BorderLayout.NORTH);
@@ -110,11 +107,12 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         khachHangTable.setDefaultEditor(Object.class, null);
         loadDataTable();
     }
+
     public void loadDataTable() {
-        listkh = KhachHangBUS.search("", "Tất cả");  // Lấy dữ liệu mới nhất
+        listkh = KhachHangBUS.search("", "Tất cả"); // Lấy dữ liệu mới nhất
         dTable.setRowCount(0);
         for (KhachHangDTO khachHang : listkh) {
-            dTable.addRow(new Object[]{
+            dTable.addRow(new Object[] {
                     khachHang.getMaKh(),
                     khachHang.getTenKh(),
                     khachHang.getSdt(),

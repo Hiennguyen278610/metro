@@ -29,55 +29,51 @@ public class MainFrame extends JFrame {
     private MenuTaskbar menuTaskbar;
 
     public MainFrame() {
-        setSize(1200, 800);
         setTitle("Quan ly Metro");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
         this.init();
+        setSize(1200, 800);
         setVisible(true);
     }
 
     private void init() {
-
-
         JPanel mainPanel = new JPanel();
         TuyenDuongPanel = new JPanel();
         this.setContentPane(mainPanel);
-        Color MainColor = Color.decode("#6096B4");
+        Color MainColor = Color.decode("#93BFCF");
         MainController controller = new MainController(this);
         mainPanel.setLayout(null);
 
         // Navbar
         navbarPanel = new JPanel();
         navbarPanel.setBounds(0, 0, 1200, 40);
-        navbarPanel.setBackground(Color.pink);
-        navbarPanel.setLayout(null);
+        navbarPanel.setBackground(MainColor);
+        navbarPanel.setLayout(new FlowLayout(2, 0, 0));
         mainPanel.add(navbarPanel);
 
-        ExitButton = new JPanel();
-        ExitButton.setBounds(1160, 0, 40, 40);
-        ExitButton.setBackground(Color.pink);
-        ExitButton.addMouseListener(controller);
-        navbarPanel.add(ExitButton);
-
-        ExitIcon = new JLabel("X");
-        ExitIcon.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        ExitIcon.setForeground(Color.white);
-        ExitIcon.setBounds(0, 0, 40, 40);
-        ExitButton.add(ExitIcon);
-
         MinimizeButton = new JPanel();
-        MinimizeButton.setBounds(1120, 0, 40, 40);
-        MinimizeButton.setBackground(Color.pink);
+        MinimizeButton.setPreferredSize(new Dimension(40, 40));
+        MinimizeButton.setBackground(MainColor);
         MinimizeButton.addMouseListener(controller);
         navbarPanel.add(MinimizeButton);
 
         MinimizeIcon = new JLabel("-");
         MinimizeIcon.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        MinimizeIcon.setForeground(Color.white);
-        MinimizeIcon.setBounds(0, 0, 40, 40);
+        MinimizeIcon.setForeground(Color.black);
         MinimizeButton.add(MinimizeIcon);
+
+        ExitButton = new JPanel();
+        ExitButton.setPreferredSize(new Dimension(40, 40));
+        ExitButton.setBackground(MainColor);
+        ExitButton.addMouseListener(controller);
+        navbarPanel.add(ExitButton);
+
+        ExitIcon = new JLabel("X");
+        ExitIcon.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        ExitIcon.setForeground(Color.black);
+        ExitButton.add(ExitIcon);
 
         // Left Panel
         JPanel leftPanel = new JPanel();
@@ -146,17 +142,14 @@ public class MainFrame extends JFrame {
 
         ChucNangPanel.add(DangXuatPanel, BorderLayout.SOUTH); // Thêm vào SOUTH
 
-
     }
 
-
-    public void setPanel(JPanel pn){
+    public void setPanel(JPanel pn) {
         rightPanel.removeAll();
         rightPanel.add(pn, BorderLayout.CENTER);
         rightPanel.revalidate();
         rightPanel.repaint();
     }
-
 
     public void resetPanel() {
     }
@@ -170,7 +163,6 @@ public class MainFrame extends JFrame {
         });
     }
 
-
     public JPanel getDangXuatPanel() {
         return DangXuatPanel;
     }
@@ -182,7 +174,6 @@ public class MainFrame extends JFrame {
     public JPanel getMinimizeButton() {
         return MinimizeButton;
     }
-
 
     public JLabel getExitIcon() {
         return ExitIcon;
