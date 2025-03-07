@@ -29,12 +29,12 @@ public class MainFrame extends JFrame {
     private MenuTaskbar menuTaskbar;
 
     public MainFrame() {
+        setSize(1200, 800);
         setTitle("Quan ly Metro");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
         this.init();
-        setSize(1200, 800);
         setVisible(true);
     }
 
