@@ -144,9 +144,7 @@ public class MainFrame extends JFrame {
         DangXuatPanel.add(DangXuatIcon);
         DangXuatPanel.add(DangXuatLabel);
 
-        ChucNangPanel.add(DangXuatPanel, BorderLayout.SOUTH); // Thêm vào SOUTH
-
-
+        ChucNangPanel.add(DangXuatPanel, BorderLayout.SOUTH);
     }
 
 

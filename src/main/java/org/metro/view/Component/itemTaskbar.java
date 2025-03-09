@@ -26,7 +26,7 @@ public class itemTaskbar extends JPanel implements MouseListener {
 
         // Icon
         lblIcon = new JLabel();
-        lblIcon.setPreferredSize(new Dimension(50, 30));
+        lblIcon.setPreferredSize(new Dimension(60, 30));
         lblIcon.setBorder(new EmptyBorder(0, 20, 0, 0));
         URL iconUrl = getClass().getResource("/svg/" + linkIcon);
         if (iconUrl != null) {
@@ -36,17 +36,17 @@ public class itemTaskbar extends JPanel implements MouseListener {
             lblIcon.setText("X");
         }
         lblIcon.setHorizontalAlignment(JLabel.CENTER);
-        this.add(lblIcon, BorderLayout.WEST); // Thêm icon vào WEST
+        this.add(lblIcon, BorderLayout.WEST);
 
         // Content
         lblContent = new JLabel(content);
         lblContent.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblContent.setForeground(FontColor);
         lblContent.setBorder(new EmptyBorder(0, 40, 0, 0));
-        this.add(lblContent, BorderLayout.CENTER); // Thêm nội dung vào CENTER
+        this.add(lblContent, BorderLayout.CENTER);
     }
 
-    // Các phương thức MouseListener giữ nguyên
+
     @Override
     public void mouseClicked(MouseEvent e) {}
 
