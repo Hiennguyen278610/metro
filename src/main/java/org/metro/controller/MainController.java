@@ -20,7 +20,6 @@ public class MainController implements MouseInputListener {
         this.frame = frame;
     }
 
-
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == frame.getDangXuatPanel()) {

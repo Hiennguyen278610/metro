@@ -82,7 +82,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
             loadDataTable();
         });
 
-        String[] actions = {"create", "update", "delete", "detail"};
+        String[] actions = { "create", "update", "delete", "detail" };
         mainFunction = new MainFunction(actions);
         for(String action : actions){
             mainFunction.btn.get(action).addActionListener(this);
