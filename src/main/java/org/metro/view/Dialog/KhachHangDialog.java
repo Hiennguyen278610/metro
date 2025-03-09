@@ -4,101 +4,169 @@ import org.metro.model.KhachHangDTO;
 import org.metro.service.KhachHangBUS;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.util.List;
 
-public class KhachHangDialog extends JDialog {
+public class KhachHangDialog {
 
-    private JTextField makhField, tenkhField, sdtField, matuyenField;
-    private List<KhachHangDTO> listkh;
+    // Dialog thêm khách hàng mới
+    public void showAddKhachHangDialog(Component parent, Runnable updateCallback) {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Thêm khách hàng mới", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setLayout(new BorderLayout());
 
-    public KhachHangDialog(Frame parent) {
-        super(parent, "Thêm Khách Hàng", true);
-        setSize(400, 300);
-        setLocationRelativeTo(parent);
-        setLayout(new BorderLayout());
+        // Nếu makh là AUTO_INCREMENT, ta không cho người dùng nhập makh
+        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        add(createInputPanel(), BorderLayout.CENTER);
-        add(createButtonPanel(), BorderLayout.SOUTH);
+        JLabel lblTenKh = new JLabel("Tên khách hàng:");
+        JTextField txtTenKh = new JTextField();
 
-        setVisible(true);
-    }
+        JLabel lblSdt = new JLabel("Số điện thoại:");
+        JTextField txtSdt = new JTextField();
 
-    private JPanel createInputPanel() {
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
-        panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        JLabel lblSolan = new JLabel("Số lần đi:");
+        JTextField txtSolan = new JTextField();
 
-        makhField = new JTextField();
-        tenkhField = new JTextField();
-        sdtField = new JTextField();
-        matuyenField = new JTextField();
+        formPanel.add(lblTenKh); formPanel.add(txtTenKh);
+        formPanel.add(lblSdt); formPanel.add(txtSdt);
+        formPanel.add(lblSolan); formPanel.add(txtSolan);
 
-        panel.add(new JLabel("Mã Khách Hàng:"));
-        panel.add(makhField);
-        panel.add(new JLabel("Tên Khách Hàng:"));
-        panel.add(tenkhField);
-        panel.add(new JLabel("Số Điện Thoại:"));
-        panel.add(sdtField);
-        panel.add(new JLabel("Mã Tuyến:"));
-        panel.add(matuyenField);
-
-        return panel;
-    }
-
-    private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton addButton = new JButton("Thêm");
-        JButton cancelButton = new JButton("Hủy");
-
-        addButton.addActionListener(e -> addKhachHang());
-        cancelButton.addActionListener(e -> dispose());
-
-        buttonPanel.add(addButton);
-        buttonPanel.add(cancelButton);
-        return buttonPanel;
-    }
-
-    private void addKhachHang() {
-        try {
-            int makh = Integer.parseInt(makhField.getText().trim());
-            String tenkh = tenkhField.getText().trim();
-            String sdt = sdtField.getText().trim();
-            String matuyen = matuyenField.getText().trim();
-
-            if (tenkh.isEmpty() || sdt.isEmpty() || matuyen.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        JButton btnCancel = new JButton("Hủy");
+        btnCancel.addActionListener(e -> dialog.dispose());
+        JButton btnAdd = new JButton("Thêm");
+        btnAdd.addActionListener(e -> {
+            String tenKh = txtTenKh.getText().trim();
+            String sdt = txtSdt.getText().trim();
+            String solanStr = txtSolan.getText().trim();
+            if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
-
-            if (!isPhoneNumber(sdt)) {
-                JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            int solan;
+            try {
+                solan = Integer.parseInt(solanStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Số lần đi phải là số!");
                 return;
             }
-
-            KhachHangDTO kh = new KhachHangDTO(makh, tenkh, sdt, matuyen, LocalDateTime.now());
-
+            // makh = 0 để đánh dấu tự động tăng
+            KhachHangDTO kh = new KhachHangDTO(0, tenKh, sdt, solan);
             if (KhachHangBUS.insert(kh)) {
-                JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-
-                // Cập nhật lại danh sách khách hàng
-                listkh = KhachHangBUS.search("", "Tất cả");
-                loadDataTable(listkh);
+                JOptionPane.showMessageDialog(dialog, "Thêm khách hàng thành công!");
+                dialog.dispose();
+                if(updateCallback != null) updateCallback.run();
             } else {
-                JOptionPane.showMessageDialog(this, "Thêm khách hàng thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Thêm khách hàng thất bại!");
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Mã khách hàng phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        });
+        buttonPanel.add(btnCancel);
+        buttonPanel.add(btnAdd);
+
+        dialog.add(formPanel, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        dialog.setVisible(true);
+    }
+
+    // Dialog cập nhật khách hàng
+    public void showUpdateKhachHangDialog(Component parent, int maKh, Runnable updateCallback) {
+        KhachHangDTO kh = KhachHangBUS.getById(maKh);
+        if (kh == null) {
+            JOptionPane.showMessageDialog(parent, "Không tìm thấy thông tin khách hàng!");
+            return;
         }
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Cập nhật khách hàng", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Mã khách hàng không được chỉnh sửa
+        JLabel lblMaKh = new JLabel("Mã khách hàng:");
+        JTextField txtMaKh = new JTextField(String.valueOf(kh.getMaKh()));
+        txtMaKh.setEditable(false);
+
+        JLabel lblTenKh = new JLabel("Tên khách hàng:");
+        JTextField txtTenKh = new JTextField(kh.getTenKh());
+
+        JLabel lblSdt = new JLabel("Số điện thoại:");
+        JTextField txtSdt = new JTextField(kh.getSdt());
+
+        JLabel lblSolan = new JLabel("Số lần đi:");
+        JTextField txtSolan = new JTextField(String.valueOf(kh.getSolan()));
+
+        // Hiển thị mã khách hàng ở dòng đầu
+        formPanel.add(lblMaKh); formPanel.add(txtMaKh);
+        formPanel.add(lblTenKh); formPanel.add(txtTenKh);
+        formPanel.add(lblSdt); formPanel.add(txtSdt);
+        formPanel.add(lblSolan); formPanel.add(txtSolan);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnCancel = new JButton("Hủy");
+        btnCancel.addActionListener(e -> dialog.dispose());
+        JButton btnUpdate = new JButton("Cập nhật");
+        btnUpdate.addActionListener(e -> {
+            String tenKh = txtTenKh.getText().trim();
+            String sdt = txtSdt.getText().trim();
+            String solanStr = txtSolan.getText().trim();
+            if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+            int solan;
+            try {
+                solan = Integer.parseInt(solanStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Số lần đi phải là số!");
+                return;
+            }
+            KhachHangDTO updatedKh = new KhachHangDTO(kh.getMaKh(), tenKh, sdt, solan);
+            if (KhachHangBUS.update(updatedKh)) {
+                JOptionPane.showMessageDialog(dialog, "Cập nhật khách hàng thành công!");
+                dialog.dispose();
+                if(updateCallback != null) updateCallback.run();
+            } else {
+                JOptionPane.showMessageDialog(dialog, "Cập nhật khách hàng thất bại!");
+            }
+        });
+        buttonPanel.add(btnCancel);
+        buttonPanel.add(btnUpdate);
+
+        dialog.add(formPanel, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        dialog.setVisible(true);
     }
 
-    private boolean isPhoneNumber(String sdt) {
-        return sdt.matches("\\d{10,11}");
-    }
+    // Dialog hiển thị chi tiết khách hàng
+    public void showKhachHangDetailDialog(Component parent, KhachHangDTO kh) {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Chi tiết khách hàng", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(400, 250);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setLayout(new BorderLayout());
 
-    private void loadDataTable(List<KhachHangDTO> listkh) {
-        // TODO: Cập nhật JTable hoặc danh sách hiển thị khách hàng sau khi thêm mới
+        JPanel detailPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        detailPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel lblMaKh = new JLabel("Mã khách hàng: " + kh.getMaKh());
+        JLabel lblTenKh = new JLabel("Tên khách hàng: " + kh.getTenKh());
+        JLabel lblSdt = new JLabel("Số điện thoại: " + kh.getSdt());
+        JLabel lblSolan = new JLabel("Số lần đi: " + kh.getSolan());
+
+        detailPanel.add(lblMaKh);
+        detailPanel.add(lblTenKh);
+        detailPanel.add(lblSdt);
+        detailPanel.add(lblSolan);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnClose = new JButton("Đóng");
+        btnClose.addActionListener(e -> dialog.dispose());
+        buttonPanel.add(btnClose);
+
+        dialog.add(detailPanel, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        dialog.setVisible(true);
     }
 }

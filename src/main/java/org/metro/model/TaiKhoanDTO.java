@@ -2,30 +2,59 @@ package org.metro.model;
 
 public class TaiKhoanDTO {
     private int manv;
-    private int maquyen;
     private String matkhau;
-    private String trangthaitaikhoan;
+    private int manhomquyen;
+    private int trangthai; // 1: Hoạt động, 0: Ngừng hoạt động
 
-    public TaiKhoanDTO(int manv, int maquyen, String matkhau, String trangthaitaikhoan) {
+    public TaiKhoanDTO() {}
+
+    public TaiKhoanDTO(int manv, String matkhau, int manhomquyen, int trangthai) {
         this.manv = manv;
-        this.maquyen = maquyen;
         this.matkhau = matkhau;
-        this.trangthaitaikhoan = trangthaitaikhoan;
+        this.manhomquyen = manhomquyen;
+        this.trangthai = trangthai;
     }
 
-    public int getManv() { return manv; }
+    public int getManv() {
+        return manv;
+    }
 
-    public int getMaquyen() { return maquyen; }
+    public void setManv(int manv) {
+        this.manv = manv;
+    }
 
-    public String getMatkhau() { return matkhau; }
+    public String getMatkhau() {
+        return matkhau;
+    }
 
-    public String getTrangthaitaikhoan() { return trangthaitaikhoan; }
+    public void setMatkhau(String matkhau) {
+        this.matkhau = matkhau;
+    }
 
-    public void setManv(int manv) { this.manv = manv; }
+    public int getManhomquyen() {
+        return manhomquyen;
+    }
 
-    public void setMaquyen(int maquyen) { this.maquyen = maquyen; }
+    public void setManhomquyen(int manhomquyen) {
+        this.manhomquyen = manhomquyen;
+    }
 
-    public void setMatkhau(String matkhau) { this.matkhau = matkhau; }
+    public int getTrangthai() {
+        return trangthai;
+    }
 
-    public void setTrangthaitaikhoan(String trangthaitaikhoan) { this.trangthaitaikhoan = trangthaitaikhoan; }
+    public void setTrangthai(int trangthai) {
+        this.trangthai = trangthai;
+    }
+
+    @Override
+    public String toString() {
+        return "TaiKhoanDTO{" +
+                "manv=" + manv +
+                ", matkhau='" + matkhau + '\'' +
+                ", manhomquyen=" + manhomquyen +
+                ", trangthai=" + trangthai +
+                '}';
+    }
+
 }
