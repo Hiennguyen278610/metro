@@ -2,10 +2,18 @@ package org.metro.service;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
+import mdlaf.components.button.MaterialButtonUI;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.metal.MetalButtonUI;
+
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.ImageObserver;
 import java.net.URL;
+import java.text.AttributedCharacterIterator;
 
 public class IntegratedSearch extends JPanel {
     public JTextField txtSearchForm;
@@ -27,10 +35,24 @@ public class IntegratedSearch extends JPanel {
         txtSearchForm.setPreferredSize(new Dimension(200, 30));
 
         btnReset = new JButton();
+        btnReset.setOpaque(true);
+        btnReset.setBackground(Color.CYAN);
+        btnReset.setContentAreaFilled(false);
+        btnReset.paintComponents(getGraphics());
         URL iconUrl = getClass().getResource("/svg/refresh.svg");
         if (iconUrl != null) {
             btnReset.setIcon(new FlatSVGIcon(iconUrl).derive(20, 20));
         }
+        btnReset.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if(e.getSource() == btnReset) btnReset.setBackground(Color.BLUE);
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if(e.getSource() == btnReset) btnReset.setBackground(Color.CYAN);
+            }
+        });
         btnReset.setPreferredSize(new Dimension(30, 30));
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -46,6 +68,7 @@ public class IntegratedSearch extends JPanel {
         searchPanel.add(btnReset);
 
         this.add(searchPanel, BorderLayout.WEST);
+        this.repaint();
+        this.revalidate();
     }
-
 }

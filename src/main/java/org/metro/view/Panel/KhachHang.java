@@ -100,6 +100,9 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         contentCenter.add(combinedPanel, BorderLayout.NORTH);
 
         contentCenter.add(khachHangScrollTable, BorderLayout.CENTER);
+
+        this.repaint();
+        this.revalidate();
     }
 
     public KhachHang() {

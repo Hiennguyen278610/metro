@@ -7,6 +7,10 @@ public class NhanVien extends JPanel {
 
     Color BackgroundColor = new Color(0, 2, 2);
 
+    public NhanVien() {
+        initComponent();
+    }
+
     public void initComponent() {
         this.setBackground(BackgroundColor);
         this.setLayout(new BorderLayout(0, 0));
@@ -16,7 +20,5 @@ public class NhanVien extends JPanel {
         this.add(nhanvienLabel, BorderLayout.CENTER);
     }
 
-    public NhanVien() {
-        initComponent();
-    }
+    
 }
