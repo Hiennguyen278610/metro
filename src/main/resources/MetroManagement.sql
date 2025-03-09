@@ -10,42 +10,56 @@ create table users (
 );
 -- KHACH HANG
 CREATE TABLE `khachhang` (
-    `makh` int(11) NOT NULL,
-    `tenkh` varchar(255) NOT NULL,
-    `sdt` varchar(255) NOT NULL,
-    `matuyen` varchar(255) NOT NULL,
-    `ngaythamgia` datetime NOT NULL DEFAULT current_timestamp()
+    `makh` INT AUTO_INCREMENT NOT NULL,
+    `tenkh` VARCHAR(255) NOT NULL,
+    `sdt` VARCHAR(255) NOT NULL,
+    `solan` INT(10) NOT NULL,
+    UNIQUE KEY (`makh`)
 );
 
 
-INSERT INTO `khachhang` (`makh`, `tenkh`, `sdt`, `matuyen`, `ngaythamgia`) VALUES
-(1, 'Nguyễn Văn Anh', '0387913347', 'tuyen1', '2023-04-19 09:52:29'),
-(2, 'Trần Thị Chỉ', '0912345678', 'tuyen2', '2023-05-10 14:32:45'),
-(3, 'Lê Hoàng Xem', '0987654321', 'tuyen3', '2023-06-15 08:21:13'),
-(4, 'Phạm Minh Em', '0971122334', 'tuyen4', '2023-07-20 10:45:30'),
-(5, 'Hoàng Văn Là', '0902233445', 'tuyen1', '2023-08-01 12:00:00'),
-(6, 'Đỗ Thị Bạn', '0923344556', 'tuyen2', '2023-09-05 16:15:42'),
-(7, 'Nguyễn Văn Thôi', '0934455667', 'tuyen3', '2023-10-10 18:25:36'),
-(8, 'Trịnh Ngọc Và', '0965566778', 'tuyen4', '2023-11-11 09:30:00'),
-(9, 'Lý Văn Đừng', '0946677889', 'tuyen1', '2023-12-25 07:45:20'),
-(10, 'Dương Thị Mong', '0917788990', 'tuyen2', '2024-01-03 11:12:33'),
-(11, 'Bùi Văn Gì', '0988899001', 'tuyen3', '2024-02-14 13:50:25'),
-(12, 'Nguyễn Minh Khác', '0900011223', 'tuyen4', '2024-03-21 15:33:47'),
-(13, 'Võ Minh Mối', '0911122334', 'tuyen1', '2024-04-05 08:10:55'),
-(14, 'Cao Thị Quan', '0922233445', 'tuyen2', '2024-05-18 17:45:30'),
-(15, 'Hồ Quang Hệ', '0933344556', 'tuyen3', '2024-06-23 19:20:40'),
-(16, 'Tạ Văn Này', '0964455667', 'tuyen4', '2024-07-30 20:10:22'),
-(17, 'Lương Hoàng Nên', '0945566778', 'tuyen1', '2024-08-15 10:05:55'),
-(18, 'Đinh Ngọc Cho', '0956677889', 'tuyen2', '2024-09-10 14:18:29'),
-(19, 'Châu Văn Nó', '0977788990', 'tuyen3', '2024-10-05 09:40:15'),
-(20, 'Hà Thị Thành', '0188899001', 'tuyen4', '2024-11-20 11:55:30'),
-(21, 'Trương Văn Kỉ', '0990011223', 'tuyen1', '2024-12-01 08:30:45'),
-(22, 'Lê Hoàng Niệm', '0882233445', 'tuyen2', '2024-12-15 10:45:20');
+INSERT INTO `khachhang` (`makh`, `tenkh`, `sdt`, `solan`) VALUES
+(1, 'Nguyễn Văn Anh', '0387913347', '1'),
+(2, 'Trần Thị Chỉ', '0912345678', '2'),
+(3, 'Lê Hoàng Xem', '0987654321', '3'),
+(4, 'Phạm Minh Em', '0971122334', '4'),
+(5, 'Hoàng Văn Là', '0902233445', '1'),
+(6, 'Đỗ Thị Bạn', '0923344556', '2'),
+(7, 'Nguyễn Văn Thôi', '0934455667', '3'),
+(8, 'Trịnh Ngọc Và', '0965566778', '4'),
+(9, 'Lý Văn Đừng', '0946677889', '1'),
+(10, 'Dương Thị Mong', '0917788990', '2'),
+(11, 'Bùi Văn Gì', '0988899001', '3'),
+(12, 'Nguyễn Minh Khác', '0900011223', '4'),
+(13, 'Võ Minh Mối', '0911122334', '1'),
+(14, 'Cao Thị Quan', '0922233445', '2'),
+(15, 'Hồ Quang Hệ', '0933344556', '3'),
+(16, 'Tạ Văn Này', '0964455667', '4'),
+(17, 'Lương Hoàng Nên', '0945566778', '1'),
+(18, 'Đinh Ngọc Cho', '0956677889', '2'),
+(19, 'Châu Văn Nó', '0977788990', '3'),
+(20, 'Hà Thị Thành', '0188899001', '4'),
+(21, 'Trương Văn Kỉ', '0990011223', '1'),
+(22, 'Lê Hoàng Niệm', '0882233445', '2');
 
 
+CREATE TABLE `taikhoan` (
+    `manv` int(11) NOT NULL,
+    `matkhau` varchar(255) NOT NULL,
+    `manhomquyen` int(11) NOT NULL,
+    `trangthai` int(11) NOT NULL
+);
+INSERT INTO `taikhoan` (`manv`, `matkhau`, `manhomquyen`, `trangthai`) VALUES
+    (1, '0000', 1, 1),  -- Admin
+    (2, '0000', 2, 1),  -- User
+    (3, '0000', 3, 1),  -- Nhân viên
+    (4, '0000', 2, 0);
 
 
+# DROP TABLE taikhoan;
+# DROP TABLE khachhang;
 select * from khachhang;
+select * from taikhoan;
 select * from users;
 
 

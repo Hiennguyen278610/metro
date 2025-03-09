@@ -7,6 +7,8 @@ import mdlaf.MaterialLookAndFeel;
 
 import org.metro.view.LoginFrame;
 
+import java.awt.*;
+
 public class Main {
     public static void main(String[] args) {
         // Đặt encoding toàn cục cho ứng dụng
@@ -15,6 +17,7 @@ public class Main {
         try {
             // Thiết lập Material Look and Feel
             UIManager.setLookAndFeel(new MaterialLookAndFeel());
+
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
