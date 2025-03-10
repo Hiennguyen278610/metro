@@ -32,49 +32,56 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
 
     private void initComponent() {
         this.setBackground(BackgroundColor);
-        this.setLayout(new BorderLayout(0,0));
+        this.setLayout(new BorderLayout(0, 0));
 
         khachHangTable = new JTable();
         khachHangScrollTable = new JScrollPane();
-        dTable = new DefaultTableModel();
-        String[] columnNames = {"Mã KH", "Tên khách hàng", "Số điện thoại", "Số lần đi"};
+        dTable = new DefaultTableModel(){
+            @Override
+             // tao model voi so cot va hang co dinh khong cho sua chua
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        String[] columnNames = { "Mã KH", "Tên khách hàng", "Số điện thoại", "Số lần đi" };
         dTable.setColumnIdentifiers(columnNames);
         khachHangTable.setModel(dTable);
         khachHangTable.setFocusable(false);
+        khachHangTable.setRowSelectionAllowed(true); // cho phep chon 1 hang nao do
         khachHangScrollTable.setViewportView(khachHangTable);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for(int i = 0; i < columnNames.length; i++){
+        for (int i = 0; i < columnNames.length; i++) {
             khachHangTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
         khachHangTable.setAutoCreateRowSorter(true);
 
         contentCenter = new JPanel();
-        contentCenter.setBackground(new Color(130,190,223));
-        contentCenter.setPreferredSize(new Dimension(1100,600));
-        contentCenter.setLayout(new BorderLayout(10,10));
+        contentCenter.setBackground(new Color(130, 190, 223));
+        contentCenter.setPreferredSize(new Dimension(1100, 600));
+        contentCenter.setLayout(new BorderLayout(10, 10));
         this.add(contentCenter, BorderLayout.CENTER);
 
         functionBar = new JPanel();
         functionBar.setLayout(new BoxLayout(functionBar, BoxLayout.X_AXIS));
-        functionBar.setPreferredSize(new Dimension(0,50));
+        functionBar.setPreferredSize(new Dimension(0, 50));
 
-        search = new IntegratedSearch(new String[]{"Tất cả", "ID", "Tên khách hàng", "Số lần đi"});
+        search = new IntegratedSearch(new String[] { "Tất cả", "ID", "Tên khách hàng", "Số lần đi" });
         search.cbxChoose.addItemListener(this);
-        search.txtSearchForm.addKeyListener(new KeyAdapter(){
+        search.txtSearchForm.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyReleased(KeyEvent e){
-                if(searchTimer != null){
+            public void keyReleased(KeyEvent e) {
+                if (searchTimer != null) {
                     searchTimer.cancel();
                 }
                 searchTimer = new Timer();
-                searchTimer.schedule(new TimerTask(){
+                searchTimer.schedule(new TimerTask() {
                     @Override
-                    public void run(){
+                    public void run() {
                         SwingUtilities.invokeLater(() -> performSearch());
                     }
-                },300);
+                }, 300);
             }
         });
         search.btnReset.addActionListener(e -> {
@@ -84,7 +91,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
 
         String[] actions = { "create", "update", "delete", "detail" };
         mainFunction = new MainFunction(actions);
-        for(String action : actions){
+        for (String action : actions) {
             mainFunction.btn.get(action).addActionListener(this);
         }
         functionBar.add(mainFunction);
@@ -101,7 +108,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
     private void populateTable(ArrayList<KhachHangDTO> data) {
         dTable.setRowCount(0);
         for (KhachHangDTO kh : data) {
-            dTable.addRow(new Object[]{
+            dTable.addRow(new Object[] {
                     kh.getMaKh(),
                     kh.getTenKh(),
                     kh.getSdt(),
@@ -123,28 +130,27 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         populateTable(result);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == mainFunction.btn.get("create")){
+        if (e.getSource() == mainFunction.btn.get("create")) {
             new KhachHangDialog().showAddKhachHangDialog(this, this::loadDataTable);
-        } else if(e.getSource() == mainFunction.btn.get("update")){
+        } else if (e.getSource() == mainFunction.btn.get("update")) {
             int selectedRow = khachHangTable.getSelectedRow();
-            if(selectedRow != -1){
+            if (selectedRow != -1) {
                 int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
                 new KhachHangDialog().showUpdateKhachHangDialog(this, maKh, this::loadDataTable);
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần cập nhật!");
             }
-        } else if(e.getSource() == mainFunction.btn.get("delete")){
+        } else if (e.getSource() == mainFunction.btn.get("delete")) {
             int selectedRow = khachHangTable.getSelectedRow();
-            if(selectedRow != -1){
+            if (selectedRow != -1) {
                 int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
                 int option = JOptionPane.showConfirmDialog(this,
                         "Bạn có chắc muốn xóa khách hàng này?",
                         "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-                if(option == JOptionPane.YES_OPTION){
-                    if(KhachHangBUS.delete(maKh)){
+                if (option == JOptionPane.YES_OPTION) {
+                    if (KhachHangBUS.delete(maKh)) {
                         JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công!");
                         loadDataTable();
                     } else {
@@ -154,12 +160,12 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần xóa!");
             }
-        } else if(e.getSource() == mainFunction.btn.get("detail")){
+        } else if (e.getSource() == mainFunction.btn.get("detail")) {
             int selectedRow = khachHangTable.getSelectedRow();
-            if(selectedRow != -1){
+            if (selectedRow != -1) {
                 int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
                 KhachHangDTO kh = KhachHangBUS.getById(maKh);
-                if(kh != null){
+                if (kh != null) {
                     new KhachHangDialog().showKhachHangDetailDialog(this, kh);
                 }
             } else {
@@ -170,7 +176,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if(e.getStateChange() == ItemEvent.SELECTED){
+        if (e.getStateChange() == ItemEvent.SELECTED) {
             performSearch();
         }
     }

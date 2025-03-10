@@ -56,10 +56,47 @@ INSERT INTO `taikhoan` (`manv`, `matkhau`, `manhomquyen`, `trangthai`) VALUES
     (4, '0000', 2, 0);
 
 
+-- NHANVIEN
+create table nhanvien(
+    manv int NOT NULL,
+    tennv varchar(100) NOT NULL,
+    sodienthoai varchar(15) NOT NULL,
+    gioitinh varchar(15) NOT NULL,
+    chucvu varchar(100) NOT NULL
+)
+
+insert into nhanvien(manv,tennv,sodienthoai,gioitinh,chucvu)
+values 
+(1, 'Nguyễn Văn A', '0901234567', 'Nam', 'Quản lý tuyến tàu điện'),
+(2, 'Trần Thị B', '0907654321', 'Nữ', 'Thu ngân'),
+(3, 'Lê Văn C', '0909876543', 'Nam', 'Nhân viên soát vé'),
+(4, 'Phạm Thị D', '0901112222', 'Nữ', 'Quản lý tuyến tàu điện'),
+(5, 'Nguyễn Văn E', '0903334444', 'Nam', 'Thu ngân'),
+(6, 'Trần Thị F', '0905556666', 'Nữ', 'Nhân viên soát vé'),
+(7, 'Lê Văn G', '0907778888', 'Nam', 'Quản lý tuyến tàu điện'),
+(8, 'Phạm Thị H', '0909990000', 'Nữ', 'Thu ngân'),
+(9, 'Nguyễn Văn I', '0901231231', 'Nam', 'Nhân viên soát vé'),
+(10, 'Trần Thị J', '0904567890', 'Nữ', 'Quản lý tuyến tàu điện'),
+(11, 'Lê Văn K', '0909012345', 'Nam', 'Thu ngân'),
+(12, 'Phạm Thị L', '0902345678', 'Nữ', 'Nhân viên soát vé'),
+(13, 'Nguyễn Văn M', '0903456789', 'Nam', 'Quản lý tuyến tàu điện'),
+(14, 'Trần Thị N', '0904567891', 'Nữ', 'Thu ngân'),
+(15, 'Lê Văn O', '0905678901', 'Nam', 'Nhân viên soát vé'),
+(16, 'Phạm Thị P', '0906789012', 'Nữ', 'Quản lý tuyến tàu điện'),
+(17, 'Nguyễn Văn Q', '0907890123', 'Nam', 'Thu ngân'),
+(18, 'Trần Thị R', '0908901234', 'Nữ', 'Nhân viên soát vé'),
+(19, 'Lê Văn S', '0909012345', 'Nam', 'Quản lý tuyến tàu điện'),
+(20, 'Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân')
+
 # DROP TABLE taikhoan;
-# DROP TABLE khachhang;
+DROP TABLE khachhang;
 select * from khachhang;
 select * from taikhoan;
 select * from users;
+select * from nhanvien;
+
+
+
+
 
 
