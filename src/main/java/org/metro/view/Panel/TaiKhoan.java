@@ -36,7 +36,13 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
 
         taiKhoanTable = new JTable();
         taiKhoanScrollTable = new JScrollPane();
-        dTable = new DefaultTableModel();
+        dTable = new DefaultTableModel(){
+            @Override
+             // tao model voi so cot va hang co dinh khong cho sua chua
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         String[] columnNames = {"Mã TK", "Nhóm quyền", "Trạng thái"};
         dTable.setColumnIdentifiers(columnNames);
         taiKhoanTable.setModel(dTable);

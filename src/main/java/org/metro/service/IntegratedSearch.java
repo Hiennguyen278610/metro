@@ -58,7 +58,7 @@ public class IntegratedSearch extends JPanel {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(Color.WHITE);
 
-        cbxChoose.setBackground(new Color(250, 250, 250));
+        cbxChoose.setBackground(new Color(250, 250, 250)); 
         txtSearchForm.setBackground(new Color(250, 250, 250));
         btnReset.setBackground(new Color(130, 190, 223));
 
