@@ -47,6 +47,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         dTable.setColumnIdentifiers(columnNames);
         khachHangTable.setModel(dTable);
         khachHangTable.setFocusable(false);
+        khachHangTable.setRowSelectionAllowed(true); // cho phep chon 1 hang nao do
         khachHangScrollTable.setViewportView(khachHangTable);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

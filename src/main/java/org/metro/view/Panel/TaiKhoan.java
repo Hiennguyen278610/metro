@@ -47,6 +47,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
         dTable.setColumnIdentifiers(columnNames);
         taiKhoanTable.setModel(dTable);
         taiKhoanTable.setFocusable(false);
+        taiKhoanTable.setRowSelectionAllowed(true); // cho phep chon 1 hang nao do
         taiKhoanScrollTable.setViewportView(taiKhoanTable);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

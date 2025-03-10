@@ -65,6 +65,7 @@ public class NhanVien extends JPanel {
         
         nhanVienTabel = new JTable();
         nhanVienTabel.setFillsViewportHeight(true); // lap day JScrollPane 
+        nhanVienTabel.setRowSelectionAllowed(true);
         nhanVienTabel.setModel(dataTabelModel);
         nhanVienScroll = new JScrollPane(nhanVienTabel);
         contentDataPanel.add(nhanVienScroll,BorderLayout.CENTER);
