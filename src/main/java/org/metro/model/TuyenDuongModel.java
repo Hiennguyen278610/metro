@@ -1,13 +1,13 @@
 package org.metro.model;
 
-public class TuyenDuongModal {
+public class TuyenDuongModel {
     private int matuyen; // Mã tuyến
     private int tramdau; // Trạm đầu
     private int tramdich; // Trạm đích
     private double thoigiandichuyen; // Thời gian đi giữa 2 trạm
     private String trangthaituyen;
 
-    public TuyenDuongModal(int matuyen, int tramdau, int tramdich, double thoigiandichuyen, String trangthaituyen) {
+    public TuyenDuongModel(int matuyen, int tramdau, int tramdich, double thoigiandichuyen, String trangthaituyen) {
         this.matuyen = matuyen;
         this.tramdau = tramdau;
         this.tramdich = tramdich;

@@ -1,11 +1,11 @@
 package org.metro.model;
 
-public class TauModal {
+public class TauModel {
     private String matau; // Mã tàu
     private int soghe; // Số ghế trên tàu
     private String trangthaitau; // Trạng thái (Đang vận hành, bảo trì)
 
-    public TauModal(String matau, int soghe, String trangthaitau) {
+    public TauModel(String matau, int soghe, String trangthaitau) {
         this.matau = matau;
         this.soghe = soghe;
         this.trangthaitau = trangthaitau;

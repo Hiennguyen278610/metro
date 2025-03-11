@@ -63,10 +63,10 @@ create table nhanvien(
     sodienthoai varchar(15) NOT NULL,
     gioitinh varchar(15) NOT NULL,
     chucvu varchar(100) NOT NULL
-)
+);
 
 insert into nhanvien(manv,tennv,sodienthoai,gioitinh,chucvu)
-values 
+values
 (1, 'Nguyễn Văn A', '0901234567', 'Nam', 'Quản lý tuyến tàu điện'),
 (2, 'Trần Thị B', '0907654321', 'Nữ', 'Thu ngân'),
 (3, 'Lê Văn C', '0909876543', 'Nam', 'Nhân viên soát vé'),
@@ -86,7 +86,77 @@ values
 (17, 'Nguyễn Văn Q', '0907890123', 'Nam', 'Thu ngân'),
 (18, 'Trần Thị R', '0908901234', 'Nữ', 'Nhân viên soát vé'),
 (19, 'Lê Văn S', '0909012345', 'Nam', 'Quản lý tuyến tàu điện'),
-(20, 'Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân')
+(20, 'Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân');
+
+-- Tạo bảng vé tàu
+create table vetau (
+    mave int NOT NULL,
+    machuyen int NOT NULL,
+    makh int NOT NULL,
+    giave double NOT NULL
+);
+
+-- Backup//test
+INSERT INTO vetau (mave, machuyen, makh, giave) VALUES
+(1, 3, 6, 8500.00),
+(2, 3, 15, 21000.00),
+(3, 3, 9, 13750.50),
+(4, 3, 2, 9000.00),
+(5, 3, 21, 23000.00),
+(6, 3, 1, 15000.00),
+(7, 6, 19, 7450.00),
+(8, 6, 14, 18000.00),
+(9, 6, 8, 23900.00),
+(10, 6, 17, 7100.00),
+(11, 6, 10, 20000.00),
+(12, 6, 6, 16000.00),
+(13, 6, 3, 9500.00),
+(14, 6, 22, 22200.00),
+(15, 6, 7, 12350.00),
+(16, 9, 11, 14000.00),
+(17, 9, 20, 23500.00),
+(18, 9, 12, 10000.00),
+(19, 9, 13, 18800.00),
+(20, 9, 4, 7800.00),
+(21, 9, 12, 10000.00);
+
+-- Tạo bảng lịch trình
+create table lichtrinh (
+    machuyen int NOT NULL,
+    manv int NOT NULL,
+    matau int NOT NULL,
+    matuyen int NOT NULL,
+    thoigiankh datetime NOT NULL,
+    tgdenthucte datetime NOT NULL,
+    trangthailichtrinh varchar(100) NOT NULL
+);
+
+-- Backup/test
+INSERT INTO lichtrinh (machuyen, manv, matau, matuyen, thoigiankh, tgdenthucte, trangthailichtrinh) VALUES
+(1, 3, 2, 1, '2025-01-05 08:15:00', '2025-01-05 08:45:00', 'Chờ khởi hành'),
+(2, 1, 4, 1, '2025-01-12 14:00:00', '2025-01-12 14:30:00', 'Đang khởi hành'),
+(3, 7, 1, 1, '2025-02-03 09:00:00', '2025-02-03 09:05:00', 'Hoàn Thành'),
+(4, 5, 3, 1, '2025-01-20 07:30:00', '2025-01-20 07:50:00', 'Đang khởi hành'),
+(5, 2, 2, 1, '2025-03-15 12:00:00', '2025-03-15 12:20:00', 'Chờ khởi hành'),
+(6, 4, 4, 1, '2025-02-25 18:15:00', '2025-02-25 18:45:00', 'Hoàn Thành'),
+(7, 1, 1, 1, '2025-03-05 06:00:00', '2025-03-05 06:10:00', 'Chờ khởi hành'),
+(8, 6, 3, 1, '2025-03-22 15:30:00', '2025-03-22 15:45:00', 'Đang khởi hành'),
+(9, 7, 2, 1, '2025-02-10 10:00:00', '2025-02-10 10:35:00', 'Hoàn Thành'),
+(10, 3, 4, 1, '2025-01-28 13:00:00', '2025-01-28 13:25:00', 'Chờ khởi hành'),
+(11, 2, 1, 1, '2025-03-10 11:15:00', '2025-03-10 11:40:00', 'Đang khởi hành'),
+(12, 4, 3, 1, '2025-02-17 17:00:00', '2025-02-17 17:20:00', 'Chờ khởi hành'),
+(13, 5, 2, 1, '2025-01-07 16:30:00', '2025-01-07 16:55:00', 'Hoàn Thành'),
+(14, 6, 1, 1, '2025-03-03 05:45:00', '2025-03-03 06:05:00', 'Đang khởi hành'),
+(15, 7, 4, 1, '2025-02-28 20:00:00', '2025-02-28 20:30:00', 'Chờ khởi hành'),
+(16, 1, 3, 1, '2025-01-15 09:30:00', '2025-01-15 09:50:00', 'Hoàn Thành'),
+(17, 3, 2, 1, '2025-03-18 07:45:00', '2025-03-18 08:10:00', 'Đang khởi hành'),
+(18, 5, 3, 1, '2025-02-05 12:15:00', '2025-02-05 12:40:00', 'Chờ khởi hành'),
+(19, 4, 1, 1, '2025-03-25 14:00:00', '2025-03-25 14:25:00', 'Hoàn Thành'),
+(20, 2, 4, 1, '2025-01-30 10:00:00', '2025-01-30 10:20:00', 'Đang khởi hành');
+
+-- test truy vấn lịch trình đã hoàn thành vào tháng 2
+select * from lichtrinh
+where trangthailichtrinh = 'Hoàn Thành' and MONTH(thoigiankh) = 2;
 
 # DROP TABLE taikhoan;
 DROP TABLE khachhang;
@@ -94,6 +164,8 @@ select * from khachhang;
 select * from taikhoan;
 select * from users;
 select * from nhanvien;
+select * from vetau;
+select * from lichtrinh;
 
 
 

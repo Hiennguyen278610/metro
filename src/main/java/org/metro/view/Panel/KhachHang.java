@@ -1,6 +1,6 @@
 package org.metro.view.Panel;
 
-import org.metro.model.KhachHangModal;
+import org.metro.model.KhachHangModel;
 import org.metro.service.KhachHangService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
@@ -23,7 +23,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
     DefaultTableModel dTable;
     MainFunction mainFunction;
     IntegratedSearch search;
-    ArrayList<KhachHangModal> listkh;
+    ArrayList<KhachHangModel> listkh;
     Timer searchTimer;
 
     public KhachHang() {
@@ -105,9 +105,9 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         loadDataTable();
     }
 
-    private void populateTable(ArrayList<KhachHangModal> data) {
+    private void populateTable(ArrayList<KhachHangModel> data) {
         dTable.setRowCount(0);
-        for (KhachHangModal kh : data) {
+        for (KhachHangModel kh : data) {
             dTable.addRow(new Object[] {
                     kh.getMaKh(),
                     kh.getTenKh(),
@@ -126,7 +126,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         String type = (String) search.cbxChoose.getSelectedItem();
         String txt = search.txtSearchForm.getText().trim();
         System.out.println("Đang tìm kiếm: " + txt + " - Loại: " + type);
-        ArrayList<KhachHangModal> result = KhachHangService.search(txt, type);
+        ArrayList<KhachHangModel> result = KhachHangService.search(txt, type);
         populateTable(result);
     }
 
@@ -164,7 +164,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
             int selectedRow = khachHangTable.getSelectedRow();
             if (selectedRow != -1) {
                 int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
-                KhachHangModal kh = KhachHangService.getById(maKh);
+                KhachHangModel kh = KhachHangService.getById(maKh);
                 if (kh != null) {
                     new KhachHangDialog().showKhachHangDetailDialog(this, kh);
                 }

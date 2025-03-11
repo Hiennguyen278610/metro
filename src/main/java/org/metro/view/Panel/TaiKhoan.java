@@ -1,6 +1,6 @@
 package org.metro.view.Panel;
 
-import org.metro.model.TaiKhoanModal;
+import org.metro.model.TaiKhoanModel;
 import org.metro.service.TaiKhoanService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
@@ -23,7 +23,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
     DefaultTableModel dTable;
     MainFunction mainFunction;
     IntegratedSearch search;
-    ArrayList<TaiKhoanModal> listtk;
+    ArrayList<TaiKhoanModel> listtk;
     Timer searchTimer;
 
     public TaiKhoan() {
@@ -105,9 +105,9 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
         loadDataTable();
     }
 
-    private void populateTable(ArrayList<TaiKhoanModal> list) {
+    private void populateTable(ArrayList<TaiKhoanModel> list) {
         dTable.setRowCount(0);
-        for (TaiKhoanModal tk : list) {
+        for (TaiKhoanModel tk : list) {
             String roleStr;
             switch (tk.getManhomquyen()) {
                 case 1:
@@ -135,13 +135,13 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
     private void performSearch() {
         String txt = search.txtSearchForm.getText().trim();
         // Tìm kiếm theo mã nhân viên (loại "ID")
-        ArrayList<TaiKhoanModal> result = TaiKhoanService.search(txt, "ID");
+        ArrayList<TaiKhoanModel> result = TaiKhoanService.search(txt, "ID");
         populateTable(result);
     }
 
     // Hàm load toàn bộ dữ liệu (reset tìm kiếm)
     public void loadDataTable() {
-        ArrayList<TaiKhoanModal> all = TaiKhoanService.search("", "Tất cả");
+        ArrayList<TaiKhoanModel> all = TaiKhoanService.search("", "Tất cả");
         populateTable(all);
     }
 
@@ -180,7 +180,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
             int selectedRow = taiKhoanTable.getSelectedRow();
             if (selectedRow != -1) {
                 int maTk = (int) taiKhoanTable.getValueAt(selectedRow, 0);
-                TaiKhoanModal tk = TaiKhoanService.getByID(maTk);
+                TaiKhoanModel tk = TaiKhoanService.getByID(maTk);
                 if (tk != null) {
                     new TaiKhoanDialog().showTaiKhoanDetailDialog(this, tk);
                 }

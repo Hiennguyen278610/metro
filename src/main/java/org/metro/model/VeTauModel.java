@@ -1,13 +1,13 @@
 package org.metro.model;
 
-public class VeTauModal {
+public class VeTauModel {
     private int mave; // Mã vé
     private int machuyen; // Mã chuyến tàu
     private int makh; // Mã khách hàng
     private int manv; // Mã nhân viên
     private double price; // Giá vé
 
-    public VeTauModal(int mave, int machuyen, int makh, int manv, double price) {
+    public VeTauModel(int mave, int machuyen, int makh, int manv, double price) {
         this.mave = mave;
         this.machuyen = machuyen;
         this.makh = makh;

@@ -2,7 +2,7 @@ package org.metro.model;
 
 import java.time.LocalDateTime;
 
-public class LichTrinhModal {
+public class LichTrinhModel {
     private int machuyen;
     private int manv;
     private int matau;
@@ -11,7 +11,7 @@ public class LichTrinhModal {
     private LocalDateTime tgdenthucte;
     private String trangthailichtrinh;
 
-    public LichTrinhModal(int machuyen, int manv, int matau, int matuyen, LocalDateTime tgkhoihanh, LocalDateTime tgdenthucte, String trangthailichtrinh) {
+    public LichTrinhModel(int machuyen, int manv, int matau, int matuyen, LocalDateTime tgkhoihanh, LocalDateTime tgdenthucte, String trangthailichtrinh) {
         this.machuyen = machuyen;
         this.manv = manv;
         this.matau = matau;

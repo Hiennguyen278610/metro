@@ -1,14 +1,14 @@
 package org.metro.model;
 
-public class TaiKhoanModal {
+public class TaiKhoanModel {
     private int manv;
     private String matkhau;
     private int manhomquyen;
     private int trangthai; // 1: Hoạt động, 0: Ngừng hoạt động
 
-    public TaiKhoanModal() {}
+    public TaiKhoanModel() {}
 
-    public TaiKhoanModal(int manv, String matkhau, int manhomquyen, int trangthai) {
+    public TaiKhoanModel(int manv, String matkhau, int manhomquyen, int trangthai) {
         this.manv = manv;
         this.matkhau = matkhau;
         this.manhomquyen = manhomquyen;
