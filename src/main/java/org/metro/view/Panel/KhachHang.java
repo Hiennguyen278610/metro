@@ -1,9 +1,9 @@
 package org.metro.view.Panel;
 
-import org.metro.controller.MainFunction;
-import org.metro.model.KhachHangDTO;
-import org.metro.service.IntegratedSearch;
-import org.metro.service.KhachHangBUS;
+import org.metro.model.KhachHangModal;
+import org.metro.service.KhachHangService;
+import org.metro.view.Component.IntegratedSearch;
+import org.metro.view.Component.MainFunction;
 import org.metro.view.Dialog.KhachHangDialog;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
     DefaultTableModel dTable;
     MainFunction mainFunction;
     IntegratedSearch search;
-    ArrayList<KhachHangDTO> listkh;
+    ArrayList<KhachHangModal> listkh;
     Timer searchTimer;
 
     public KhachHang() {
@@ -105,9 +105,9 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         loadDataTable();
     }
 
-    private void populateTable(ArrayList<KhachHangDTO> data) {
+    private void populateTable(ArrayList<KhachHangModal> data) {
         dTable.setRowCount(0);
-        for (KhachHangDTO kh : data) {
+        for (KhachHangModal kh : data) {
             dTable.addRow(new Object[] {
                     kh.getMaKh(),
                     kh.getTenKh(),
@@ -118,7 +118,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
     }
 
     public void loadDataTable() {
-        listkh = KhachHangBUS.search("", "Tất cả");
+        listkh = KhachHangService.search("", "Tất cả");
         populateTable(listkh);
     }
 
@@ -126,7 +126,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         String type = (String) search.cbxChoose.getSelectedItem();
         String txt = search.txtSearchForm.getText().trim();
         System.out.println("Đang tìm kiếm: " + txt + " - Loại: " + type);
-        ArrayList<KhachHangDTO> result = KhachHangBUS.search(txt, type);
+        ArrayList<KhachHangModal> result = KhachHangService.search(txt, type);
         populateTable(result);
     }
 
@@ -150,7 +150,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
                         "Bạn có chắc muốn xóa khách hàng này?",
                         "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
                 if (option == JOptionPane.YES_OPTION) {
-                    if (KhachHangBUS.delete(maKh)) {
+                    if (KhachHangService.delete(maKh)) {
                         JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công!");
                         loadDataTable();
                     } else {
@@ -164,7 +164,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
             int selectedRow = khachHangTable.getSelectedRow();
             if (selectedRow != -1) {
                 int maKh = (int) khachHangTable.getValueAt(selectedRow, 0);
-                KhachHangDTO kh = KhachHangBUS.getById(maKh);
+                KhachHangModal kh = KhachHangService.getById(maKh);
                 if (kh != null) {
                     new KhachHangDialog().showKhachHangDetailDialog(this, kh);
                 }

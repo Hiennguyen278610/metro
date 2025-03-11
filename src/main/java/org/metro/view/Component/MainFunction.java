@@ -1,6 +1,7 @@
-package org.metro.controller;
+package org.metro.view.Component;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
 package org.metro.view.Dialog;
 
-import org.metro.model.TaiKhoanDTO;
-import org.metro.service.TaiKhoanBUS;
+import org.metro.model.TaiKhoanModal;
+import org.metro.service.TaiKhoanService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,8 +73,8 @@ public class TaiKhoanDialog {
                 nhomQuyen = 0;
             }
             int trangThai = "Hoạt động".equals((String) cbxTrangThai.getSelectedItem()) ? 1 : 0;
-            TaiKhoanDTO tk = new TaiKhoanDTO(selectedManv, matKhau, nhomQuyen, trangThai);
-            if (TaiKhoanBUS.insert(tk)) {
+            TaiKhoanModal tk = new TaiKhoanModal(selectedManv, matKhau, nhomQuyen, trangThai);
+            if (TaiKhoanService.insert(tk)) {
                 JOptionPane.showMessageDialog(dialog, "Thêm tài khoản thành công!");
                 dialog.dispose();
                 if (updateCallback != null) updateCallback.run();
@@ -92,7 +92,7 @@ public class TaiKhoanDialog {
 
     // Dialog cập nhật tài khoản (các trường dùng JComboBox để chọn nhóm quyền và trạng thái)
     public void showUpdateTaiKhoanDialog(Component parent, int manv, Runnable updateCallback) {
-        TaiKhoanDTO tk = TaiKhoanBUS.getByID(manv);
+        TaiKhoanModal tk = TaiKhoanService.getByID(manv);
         if (tk == null) {
             JOptionPane.showMessageDialog(parent, "Không tìm thấy thông tin tài khoản!");
             return;
@@ -165,8 +165,8 @@ public class TaiKhoanDialog {
                 nhomQuyen = 0;
             }
             int trangThai = "Hoạt động".equals((String) cbxTrangThai.getSelectedItem()) ? 1 : 0;
-            TaiKhoanDTO updatedTk = new TaiKhoanDTO(tk.getManv(), matKhau, nhomQuyen, trangThai);
-            if (TaiKhoanBUS.update(updatedTk)) {
+            TaiKhoanModal updatedTk = new TaiKhoanModal(tk.getManv(), matKhau, nhomQuyen, trangThai);
+            if (TaiKhoanService.update(updatedTk)) {
                 JOptionPane.showMessageDialog(dialog, "Cập nhật tài khoản thành công!");
                 dialog.dispose();
                 if (updateCallback != null) updateCallback.run();
@@ -183,7 +183,7 @@ public class TaiKhoanDialog {
     }
 
     // Dialog hiển thị chi tiết tài khoản
-    public void showTaiKhoanDetailDialog(Component parent, TaiKhoanDTO tk) {
+    public void showTaiKhoanDetailDialog(Component parent, TaiKhoanModal tk) {
         JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Chi tiết tài khoản", Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(400, 250);
         dialog.setLocationRelativeTo(parent);

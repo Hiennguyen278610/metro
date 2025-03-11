@@ -2,13 +2,13 @@ package org.metro.model;
 
 import java.time.LocalDateTime;
 
-public class LichBaoTriDTO {
+public class LichBaoTriModal {
     private int mabaotri;
     private int matau;
     private LocalDateTime ngaybaotri;
     private String trangthaibaotri;
 
-    public LichBaoTriDTO(int mabaotri, int matau, LocalDateTime ngaybaotri, String trangthaibaotri) {
+    public LichBaoTriModal(int mabaotri, int matau, LocalDateTime ngaybaotri, String trangthaibaotri) {
         this.mabaotri = mabaotri;
         this.matau = matau;
         this.ngaybaotri = ngaybaotri;

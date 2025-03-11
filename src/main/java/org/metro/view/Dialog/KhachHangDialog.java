@@ -1,7 +1,7 @@
 package org.metro.view.Dialog;
 
-import org.metro.model.KhachHangDTO;
-import org.metro.service.KhachHangBUS;
+import org.metro.model.KhachHangModal;
+import org.metro.service.KhachHangService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,8 +52,8 @@ public class KhachHangDialog {
                 return;
             }
             // makh = 0 để đánh dấu tự động tăng
-            KhachHangDTO kh = new KhachHangDTO(0, tenKh, sdt, solan);
-            if (KhachHangBUS.insert(kh)) {
+            KhachHangModal kh = new KhachHangModal(0, tenKh, sdt, solan);
+            if (KhachHangService.insert(kh)) {
                 JOptionPane.showMessageDialog(dialog, "Thêm khách hàng thành công!");
                 dialog.dispose();
                 if(updateCallback != null) updateCallback.run();
@@ -71,7 +71,7 @@ public class KhachHangDialog {
 
     // Dialog cập nhật khách hàng
     public void showUpdateKhachHangDialog(Component parent, int maKh, Runnable updateCallback) {
-        KhachHangDTO kh = KhachHangBUS.getById(maKh);
+        KhachHangModal kh = KhachHangService.getById(maKh);
         if (kh == null) {
             JOptionPane.showMessageDialog(parent, "Không tìm thấy thông tin khách hàng!");
             return;
@@ -123,8 +123,8 @@ public class KhachHangDialog {
                 JOptionPane.showMessageDialog(dialog, "Số lần đi phải là số!");
                 return;
             }
-            KhachHangDTO updatedKh = new KhachHangDTO(kh.getMaKh(), tenKh, sdt, solan);
-            if (KhachHangBUS.update(updatedKh)) {
+            KhachHangModal updatedKh = new KhachHangModal(kh.getMaKh(), tenKh, sdt, solan);
+            if (KhachHangService.update(updatedKh)) {
                 JOptionPane.showMessageDialog(dialog, "Cập nhật khách hàng thành công!");
                 dialog.dispose();
                 if(updateCallback != null) updateCallback.run();
@@ -141,7 +141,7 @@ public class KhachHangDialog {
     }
 
     // Dialog hiển thị chi tiết khách hàng
-    public void showKhachHangDetailDialog(Component parent, KhachHangDTO kh) {
+    public void showKhachHangDetailDialog(Component parent, KhachHangModal kh) {
         JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Chi tiết khách hàng", Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(400, 250);
         dialog.setLocationRelativeTo(parent);

@@ -1,6 +1,6 @@
 package org.metro.model;
 
-public enum PhanQuyenDTO {
+public enum PhanQuyenModal {
     nvbanve, // Nhân viên bán vé
     quanlylichtrinh, // Nhân viên lái tàu
     quanlytau, // Nhân viên quản lý tuyến

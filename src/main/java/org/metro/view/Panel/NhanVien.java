@@ -3,14 +3,19 @@ package org.metro.view.Panel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import org.metro.controller.MainFunction;
-import org.metro.dao.NhanVienDAO;
-import org.metro.model.NhanVienDTO;
-import org.metro.service.IntegratedSearch;
+import org.metro.DAO.NhanVienDAO;
+import org.metro.controller.NhanVienController;
+import org.metro.model.NhanVienModal;
+import org.metro.view.Component.IntegratedSearch;
+import org.metro.view.Component.MainFunction;
 
 import java.awt.*;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NhanVien extends JPanel {
     Color BackgroundColor = new Color(0, 2, 2);
@@ -20,10 +25,12 @@ public class NhanVien extends JPanel {
     private DefaultTableModel dataTabelModel;
     private MainFunction mainfunc;
     private IntegratedSearch searchfunc;
-    private List<NhanVienDTO> listNhanVien;
+    private List<NhanVienModal> listNhanVien;
+    private Timer timeSearch;
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
+        timeSearch = new Timer();
         reloadData(); // cap nhap table moi khi run 
     }
 
@@ -65,17 +72,23 @@ public class NhanVien extends JPanel {
         
         nhanVienTabel = new JTable();
         nhanVienTabel.setFillsViewportHeight(true); // lap day JScrollPane 
-        nhanVienTabel.setRowSelectionAllowed(true);
+        nhanVienTabel.setRowSelectionAllowed(true); // cho phep chon hang
         nhanVienTabel.setModel(dataTabelModel);
         nhanVienScroll = new JScrollPane(nhanVienTabel);
         contentDataPanel.add(nhanVienScroll,BorderLayout.CENTER);
 
+
+        //them acction
+        NhanVienController acction = new NhanVienController(this);
+        searchfunc.getCbxChoose().addItemListener(acction);
+        
+
         this.add(contentDataPanel, BorderLayout.CENTER);
     }
 
-    public void reloadList(List<NhanVienDTO> listNhanVien2) {
+    public void reloadList(List<NhanVienModal> listNhanVien2) {
             dataTabelModel.setRowCount(0); //xoa het bang de tai lai tu dau
-            for(NhanVienDTO nvd : listNhanVien2) {
+            for(NhanVienModal nvd : listNhanVien2) {
             dataTabelModel.addRow(new Object[]{
                 nvd.getManv(),
                 nvd.getTennv(),
@@ -89,5 +102,108 @@ public class NhanVien extends JPanel {
         listNhanVien = new NhanVienDAO().selectAll();
         reloadList(listNhanVien);
     }
+
+    //tim kiem theo field nhap
+    public void searchByKeyWord() {
+        String key = (String) searchfunc.getCbxChoose().getSelectedItem();
+        String word = (String) searchfunc.getTxtSearchForm().getText(); 
+        
+    }
+    
+    //load thoi gian tim kiem moi 0.2s
+    public void loadTimeSearch() {
+        timeSearch.cancel();
+        timeSearch = new Timer();
+        timeSearch.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                
+            }
+            
+        }, 200);
+    }
+
+    //getter setter
+    public Color getBackgroundColor() {
+        return BackgroundColor;
+    }
+
+    public JPanel getContentDataPanel() {
+        return contentDataPanel;
+    }
+
+    public JPanel getFunctionBarPanel() {
+        return functionBarPanel;
+    }
+
+    public JTable getNhanVienTabel() {
+        return nhanVienTabel;
+    }
+
+    public JScrollPane getNhanVienScroll() {
+        return nhanVienScroll;
+    }
+
+    public DefaultTableModel getDataTabelModel() {
+        return dataTabelModel;
+    }
+
+    public MainFunction getMainfunc() {
+        return mainfunc;
+    }
+
+    public IntegratedSearch getSearchfunc() {
+        return searchfunc;
+    }
+
+    public List<NhanVienModal> getListNhanVien() {
+        return listNhanVien;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        BackgroundColor = backgroundColor;
+    }
+
+    public void setContentDataPanel(JPanel contentDataPanel) {
+        this.contentDataPanel = contentDataPanel;
+    }
+
+    public void setFunctionBarPanel(JPanel functionBarPanel) {
+        this.functionBarPanel = functionBarPanel;
+    }
+
+    public void setNhanVienTabel(JTable nhanVienTabel) {
+        this.nhanVienTabel = nhanVienTabel;
+    }
+
+    public void setNhanVienScroll(JScrollPane nhanVienScroll) {
+        this.nhanVienScroll = nhanVienScroll;
+    }
+
+    public void setDataTabelModel(DefaultTableModel dataTabelModel) {
+        this.dataTabelModel = dataTabelModel;
+    }
+
+    public void setMainfunc(MainFunction mainfunc) {
+        this.mainfunc = mainfunc;
+    }
+
+    public void setSearchfunc(IntegratedSearch searchfunc) {
+        this.searchfunc = searchfunc;
+    }
+
+    public void setListNhanVien(List<NhanVienModal> listNhanVien) {
+        this.listNhanVien = listNhanVien;
+    }
+
+    public Timer getTimeSearch() {
+        return timeSearch;
+    }
+
+    public void setTimeSearch(Timer timeSearch) {
+        this.timeSearch = timeSearch;
+    }
+
     
 }
