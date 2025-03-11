@@ -8,6 +8,8 @@ import org.metro.controller.NhanVienController;
 import org.metro.model.NhanVienModel;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
+import org.metro.view.Component.ToolBar;
+import org.metro.view.MainFrame;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.TimerTask;
 
 public class NhanVien extends JPanel {
     Color BackgroundColor = new Color(0, 2, 2);
+    private MainFrame mf;
     private JPanel contentDataPanel,functionBarPanel;
     private JTable nhanVienTabel;
     private JScrollPane nhanVienScroll; 
@@ -80,7 +83,10 @@ public class NhanVien extends JPanel {
         //them acction
         NhanVienController acction = new NhanVienController(this);
         searchfunc.getCbxChoose().addItemListener(acction);
-        
+
+        for(ToolBar tb : mainfunc.getBtn().values()) {
+            tb.addActionListener(acction);
+        }
 
         this.add(contentDataPanel, BorderLayout.CENTER);
     }
@@ -160,6 +166,10 @@ public class NhanVien extends JPanel {
         return listNhanVien;
     }
 
+    public MainFrame getMf() {
+        return mf;
+    }
+
     public void setBackgroundColor(Color backgroundColor) {
         BackgroundColor = backgroundColor;
     }
@@ -203,6 +213,7 @@ public class NhanVien extends JPanel {
     public void setTimeSearch(Timer timeSearch) {
         this.timeSearch = timeSearch;
     }
-
-    
+    public void setMf(MainFrame mf) {
+        this.mf = mf;
+    }
 }

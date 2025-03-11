@@ -62,4 +62,13 @@ public class MainFunction extends JToolBar {
         // Thêm đường viền nhỏ
         this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
     }
+
+    //getter setter
+    public HashMap<String, ToolBar> getBtn() {
+        return btn;
+    }
+
+    public void setBtn(HashMap<String, ToolBar> btn) {
+        this.btn = btn;
+    }
 }

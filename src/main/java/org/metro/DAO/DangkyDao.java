@@ -1,4 +1,4 @@
-    package org.metro.service;
+    package org.metro.DAO;
 
     import org.metro.util.DatabaseUtils;
 
@@ -6,7 +6,7 @@
     import java.sql.PreparedStatement;
     import java.sql.SQLException;
 
-    public class UserService {
+    public class DangkyDao {
             public boolean DangKy(String tenDangNhap, String matkhau,String sodienthoai) {
                 String user_sql = "INSERT INTO users(username,password,sodienthoai) Values (?,?,?)";
                 try(Connection connection = DatabaseUtils.getConnection();

@@ -6,8 +6,8 @@ import java.awt.Image;
 
 import javax.swing.*;
 
+import org.metro.DAO.DangkyDao;
 import org.metro.controller.LoginController;
-import org.metro.service.UserService;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
@@ -297,7 +297,7 @@ public class LoginFrame extends JFrame {
                     return;
                 }
 
-                UserService user = new UserService();
+                DangkyDao user = new DangkyDao();
                 boolean check = user.DangKy(tenDangNhap, matKhau, sodienthoai);
 
                 if (check) {

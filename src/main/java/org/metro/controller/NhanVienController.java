@@ -7,10 +7,13 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.metro.view.Component.ToolBar;
+import org.metro.view.Dialog.NhanVienDialog;
+import org.metro.view.MainFrame;
 import org.metro.view.Panel.NhanVien;
 
 public class NhanVienController implements ActionListener,ItemListener,KeyListener{
@@ -33,17 +36,27 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       
+        JComponent c = (JComponent) e.getSource(); // dung combonent de su dung cho nhieu kieu nhu button,label,..
+        for(String nambtn : nv.getMainfunc().getBtn().keySet()) {
+            ToolBar tb = nv.getMainfunc().getBtn().get(nambtn);
+            if(c.equals(tb)) {
+                if(nambtn == null || nambtn.isEmpty()) {
+                    System.err.println("errors");
+                    return;
+                }
+                new NhanVienDialog(nv.getMf(),nambtn); // MainFrame la cha
+                break;
+            }
+        }
+
     }
     @Override
     public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+      
     }
     @Override
     public void keyPressed(KeyEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
+     
     }
     @Override
     public void keyReleased(KeyEvent e) {
