@@ -1,12 +1,12 @@
 package org.metro.controller;
 
-import org.metro.service.UserService;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.metro.DAO.DangkyDao;
+
 public class UserController implements ActionListener {
-    private final UserService userService = new UserService();
+    private final DangkyDao userService = new DangkyDao();
     @Override
     public void actionPerformed(ActionEvent e) {
 

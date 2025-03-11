@@ -14,8 +14,19 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModal> {
 
     @Override
     public int insert(NhanVienModal t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        String queryInsert = "insert into nhanvien(tennv,sodienthoai,gioitinh,chucvu) values(?,?,?,?)";
+        try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement prs = c.prepareStatement(queryInsert);) {
+            prs.setString(1,t.getTennv());
+            prs.setString(2, t.getSdtnv());
+            prs.setString(3, t.getGioitinh());
+            prs.setString(4, t.getChucvu());
+            c.close();
+            return prs.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

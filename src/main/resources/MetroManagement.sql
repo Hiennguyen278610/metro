@@ -57,13 +57,16 @@ INSERT INTO `taikhoan` (`manv`, `matkhau`, `manhomquyen`, `trangthai`) VALUES
 
 
 -- NHANVIEN
-create table nhanvien(
-    manv int NOT NULL,
-    tennv varchar(100) NOT NULL,
-    sodienthoai varchar(15) NOT NULL,
-    gioitinh varchar(15) NOT NULL,
-    chucvu varchar(100) NOT NULL
-)
+create table nhanvien (
+    manv INT AUTO_INCREMENT NOT NULL,
+    tennv VARCHAR(100) NOT NULL,
+    sodienthoai VARCHAR(15) NOT NULL,
+    gioitinh VARCHAR(15) NOT NULL,
+    chucvu VARCHAR(100) NOT NULL,
+    UNIQUE (manv)
+);
+
+-- DROP table nhanvien;
 
 insert into nhanvien(manv,tennv,sodienthoai,gioitinh,chucvu)
 values 
