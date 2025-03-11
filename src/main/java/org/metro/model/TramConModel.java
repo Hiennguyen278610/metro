@@ -1,12 +1,12 @@
 package org.metro.model;
 
-public class TramConModal {
+public class TramConModel {
     private int matramcon;
     private int matuyen;
     private String tentramcon;
     private String diachitramcon;
 
-    public TramConModal(int matramcon, int matuyen, String tentramcon, String diachitramcon) {
+    public TramConModel(int matramcon, int matuyen, String tentramcon, String diachitramcon) {
         this.matramcon = matramcon;
         this.matuyen = matuyen;
         this.tentramcon = tentramcon;

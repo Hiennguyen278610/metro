@@ -1,23 +1,23 @@
 package org.metro.DAO;
 
-import org.metro.model.KhachHangModal;
+import org.metro.model.KhachHangModel;
 import org.metro.util.DatabaseUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KhachHangDAO implements IBaseDAO<KhachHangModal> {
+public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
 
     // Lấy toàn bộ danh sách khách hàng
-    public List<KhachHangModal> getAll() {
-        List<KhachHangModal> list = new ArrayList<>();
+    public List<KhachHangModel> getAll() {
+        List<KhachHangModel> list = new ArrayList<>();
         String query = "SELECT * FROM khachhang";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                KhachHangModal kh = new KhachHangModal(
+                KhachHangModel kh = new KhachHangModel(
                         rs.getInt("makh"),
                         rs.getString("tenkh"),
                         rs.getString("sdt"),
@@ -32,7 +32,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModal> {
     }
 
     @Override
-    public int insert(KhachHangModal t) {
+    public int insert(KhachHangModel t) {
         // Giả sử cột makh là AUTO_INCREMENT nên không cần truyền vào
         String sql = "INSERT INTO khachhang (tenkh, sdt, solan) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
@@ -48,7 +48,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModal> {
     }
 
     @Override
-    public int update(KhachHangModal t) {
+    public int update(KhachHangModel t) {
         String sql = "UPDATE khachhang SET tenkh = ?, sdt = ?, solan = ? WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -77,19 +77,19 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModal> {
     }
 
     @Override
-    public List<KhachHangModal> selectAll() {
+    public List<KhachHangModel> selectAll() {
         return getAll();
     }
 
     @Override
-    public KhachHangModal selectById(int maKh) {
+    public KhachHangModel selectById(int maKh) {
         String sql = "SELECT * FROM khachhang WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maKh);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return new KhachHangModal(
+                    return new KhachHangModel(
                             rs.getInt("makh"),
                             rs.getString("tenkh"),
                             rs.getString("sdt"),

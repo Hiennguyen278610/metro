@@ -1,14 +1,14 @@
 package org.metro.model;
 
-public class KhachHangModal {
+public class KhachHangModel {
     private int maKh;
     private String tenKh;
     private String sdt;
     private int solan;
 
-    public KhachHangModal() {}
+    public KhachHangModel() {}
 
-    public KhachHangModal(int maKh, String tenKh, String sdt, int solan) {
+    public KhachHangModel(int maKh, String tenKh, String sdt, int solan) {
         this.maKh = maKh;
         this.tenKh = tenKh;
         this.sdt = sdt;

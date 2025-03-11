@@ -1,11 +1,11 @@
 package org.metro.model;
 
-public class TramModal {
+public class TramModel {
     private int matram; // Mã trạm
     private String tentram; // Tên trạm
     private String diachi; // Địa chỉ trạm
 
-    public TramModal(int matram, String tentram, String diachi) {
+    public TramModel(int matram, String tentram, String diachi) {
         this.matram = matram;
         this.tentram = tentram;
         this.diachi = diachi;

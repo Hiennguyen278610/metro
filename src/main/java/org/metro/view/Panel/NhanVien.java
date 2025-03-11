@@ -5,14 +5,13 @@ import javax.swing.table.DefaultTableModel;
 
 import org.metro.DAO.NhanVienDAO;
 import org.metro.controller.NhanVienController;
-import org.metro.model.NhanVienModal;
+import org.metro.model.NhanVienModel;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.ToolBar;
 import org.metro.view.MainFrame;
 
 import java.awt.*;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class NhanVien extends JPanel {
     private DefaultTableModel dataTabelModel;
     private MainFunction mainfunc;
     private IntegratedSearch searchfunc;
-    private List<NhanVienModal> listNhanVien;
+    private List<NhanVienModel> listNhanVien;
     private Timer timeSearch;
     public NhanVien() {
         initComponent();
@@ -92,9 +91,9 @@ public class NhanVien extends JPanel {
         this.add(contentDataPanel, BorderLayout.CENTER);
     }
 
-    public void reloadList(List<NhanVienModal> listNhanVien2) {
+    public void reloadList(List<NhanVienModel> listNhanVien2) {
             dataTabelModel.setRowCount(0); //xoa het bang de tai lai tu dau
-            for(NhanVienModal nvd : listNhanVien2) {
+            for(NhanVienModel nvd : listNhanVien2) {
             dataTabelModel.addRow(new Object[]{
                 nvd.getManv(),
                 nvd.getTennv(),
@@ -163,7 +162,7 @@ public class NhanVien extends JPanel {
         return searchfunc;
     }
 
-    public List<NhanVienModal> getListNhanVien() {
+    public List<NhanVienModel> getListNhanVien() {
         return listNhanVien;
     }
 
@@ -203,7 +202,7 @@ public class NhanVien extends JPanel {
         this.searchfunc = searchfunc;
     }
 
-    public void setListNhanVien(List<NhanVienModal> listNhanVien) {
+    public void setListNhanVien(List<NhanVienModel> listNhanVien) {
         this.listNhanVien = listNhanVien;
     }
 

@@ -1,12 +1,12 @@
 package org.metro.service;
 
 import org.metro.DAO.KhachHangDAO;
-import org.metro.model.KhachHangModal;
+import org.metro.model.KhachHangModel;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class KhachHangService {
-    private static ArrayList<KhachHangModal> allCustomers = new ArrayList<>();
+    private static ArrayList<KhachHangModel> allCustomers = new ArrayList<>();
     private static final KhachHangDAO khachHangDAO = new KhachHangDAO();
 
     // Load dữ liệu từ DB
@@ -15,7 +15,7 @@ public class KhachHangService {
     }
 
     // Tìm kiếm khách hàng theo từ khóa và loại tìm kiếm
-    public static ArrayList<KhachHangModal> search(String txt, String type) {
+    public static ArrayList<KhachHangModel> search(String txt, String type) {
         loadData(); // đảm bảo dữ liệu mới nhất
         if (txt == null || txt.trim().isEmpty()) {
             return new ArrayList<>(allCustomers);
@@ -42,7 +42,7 @@ public class KhachHangService {
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static boolean insert(KhachHangModal kh) {
+    public static boolean insert(KhachHangModel kh) {
         if (khachHangDAO.insert(kh) > 0) {
             loadData();
             return true;
@@ -50,7 +50,7 @@ public class KhachHangService {
         return false;
     }
 
-    public static boolean update(KhachHangModal kh) {
+    public static boolean update(KhachHangModel kh) {
         if (khachHangDAO.update(kh) > 0) {
             loadData();
             return true;
@@ -66,7 +66,7 @@ public class KhachHangService {
         return false;
     }
 
-    public static KhachHangModal getById(int maKh) {
+    public static KhachHangModel getById(int maKh) {
         return khachHangDAO.selectById(maKh);
     }
 }

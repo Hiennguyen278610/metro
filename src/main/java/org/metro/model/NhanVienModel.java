@@ -1,13 +1,13 @@
 package org.metro.model;
 
-public class NhanVienModal {
+public class NhanVienModel {
     private int manv;
     private String tennv;
     private String sdtnv;
     private String gioitinh;
     private String chucvu;
 
-    public NhanVienModal(int manv, String tennv,String gioitinh, String sdtnv,String chucvu) {
+    public NhanVienModel(int manv, String tennv, String gioitinh, String sdtnv, String chucvu) {
         this.manv = manv;
         this.tennv = tennv;
         this.gioitinh = gioitinh;

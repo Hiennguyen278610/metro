@@ -1,6 +1,6 @@
 package org.metro.DAO;
 
-import org.metro.model.TaiKhoanModal;
+import org.metro.model.TaiKhoanModel;
 import org.metro.util.DatabaseUtils;
 
 import java.sql.*;
@@ -10,14 +10,14 @@ import java.util.List;
 public class TaiKhoanDAO {
 
     // Lấy tất cả tài khoản
-    public List<TaiKhoanModal> getAll() {
-        List<TaiKhoanModal> list = new ArrayList<>();
+    public List<TaiKhoanModel> getAll() {
+        List<TaiKhoanModel> list = new ArrayList<>();
         String query = "SELECT * FROM taikhoan";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                TaiKhoanModal tk = new TaiKhoanModal(
+                TaiKhoanModel tk = new TaiKhoanModel(
                         rs.getInt("manv"),
                         rs.getString("matkhau"),
                         rs.getInt("manhomquyen"),
@@ -32,7 +32,7 @@ public class TaiKhoanDAO {
     }
 
     // Thêm tài khoản mới
-    public int insert(TaiKhoanModal tk) {
+    public int insert(TaiKhoanModel tk) {
         String sql = "INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -48,7 +48,7 @@ public class TaiKhoanDAO {
     }
 
     // Cập nhật tài khoản
-    public int update(TaiKhoanModal tk) {
+    public int update(TaiKhoanModel tk) {
         String sql = "UPDATE taikhoan SET matkhau = ?, manhomquyen = ?, trangthai = ? WHERE manv = ?";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -77,14 +77,14 @@ public class TaiKhoanDAO {
     }
 
     // Lấy tài khoản theo manv
-    public TaiKhoanModal selectById(int manv) {
+    public TaiKhoanModel selectById(int manv) {
         String sql = "SELECT * FROM taikhoan WHERE manv = ?";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, manv);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return new TaiKhoanModal(
+                    return new TaiKhoanModel(
                             rs.getInt("manv"),
                             rs.getString("matkhau"),
                             rs.getInt("manhomquyen"),
