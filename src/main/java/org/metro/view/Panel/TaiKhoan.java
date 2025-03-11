@@ -1,9 +1,9 @@
 package org.metro.view.Panel;
 
-import org.metro.controller.MainFunction;
-import org.metro.model.TaiKhoanDTO;
-import org.metro.service.IntegratedSearch;
-import org.metro.service.TaiKhoanBUS;
+import org.metro.model.TaiKhoanModal;
+import org.metro.service.TaiKhoanService;
+import org.metro.view.Component.IntegratedSearch;
+import org.metro.view.Component.MainFunction;
 import org.metro.view.Dialog.TaiKhoanDialog;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
     DefaultTableModel dTable;
     MainFunction mainFunction;
     IntegratedSearch search;
-    ArrayList<TaiKhoanDTO> listtk;
+    ArrayList<TaiKhoanModal> listtk;
     Timer searchTimer;
 
     public TaiKhoan() {
@@ -105,9 +105,9 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
         loadDataTable();
     }
 
-    private void populateTable(ArrayList<TaiKhoanDTO> list) {
+    private void populateTable(ArrayList<TaiKhoanModal> list) {
         dTable.setRowCount(0);
-        for (TaiKhoanDTO tk : list) {
+        for (TaiKhoanModal tk : list) {
             String roleStr;
             switch (tk.getManhomquyen()) {
                 case 1:
@@ -135,13 +135,13 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
     private void performSearch() {
         String txt = search.txtSearchForm.getText().trim();
         // Tìm kiếm theo mã nhân viên (loại "ID")
-        ArrayList<TaiKhoanDTO> result = TaiKhoanBUS.search(txt, "ID");
+        ArrayList<TaiKhoanModal> result = TaiKhoanService.search(txt, "ID");
         populateTable(result);
     }
 
     // Hàm load toàn bộ dữ liệu (reset tìm kiếm)
     public void loadDataTable() {
-        ArrayList<TaiKhoanDTO> all = TaiKhoanBUS.search("", "Tất cả");
+        ArrayList<TaiKhoanModal> all = TaiKhoanService.search("", "Tất cả");
         populateTable(all);
     }
 
@@ -166,7 +166,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
                         "Bạn có chắc muốn xóa tài khoản này?",
                         "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
                 if (option == JOptionPane.YES_OPTION) {
-                    if (TaiKhoanBUS.delete(maTk)) {
+                    if (TaiKhoanService.delete(maTk)) {
                         JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công!");
                         loadDataTable();
                     } else {
@@ -180,7 +180,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
             int selectedRow = taiKhoanTable.getSelectedRow();
             if (selectedRow != -1) {
                 int maTk = (int) taiKhoanTable.getValueAt(selectedRow, 0);
-                TaiKhoanDTO tk = TaiKhoanBUS.getByID(maTk);
+                TaiKhoanModal tk = TaiKhoanService.getByID(maTk);
                 if (tk != null) {
                     new TaiKhoanDialog().showTaiKhoanDetailDialog(this, tk);
                 }

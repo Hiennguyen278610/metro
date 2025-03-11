@@ -1,4 +1,4 @@
-package org.metro.service;
+package org.metro.view.Component;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
@@ -71,4 +71,31 @@ public class IntegratedSearch extends JPanel {
         this.repaint();
         this.revalidate();
     }
+
+    public JTextField getTxtSearchForm() {
+        return txtSearchForm;
+    }
+
+    public void setTxtSearchForm(JTextField txtSearchForm) {
+        this.txtSearchForm = txtSearchForm;
+    }
+
+    public JComboBox<String> getCbxChoose() {
+        return cbxChoose;
+    }
+
+    public void setCbxChoose(JComboBox<String> cbxChoose) {
+        this.cbxChoose = cbxChoose;
+    }
+
+    public JButton getBtnReset() {
+        return btnReset;
+    }
+
+    public void setBtnReset(JButton btnReset) {
+        this.btnReset = btnReset;
+    }
+
+    //getter va setter
+    
 }

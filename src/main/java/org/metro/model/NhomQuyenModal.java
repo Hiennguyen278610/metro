@@ -1,10 +1,10 @@
 package org.metro.model;
 
-public class NhomQuyenDTO {
+public class NhomQuyenModal {
     private int manhomquyen;
     private String tennhomquyen;
 
-    public NhomQuyenDTO(int manhomquyen, String tennhomquyen) {
+    public NhomQuyenModal(int manhomquyen, String tennhomquyen) {
         this.manhomquyen = manhomquyen;
         this.tennhomquyen = tennhomquyen;
     }

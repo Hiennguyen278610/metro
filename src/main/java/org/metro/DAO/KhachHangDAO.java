@@ -1,23 +1,23 @@
-package org.metro.dao;
+package org.metro.DAO;
 
-import org.metro.model.KhachHangDTO;
+import org.metro.model.KhachHangModal;
 import org.metro.util.DatabaseUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KhachHangDAO implements IBaseDAO<KhachHangDTO> {
+public class KhachHangDAO implements IBaseDAO<KhachHangModal> {
 
     // Lấy toàn bộ danh sách khách hàng
-    public List<KhachHangDTO> getAll() {
-        List<KhachHangDTO> list = new ArrayList<>();
+    public List<KhachHangModal> getAll() {
+        List<KhachHangModal> list = new ArrayList<>();
         String query = "SELECT * FROM khachhang";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                KhachHangDTO kh = new KhachHangDTO(
+                KhachHangModal kh = new KhachHangModal(
                         rs.getInt("makh"),
                         rs.getString("tenkh"),
                         rs.getString("sdt"),
@@ -32,7 +32,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangDTO> {
     }
 
     @Override
-    public int insert(KhachHangDTO t) {
+    public int insert(KhachHangModal t) {
         // Giả sử cột makh là AUTO_INCREMENT nên không cần truyền vào
         String sql = "INSERT INTO khachhang (tenkh, sdt, solan) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
@@ -48,7 +48,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangDTO> {
     }
 
     @Override
-    public int update(KhachHangDTO t) {
+    public int update(KhachHangModal t) {
         String sql = "UPDATE khachhang SET tenkh = ?, sdt = ?, solan = ? WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -77,19 +77,19 @@ public class KhachHangDAO implements IBaseDAO<KhachHangDTO> {
     }
 
     @Override
-    public List<KhachHangDTO> selectAll() {
+    public List<KhachHangModal> selectAll() {
         return getAll();
     }
 
     @Override
-    public KhachHangDTO selectById(int maKh) {
+    public KhachHangModal selectById(int maKh) {
         String sql = "SELECT * FROM khachhang WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maKh);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return new KhachHangDTO(
+                    return new KhachHangModal(
                             rs.getInt("makh"),
                             rs.getString("tenkh"),
                             rs.getString("sdt"),

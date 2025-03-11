@@ -1,13 +1,13 @@
 package org.metro.service;
 
-import org.metro.dao.TaiKhoanDAO;
-import org.metro.model.TaiKhoanDTO;
+import org.metro.DAO.TaiKhoanDAO;
+import org.metro.model.TaiKhoanModal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TaiKhoanBUS {
-    private static ArrayList<TaiKhoanDTO> allAccounts = new ArrayList<>();
+public class TaiKhoanService {
+    private static ArrayList<TaiKhoanModal> allAccounts = new ArrayList<>();
     private static final TaiKhoanDAO taikhoanDAO = new TaiKhoanDAO();
 
     // Load dữ liệu từ DB
@@ -16,7 +16,7 @@ public class TaiKhoanBUS {
     }
 
     // Tìm kiếm tài khoản theo mã nhân viên (ID)
-    public static ArrayList<TaiKhoanDTO> search(String txt, String type) {
+    public static ArrayList<TaiKhoanModal> search(String txt, String type) {
         loadData(); // luôn load dữ liệu mới nhất
         if (txt == null || txt.trim().isEmpty()) {
             return new ArrayList<>(allAccounts);
@@ -28,7 +28,7 @@ public class TaiKhoanBUS {
     }
 
 
-    public static boolean insert(TaiKhoanDTO tk) {
+    public static boolean insert(TaiKhoanModal tk) {
         if (taikhoanDAO.insert(tk) > 0) {
             loadData();
             return true;
@@ -36,7 +36,7 @@ public class TaiKhoanBUS {
         return false;
     }
 
-    public static boolean update(TaiKhoanDTO tk) {
+    public static boolean update(TaiKhoanModal tk) {
         if (taikhoanDAO.update(tk) > 0) {
             loadData();
             return true;
@@ -52,7 +52,7 @@ public class TaiKhoanBUS {
         return false;
     }
 
-    public static TaiKhoanDTO getByID(int manv) {
+    public static TaiKhoanModal getByID(int manv) {
         return taikhoanDAO.selectById(manv);
     }
 }

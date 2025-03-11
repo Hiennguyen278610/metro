@@ -1,4 +1,4 @@
-package org.metro.dao;
+package org.metro.DAO;
 
 import java.util.List;
 

@@ -1,12 +1,12 @@
 package org.metro.service;
 
-import org.metro.dao.KhachHangDAO;
-import org.metro.model.KhachHangDTO;
+import org.metro.DAO.KhachHangDAO;
+import org.metro.model.KhachHangModal;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class KhachHangBUS {
-    private static ArrayList<KhachHangDTO> allCustomers = new ArrayList<>();
+public class KhachHangService {
+    private static ArrayList<KhachHangModal> allCustomers = new ArrayList<>();
     private static final KhachHangDAO khachHangDAO = new KhachHangDAO();
 
     // Load dữ liệu từ DB
@@ -15,7 +15,7 @@ public class KhachHangBUS {
     }
 
     // Tìm kiếm khách hàng theo từ khóa và loại tìm kiếm
-    public static ArrayList<KhachHangDTO> search(String txt, String type) {
+    public static ArrayList<KhachHangModal> search(String txt, String type) {
         loadData(); // đảm bảo dữ liệu mới nhất
         if (txt == null || txt.trim().isEmpty()) {
             return new ArrayList<>(allCustomers);
@@ -42,7 +42,7 @@ public class KhachHangBUS {
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public static boolean insert(KhachHangDTO kh) {
+    public static boolean insert(KhachHangModal kh) {
         if (khachHangDAO.insert(kh) > 0) {
             loadData();
             return true;
@@ -50,7 +50,7 @@ public class KhachHangBUS {
         return false;
     }
 
-    public static boolean update(KhachHangDTO kh) {
+    public static boolean update(KhachHangModal kh) {
         if (khachHangDAO.update(kh) > 0) {
             loadData();
             return true;
@@ -66,7 +66,7 @@ public class KhachHangBUS {
         return false;
     }
 
-    public static KhachHangDTO getById(int maKh) {
+    public static KhachHangModal getById(int maKh) {
         return khachHangDAO.selectById(maKh);
     }
 }
