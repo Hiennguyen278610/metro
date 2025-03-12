@@ -28,7 +28,7 @@ public class NhanVienDialog extends JDialog{
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10,10,5,5);
+        gbc.insets = new Insets(5,5,5,5);
 
         //label
         tennvLabel = new JLabel("ten nhan vien: ");
@@ -78,7 +78,7 @@ public class NhanVienDialog extends JDialog{
         gbc.gridwidth = 2;
         this.add(ok,gbc);
         gbc.gridy = 5;
-        this.add(cancel);
+        this.add(cancel,gbc);
 
     }
 
