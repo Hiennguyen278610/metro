@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import org.metro.DAO.DangkyDao;
 import org.metro.controller.LoginController;
+import org.metro.service.SetLogoService;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
@@ -32,6 +33,7 @@ public class LoginFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setUndecorated(true);
         this.setVisible(true);
+        SetLogoService.setLogo(this);
         this.init();
     }
 
@@ -68,7 +70,7 @@ public class LoginFrame extends JFrame {
         leftContent.setBounds(0, 0, 350, 600);
         leftContent.setLayout(null);
 
-        FlatSVGIcon iconMetro = new FlatSVGIcon(getClass().getResource("/svg/metro.svg")).derive(220, 220);
+        FlatSVGIcon iconMetro = new FlatSVGIcon(getClass().getResource("/svg/metro_logo.svg")).derive(220, 220);
         JLabel Metro = new JLabel(iconMetro, JLabel.CENTER);
         Metro.setBounds(70, 120, 220, 220);
         leftContent.add(Metro);
@@ -112,8 +114,8 @@ public class LoginFrame extends JFrame {
         MatKhauLabel.setForeground(MainColor);
         rightContent.add(MatKhauLabel);
 
-        //layout chua password field + icon an hien 
-        JLayeredPane matkhauPane = new JLayeredPane(); // layout cho phep cac phan tu xep chong len nhau 
+        // layout chua password field + icon an hien
+        JLayeredPane matkhauPane = new JLayeredPane(); // layout cho phep cac phan tu xep chong len nhau
         matkhauPane.setBounds(60, 290, 310, 50);
 
         JPasswordField MatKhauField = new JPasswordField("Nhập mật khẩu ...");
@@ -124,24 +126,26 @@ public class LoginFrame extends JFrame {
         MatKhauField.setForeground(Color.GRAY);
         MatKhauField.setEchoChar((char) 0);
 
-        //icon an hien
-        ImageIcon openEye = new ImageIcon(new ImageIcon("src/main/java/org/metro/assets/icons/view.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        // icon an hien
+        ImageIcon openEye = new ImageIcon(new ImageIcon("src/main/java/org/metro/assets/icons/view.png").getImage()
+                .getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         JLabel openEyeLabel = new JLabel(openEye);
         openEyeLabel.setVisible(true);
-        openEyeLabel.setBounds(270,5,30,30);
+        openEyeLabel.setBounds(270, 5, 30, 30);
 
-        ImageIcon closeEye = new ImageIcon(new ImageIcon("src/main/java/org/metro/assets/icons/hide.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+        ImageIcon closeEye = new ImageIcon(new ImageIcon("src/main/java/org/metro/assets/icons/hide.png").getImage()
+                .getScaledInstance(20, 20, Image.SCALE_SMOOTH));
         JLabel closeEyeLabel = new JLabel(closeEye);
         closeEyeLabel.setVisible(false);
         closeEyeLabel.setBounds(270, 5, 30, 30);
 
-        matkhauPane.add(MatKhauField,JLayeredPane.DEFAULT_LAYER);
-        matkhauPane.add(openEyeLabel,JLayeredPane.PALETTE_LAYER);
-        matkhauPane.add(closeEyeLabel,JLayeredPane.PALETTE_LAYER);
+        matkhauPane.add(MatKhauField, JLayeredPane.DEFAULT_LAYER);
+        matkhauPane.add(openEyeLabel, JLayeredPane.PALETTE_LAYER);
+        matkhauPane.add(closeEyeLabel, JLayeredPane.PALETTE_LAYER);
 
         rightContent.add(matkhauPane);
 
-        //goi function
+        // goi function
         showPassword(MatKhauField, openEyeLabel, closeEyeLabel);
 
         DangNhapButton = new JButton("ĐĂNG NHẬP");
@@ -388,8 +392,8 @@ public class LoginFrame extends JFrame {
         }
     }
 
-    //ham hien thi mat khau 
-    public static void showPassword(JPasswordField pf,JLabel show,JLabel hide) {
+    // ham hien thi mat khau
+    public static void showPassword(JPasswordField pf, JLabel show, JLabel hide) {
         hide.setVisible(false);
         show.addMouseListener(new MouseAdapter() {
             @Override

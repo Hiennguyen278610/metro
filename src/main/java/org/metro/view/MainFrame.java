@@ -9,10 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
-import org.metro.Main;
 import org.metro.controller.MainController;
+import org.metro.service.SetLogoService;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+
 import org.metro.view.Component.MenuTaskbar;
 
 public class MainFrame extends JFrame {
@@ -35,6 +36,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
         this.init();
+        SetLogoService.setLogo(this);
         setVisible(true);
     }
 
@@ -52,6 +54,23 @@ public class MainFrame extends JFrame {
         navbarPanel.setBackground(MainColor);
         navbarPanel.setLayout(new FlowLayout(2, 0, 0));
         mainPanel.add(navbarPanel);
+
+        JPanel LogoPanel = new JPanel();
+        LogoPanel.setLayout(new FlowLayout(0, 10, 0));
+
+        Image icon = new ImageIcon(getClass().getResource("/svg/logo.png")).getImage().getScaledInstance(60, 40,
+                Image.SCALE_SMOOTH);
+        JLabel LogoLabel = new JLabel(new ImageIcon(icon));
+        LogoPanel.add(LogoLabel);
+
+        JLabel TitleLabel = new JLabel("Quản lý Metro");
+        TitleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        TitleLabel.setForeground(Color.black);
+        LogoPanel.add(TitleLabel);
+
+        LogoPanel.setPreferredSize(new Dimension(1110, 40));
+        LogoPanel.setBackground(MainColor);
+        navbarPanel.add(LogoPanel);
 
         MinimizeButton = new JPanel();
         MinimizeButton.setPreferredSize(new Dimension(40, 40));
