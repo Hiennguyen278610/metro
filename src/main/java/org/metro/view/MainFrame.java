@@ -15,6 +15,7 @@ import org.metro.service.SetLogoService;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import org.metro.view.Component.MenuTaskbar;
+import org.metro.view.Component.RoundedPanel;
 
 public class MainFrame extends JFrame {
     private JPanel TuyenDuongPanel;
@@ -58,9 +59,10 @@ public class MainFrame extends JFrame {
         JPanel LogoPanel = new JPanel();
         LogoPanel.setLayout(new FlowLayout(0, 10, 0));
 
-        Image icon = new ImageIcon(getClass().getResource("/svg/logo.png")).getImage().getScaledInstance(60, 40,
+        Image icon = new ImageIcon(getClass().getResource("/svg/logo.png")).getImage().getScaledInstance(50, 30,
                 Image.SCALE_SMOOTH);
-        JLabel LogoLabel = new JLabel(new ImageIcon(icon));
+        JLabel LogoLabel = new JLabel(new ImageIcon(icon), JLabel.CENTER);
+        LogoLabel.setPreferredSize(new Dimension(50, 40));
         LogoPanel.add(LogoLabel);
 
         JLabel TitleLabel = new JLabel("Quản lý Metro");
@@ -159,6 +161,64 @@ public class MainFrame extends JFrame {
         DangXuatPanel.add(DangXuatIcon);
         DangXuatPanel.add(DangXuatLabel);
         ChucNangPanel.add(DangXuatPanel, BorderLayout.SOUTH);
+
+        // Panel Trang chu
+        JPanel TrangChuPanel = new JPanel();
+        TrangChuPanel.setLayout(null);
+        TrangChuPanel.setBackground(Color.white);
+        TrangChuPanel.setSize(900, 760);
+
+        JLabel TrangChuLabel = new JLabel(
+                "<html><div style='text-align: center; font-weight: 700;'>HỆ THỐNG QUẢN LÝ VẬN HÀNH METRO</div><div style='text-align: center; font-weight: 400; font-size: smaller;'>- Metro đưa bạn tới bất cứ đâu -</div></html>",
+                JLabel.CENTER);
+        TrangChuLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        TrangChuLabel.setForeground(Color.black);
+        TrangChuLabel.setBounds(0, 0, 900, 140);
+        TrangChuPanel.add(TrangChuLabel);
+
+        JPanel ThongKePanel = new JPanel();
+        ThongKePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50));
+        ThongKePanel.setBackground(Color.decode("#BDCDD6"));
+        ThongKePanel.setBounds(0, 140, 900, 620);
+        TrangChuPanel.add(ThongKePanel);
+
+        RoundedPanel SoTauPanel = new RoundedPanel(20);
+        SoTauPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        SoTauPanel.setBackground(Color.decode("#93BFCF"));
+        SoTauPanel.setPreferredSize(new Dimension(250, 350));
+        SoTauPanel.setBorder(new LineBorder(Color.black, 2));
+        ThongKePanel.add(SoTauPanel);
+
+        JLabel SoTauLabel = new JLabel("Số tàu", JLabel.CENTER);
+        SoTauLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        SoTauLabel.setForeground(Color.black);
+        SoTauPanel.add(SoTauLabel);
+
+        RoundedPanel SoNguoiSuDungPanel = new RoundedPanel(20);
+        SoNguoiSuDungPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        SoNguoiSuDungPanel.setBackground(Color.decode("#93BFCF"));
+        SoNguoiSuDungPanel.setPreferredSize(new Dimension(250, 350));
+        SoNguoiSuDungPanel.setBorder(new LineBorder(Color.black, 2));
+        ThongKePanel.add(SoNguoiSuDungPanel);
+
+        JLabel SoNguoiSuDungLabel = new JLabel("Số người sử dụng", JLabel.CENTER);
+        SoNguoiSuDungLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        SoNguoiSuDungLabel.setForeground(Color.black);
+        SoNguoiSuDungPanel.add(SoNguoiSuDungLabel);
+
+        RoundedPanel SoTuyenDuongPanel = new RoundedPanel(20);
+        SoTuyenDuongPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        SoTuyenDuongPanel.setBackground(Color.decode("#93BFCF"));
+        SoTuyenDuongPanel.setPreferredSize(new Dimension(250, 350));
+        SoTuyenDuongPanel.setBorder(new LineBorder(Color.black, 2));
+        ThongKePanel.add(SoTuyenDuongPanel);
+
+        JLabel SoTuyenDuongLabel = new JLabel("Số tuyến đường", JLabel.CENTER);
+        SoTuyenDuongLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        SoTuyenDuongLabel.setForeground(Color.black);
+        SoTuyenDuongPanel.add(SoTuyenDuongLabel);
+
+        this.setPanel(TrangChuPanel);
     }
 
     public void setPanel(JPanel pn) {
