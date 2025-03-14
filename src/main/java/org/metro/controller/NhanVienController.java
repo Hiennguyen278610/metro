@@ -13,11 +13,18 @@ import javax.swing.event.DocumentListener;
 
 import org.metro.view.Component.ToolBar;
 import org.metro.view.Dialog.NhanVienDialog;
+import org.metro.DAO.NhanVienDAO;
+import org.metro.model.NhanVienModel;
+import org.metro.service.NhanVienService;
 import org.metro.view.MainFrame;
 import org.metro.view.Panel.NhanVien;
 
 public class NhanVienController implements ActionListener,ItemListener,KeyListener{
     private NhanVien nv;
+    private NhanVienDialog nvdl;
+    public NhanVienController(NhanVienDialog nvdl) {
+        this.nvdl = nvdl;
+    }
     public NhanVienController(NhanVien nv) {
         this.nv = nv;
     }
@@ -37,6 +44,7 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
     @Override
     public void actionPerformed(ActionEvent e) {
         JComponent c = (JComponent) e.getSource(); // dung combonent de su dung cho nhieu kieu nhu button,label,..
+       if(nv != null) {
         for(String nambtn : nv.getMainfunc().getBtn().keySet()) {
             ToolBar tb = nv.getMainfunc().getBtn().get(nambtn);
             if(c.equals(tb)) {
@@ -48,6 +56,44 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
                 break;
             }
         }
+       }
+
+        //xu li khi an nut them
+       if(nvdl != null) {
+        String namebtn = e.getActionCommand();
+        if(c instanceof JButton) {
+            if(namebtn.equals("THEM")) {
+                String ten = String.valueOf(nvdl.getTennvTextfield().getText().trim());
+                String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getText().trim());
+                String gt = String.valueOf(nvdl.getGioitinhCombobox().getSelectedItem());
+                String cv = String.valueOf(nvdl.getChucvuCombobox().getSelectedItem());
+
+                if(ten.isEmpty()) {
+                    JOptionPane.showMessageDialog(null,"ten khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                    nvdl.getTennvTextfield().requestFocus();
+                    return;
+                }
+                if(sdt.isEmpty()) {
+                    JOptionPane.showMessageDialog(null,"sdt khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                    nvdl.getTennvTextfield().requestFocus();
+                    return;
+                }
+
+                if(nvdl.getGioitinhCombobox().getSelectedItem() == "--" || nvdl.getChucvuCombobox().getSelectedItem() == "--") {
+                    JOptionPane.showMessageDialog(null, "vui long chon 1 chi muc!","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                NhanVienModel nvm = new NhanVienModel(ten, sdt, gt, cv); // ma nv la auto increment nen dung constructor kh co manv
+                if(NhanVienService.insert(nvm)) {
+                    JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THANH CONG","THONG BAO",JOptionPane.INFORMATION_MESSAGE);
+                    nvdl.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THAT BAI","THONG BAO",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+        }
+       }
 
     }
     @Override

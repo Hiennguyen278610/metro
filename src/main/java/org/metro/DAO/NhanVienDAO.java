@@ -20,7 +20,6 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
             prs.setString(2, t.getSdtnv());
             prs.setString(3, t.getGioitinh());
             prs.setString(4, t.getChucvu());
-            c.close();
             return prs.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

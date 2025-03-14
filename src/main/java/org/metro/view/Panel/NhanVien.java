@@ -29,6 +29,7 @@ public class NhanVien extends JPanel {
     private IntegratedSearch searchfunc;
     private List<NhanVienModel> listNhanVien;
     private Timer timeSearch;
+    private NhanVienController action = new NhanVienController(this);
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
@@ -81,11 +82,11 @@ public class NhanVien extends JPanel {
 
 
         //them acction
-        NhanVienController acction = new NhanVienController(this);
-        searchfunc.getCbxChoose().addItemListener(acction);
+        searchfunc.getCbxChoose().addItemListener(action);
 
+        //action check xem nhan nut nao
         for(ToolBar tb : mainfunc.getBtn().values()) {
-            tb.addActionListener(acction);
+            tb.addActionListener(action);
         }
 
         this.add(contentDataPanel, BorderLayout.CENTER);
