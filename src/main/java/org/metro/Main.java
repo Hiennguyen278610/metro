@@ -7,8 +7,6 @@ import mdlaf.MaterialLookAndFeel;
 
 import org.metro.view.LoginFrame;
 
-import java.awt.*;
-
 public class Main {
     public static void main(String[] args) {
         // Đặt encoding toàn cục cho ứng dụng
@@ -30,3 +28,4 @@ public class Main {
         });
     }
 }
+

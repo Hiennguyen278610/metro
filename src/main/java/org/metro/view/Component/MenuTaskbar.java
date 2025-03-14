@@ -155,7 +155,7 @@ public class MenuTaskbar extends JPanel {
                 listItem[i].setBackground(HoverBackgroundColor);
                 listItem[i].lblContent.setForeground(HoverFontColor); // Cập nhật màu chữ
             } else {
-                listItem[i].setBackground(DefaultColor);
+                listItem[i].setBackground(DefaultColor);//
                 listItem[i].lblContent.setForeground(FontColor);
             }
         }
