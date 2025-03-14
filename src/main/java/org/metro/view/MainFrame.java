@@ -195,28 +195,40 @@ public class MainFrame extends JFrame {
         SoTauPanel.add(SoTauLabel);
 
         RoundedPanel SoNguoiSuDungPanel = new RoundedPanel(20);
-        SoNguoiSuDungPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        SoNguoiSuDungPanel.setLayout(null);
         SoNguoiSuDungPanel.setBackground(Color.decode("#93BFCF"));
         SoNguoiSuDungPanel.setPreferredSize(new Dimension(250, 350));
         SoNguoiSuDungPanel.setBorder(new LineBorder(Color.black, 2));
         ThongKePanel.add(SoNguoiSuDungPanel);
 
-        JLabel SoNguoiSuDungLabel = new JLabel("Số người sử dụng", JLabel.CENTER);
+        JLabel SoNguoiSuDungLabel = new JLabel("696 HÀNH KHÁCH", JLabel.CENTER);
         SoNguoiSuDungLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        SoNguoiSuDungLabel.setBounds(0, 200, 250, 50);
         SoNguoiSuDungLabel.setForeground(Color.black);
         SoNguoiSuDungPanel.add(SoNguoiSuDungLabel);
 
+        FlatSVGIcon SoNugoiSuDungIcon = new FlatSVGIcon(getClass().getResource("/svg/teamwork.svg")).derive(150, 150);
+        JLabel NguoiSuDungIcon = new JLabel(SoNugoiSuDungIcon, JLabel.CENTER);
+        NguoiSuDungIcon.setBounds(50, 30, 150, 150);
+        SoNguoiSuDungPanel.add(NguoiSuDungIcon);
+
         RoundedPanel SoTuyenDuongPanel = new RoundedPanel(20);
-        SoTuyenDuongPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        SoTuyenDuongPanel.setLayout(null);
         SoTuyenDuongPanel.setBackground(Color.decode("#93BFCF"));
         SoTuyenDuongPanel.setPreferredSize(new Dimension(250, 350));
         SoTuyenDuongPanel.setBorder(new LineBorder(Color.black, 2));
         ThongKePanel.add(SoTuyenDuongPanel);
 
-        JLabel SoTuyenDuongLabel = new JLabel("Số tuyến đường", JLabel.CENTER);
+        JLabel SoTuyenDuongLabel = new JLabel("7749 TUYẾN ĐƯỜNG", JLabel.CENTER);
         SoTuyenDuongLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        SoTuyenDuongLabel.setBounds(0, 200, 250, 50);
         SoTuyenDuongLabel.setForeground(Color.black);
         SoTuyenDuongPanel.add(SoTuyenDuongLabel);
+
+        FlatSVGIcon SoTuyenDuongIcon = new FlatSVGIcon(getClass().getResource("/svg/route2.svg")).derive(150, 150);
+        JLabel TuyenDuongIcon = new JLabel(SoTuyenDuongIcon, JLabel.CENTER);
+        TuyenDuongIcon.setBounds(50, 30, 150, 150);
+        SoTuyenDuongPanel.add(TuyenDuongIcon);
 
         this.setPanel(TrangChuPanel);
     }

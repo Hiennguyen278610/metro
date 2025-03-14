@@ -1,10 +1,10 @@
 package org.metro.view.Panel;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 
 import org.metro.DAO.TauDAO;
 import org.metro.model.TauModel;
-import org.metro.view.Component.RoundedPanel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -76,23 +76,32 @@ public class Tau extends JPanel {
 
         JPanel TongSoTauPanel = new JPanel();
         TongSoTauPanel.setPreferredSize(new Dimension(900, 40));
-        TongSoTauPanel.setBackground(Color.yellow);
+        TongSoTauPanel.setBorder(new MatteBorder(0, 0, 2, 0, Color.black));
+        TongSoTauPanel.setBackground(Color.white);
         TongSoTauPanel.setLayout(null);
         JLabel TongSoTauLabel = new JLabel("Tổng số tàu (" + list.size() + ")");
         TongSoTauLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        TongSoTauLabel.setBounds(10, 10, 500, 40);
+        TongSoTauLabel.setBounds(30, 5, 200, 40);
         TongSoTauPanel.add(TongSoTauLabel);
         this.add(TongSoTauPanel);
+        JLabel SortLabel = new JLabel("Sắp xếp theo: ");
+        SortLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        SortLabel.setBounds(650, 5, 200, 40);
+        TongSoTauPanel.add(SortLabel);
+        JComboBox<String> SortComboBox = new JComboBox<>();
+        SortComboBox.addItem("Mã tàu");
+        SortComboBox.addItem("Trạng thái tàu");
+        SortComboBox.addItem("Ngày nhập tàu");
+        SortComboBox.setBounds(760, 14, 100, 20);
+        TongSoTauPanel.add(SortComboBox);
 
-        JPanel DanhSachTauPanel = new JPanel();
-        DanhSachTauPanel.setLayout(new FlowLayout(1, 0, 0));
-        DanhSachTauPanel.setPreferredSize(new Dimension(900, 360));
-        DanhSachTauPanel.setBackground(Color.blue);
+        JPanel DanhSachTauPanel = new DanhSachTau();
 
-        JScrollBar scrollBar = new JScrollBar();
-        scrollBar.setPreferredSize(new Dimension(900, 360));
-        DanhSachTauPanel.add(scrollBar);
-        this.add(DanhSachTauPanel);
+        JScrollPane DanhSachTauScrollPane = new JScrollPane(DanhSachTauPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        DanhSachTauScrollPane.setPreferredSize(new Dimension(900, 600));
+        // DanhSachTauScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        this.add(DanhSachTauScrollPane);
 
     }
 
