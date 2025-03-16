@@ -24,6 +24,7 @@ import org.metro.view.Panel.NhanVien;
 public class NhanVienController implements ActionListener,ItemListener,KeyListener{
     private NhanVien nv;
     private NhanVienDialog nvdl;
+    private NhanVienModel nvm;
     public NhanVienController(NhanVienDialog nvdl) {
         this.nvdl = nvdl;
     }
@@ -50,17 +51,37 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
         for(String namebtn : nv.getMainfunc().getBtn().keySet()) {
             ToolBar tb = nv.getMainfunc().getBtn().get(namebtn);
             if(c.equals(tb)) {
-                if(namebtn == null || namebtn.isEmpty()) {
+                if(namebtn == null || namebtn.trim().isEmpty()) {
                     System.err.println("errors");
                     return;
                 }
-                new NhanVienDialog(nv.getMf(),namebtn); // MainFrame la cha
-                break;
+
+                if("create".equals(namebtn)) {
+                    new NhanVienDialog(nv.getMf(), namebtn, nv, null).setVisible(true);;
+                }
+                else if("detail".equals(namebtn) || "update".equals(namebtn)) {
+                    nvm = nv.getSelectedNhanvien();
+                    if(nvm == null) {
+                        JOptionPane.showMessageDialog(nv,"Hay chon 1 nhan vien","Thong bao",JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    new NhanVienDialog(nv.getMf(), namebtn, nv, nvm).setVisible(true);
+                }
+                else if("delete".equals(namebtn)) {
+                    int confirm = JOptionPane.showConfirmDialog(nv, "Ban co chac muon xoa ? ","Xac nhan",JOptionPane.YES_NO_OPTION);
+                    if(confirm == JOptionPane.YES_OPTION) {
+                        deleteNhanvien();
+                        if(nv.getNhanVienTabel() != null) nv.getNhanVienTabel().updateUI();
+                    }
+                } else {
+                    System.out.println("khong co nut nao duoc click");
+                    return;
+                }
             }
         }
        }
 
-        //xu li khi an nut them
+        //xu li khi an nut them de xac nhan them 1 nhan vien
        if(nvdl != null) {
             String namebtn = e.getActionCommand();
             if(c instanceof JButton) {
@@ -96,8 +117,23 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
                 } else if(namebtn.equals("CANCEl")) nvdl.dispose();
             }
        }
-
     }
+
+
+    //ham xoa nhan vien
+    public void deleteNhanvien() {
+        nvm = nv.getSelectedNhanvien();
+        System.out.println("phuong thuc delete");
+        if(nvm == null) {
+            System.out.println("khong tim thay nhan vien duoc chon");
+            return;
+        }
+        System.out.println("nhan vien duoc chon de xoa la : " + nvm.getManv());
+        if(NhanVienService.delete(nvm.getManv())) {
+            JOptionPane.showMessageDialog(null,"Xoa nhan vien thanh cong","Thong bao",JOptionPane.INFORMATION_MESSAGE);
+        } else JOptionPane.showMessageDialog(null,"Xoa nhan vien that bai","Thong bao",JOptionPane.ERROR_MESSAGE);
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
       

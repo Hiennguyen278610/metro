@@ -1,7 +1,10 @@
 package org.metro.view.Dialog;
 
 import org.metro.controller.NhanVienController;
+import org.metro.model.NhanVienModel;
+import org.metro.service.NhanVienService;
 import org.metro.view.Component.handleComponents;
+import org.metro.view.Panel.NhanVien;
 
 import java.awt.*;
 
@@ -14,18 +17,22 @@ public class NhanVienDialog extends JDialog{
     private JButton ok,cancel;
     private String type;
     private JPanel contentPanel;
+    private NhanVien nv;
+    private NhanVienModel nvm;
     private NhanVienController action = new NhanVienController(this);
 
     // dialog them, sua , chi tiet nhanvien
-    public NhanVienDialog(Frame parent, String type) {
+    public NhanVienDialog(Frame parent, String type,NhanVien nv,NhanVienModel nvm) {
         super(parent,true);
+        this.nv = nv;
         this.type = type;
-        this.setTitle(setTileType());
+        this.nvm = nvm;
+        this.setTitle(setTitleType());
         this.setSize(500,500);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-       this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
         this.init();
-        this.setVisible(true);
+        checkButtonClicked();
     }
 
     private void init() {
@@ -62,7 +69,10 @@ public class NhanVienDialog extends JDialog{
     }
 
     //ham set title cho tung kieu them, xoa ,sua
-    private String setTileType() {
+    private String setTitleType() {
+        if(type == null) {
+            return null;
+        }
         switch (type) {
             case "create":
                 return "THEM NHAN VIEN";
@@ -74,7 +84,42 @@ public class NhanVienDialog extends JDialog{
         }
     }
 
-  
+    //check xem nut them,sau,xoa,delete dc nhan
+    public void checkButtonClicked() {
+        switch (type) {
+            case "create":
+                editEnabled(true);
+                break;
+            case "update":
+                editEnabled(true);
+                if(nv != null) {
+                    nv.reloadData();
+                }
+                break;
+            case "detail":
+                editEnabled(false);
+                if(nv != null) {
+                    nv.reloadData();
+                }
+                break;
+            case "delete":
+//                this.dispose();
+                break;
+            default:
+                System.err.println("button duoc nhan la " + type);
+
+        }
+    }
+
+    //ham cho phep chinh sua
+    public void editEnabled(boolean enabled) {
+        tennvTextfield.setEnabled(enabled);
+        sodienthoaiTextfield.setEnabled(enabled);
+        gioitinhCombobox.setEnabled(enabled);
+        chucvuCombobox.setEnabled(enabled);
+    }
+
+
 
     //getter setter
     public JLabel getTennvLabel() {

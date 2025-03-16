@@ -9,6 +9,8 @@ import java.util.List;
 import org.metro.model.NhanVienModel;
 import org.metro.util.DatabaseUtils;
 
+import javax.xml.crypto.Data;
+
 public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
@@ -45,9 +47,15 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public int delete(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
-
+        String query = "delete from nhanvien where manv = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+        PreparedStatement prs = c.prepareStatement(query);) {
+            prs.setInt(1,id);
+            return prs.executeUpdate();
+        }catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

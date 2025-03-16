@@ -93,20 +93,22 @@ public class NhanVien extends JPanel {
     }
 
     public void reloadList(List<NhanVienModel> listNhanVien2) {
-            dataTabelModel.setRowCount(0); //xoa het bang de tai lai tu dau
+        dataTabelModel.setRowCount(0); //xoa het bang de tai lai tu dau
+        if(listNhanVien2 != null) {
             for(NhanVienModel nvd : listNhanVien2) {
-            dataTabelModel.addRow(new Object[]{
-                nvd.getManv(),
-                nvd.getTennv(),
-                nvd.getSdtnv(),
-                nvd.getGioitinh(),
-                nvd.getChucvu()
-            });
+                dataTabelModel.addRow(new Object[]{
+                    nvd.getManv(),
+                    nvd.getTennv(),
+                    nvd.getSdtnv(),
+                    nvd.getGioitinh(),
+                    nvd.getChucvu()
+                });
+            }   
         }
     }
     public void reloadData() {
-        listNhanVien = new NhanVienDAO().selectAll();
-        reloadList(listNhanVien);
+        List<NhanVienModel> lst = new NhanVienDAO().selectAll();
+        reloadList(lst);
     }
 
     //tim kiem theo field nhap
@@ -128,6 +130,17 @@ public class NhanVien extends JPanel {
             }
             
         }, 200);
+    }
+
+    public NhanVienModel getSelectedNhanvien() {
+        int row = nhanVienTabel.getSelectedRow();
+        if(row == - 1) return null;
+        int manv = (int) nhanVienTabel.getValueAt(row, 0);
+        String tennv = (String) nhanVienTabel.getValueAt(row, 1);
+        String sdtnv = (String) nhanVienTabel.getValueAt(row, 2);
+        String gioitinh = (String) nhanVienTabel.getValueAt(row, 3);
+        String chucvu = (String) nhanVienTabel.getValueAt(row, 4);
+        return new NhanVienModel(manv,tennv,sdtnv,gioitinh,chucvu);
     }
 
     //getter setter
@@ -217,4 +230,6 @@ public class NhanVien extends JPanel {
     public void setMf(MainFrame mf) {
         this.mf = mf;
     }
+
+
 }

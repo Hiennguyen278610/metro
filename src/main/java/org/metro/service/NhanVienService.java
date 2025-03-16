@@ -15,4 +15,17 @@ public class NhanVienService {
         }
         return false;
     }
+
+    public static boolean update(NhanVienModel nvm) {
+        return false;
+    }
+
+    public static boolean delete(int maNV) {
+        System.out.println("Gọi phương thức delete() trong NhanVienService với maNV = " + maNV);
+       if(nvd != null && nvd.delete(maNV) > 0) {
+           if(nv != null) nv.reloadData();
+           return true;
+       }
+       return false;
+    }
 }
