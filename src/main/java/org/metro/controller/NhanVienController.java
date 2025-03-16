@@ -6,6 +6,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -45,14 +47,14 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
     public void actionPerformed(ActionEvent e) {
         JComponent c = (JComponent) e.getSource(); // dung combonent de su dung cho nhieu kieu nhu button,label,..
        if(nv != null) {
-        for(String nambtn : nv.getMainfunc().getBtn().keySet()) {
-            ToolBar tb = nv.getMainfunc().getBtn().get(nambtn);
+        for(String namebtn : nv.getMainfunc().getBtn().keySet()) {
+            ToolBar tb = nv.getMainfunc().getBtn().get(namebtn);
             if(c.equals(tb)) {
-                if(nambtn == null || nambtn.isEmpty()) {
+                if(namebtn == null || namebtn.isEmpty()) {
                     System.err.println("errors");
                     return;
                 }
-                new NhanVienDialog(nv.getMf(),nambtn); // MainFrame la cha
+                new NhanVienDialog(nv.getMf(),namebtn); // MainFrame la cha
                 break;
             }
         }
@@ -60,39 +62,39 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
 
         //xu li khi an nut them
        if(nvdl != null) {
-        String namebtn = e.getActionCommand();
-        if(c instanceof JButton) {
-            if(namebtn.equals("THEM")) {
-                String ten = String.valueOf(nvdl.getTennvTextfield().getText().trim());
-                String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getText().trim());
-                String gt = String.valueOf(nvdl.getGioitinhCombobox().getSelectedItem());
-                String cv = String.valueOf(nvdl.getChucvuCombobox().getSelectedItem());
+            String namebtn = e.getActionCommand();
+            if(c instanceof JButton) {
+                if(namebtn.equals("THEM")) {
+                    String ten = String.valueOf(nvdl.getTennvTextfield().getText().trim());
+                    String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getText().trim());
+                    String gt = String.valueOf(nvdl.getGioitinhCombobox().getSelectedItem());
+                    String cv = String.valueOf(nvdl.getChucvuCombobox().getSelectedItem());
 
-                if(ten.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"ten khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
-                    nvdl.getTennvTextfield().requestFocus();
-                    return;
-                }
-                if(sdt.isEmpty()) {
-                    JOptionPane.showMessageDialog(null,"sdt khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
-                    nvdl.getTennvTextfield().requestFocus();
-                    return;
-                }
+                    if(ten.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,"ten khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                        nvdl.getTennvTextfield().requestFocus();
+                        return;
+                    }
+                    if(sdt.isEmpty()) {
+                        JOptionPane.showMessageDialog(null,"sdt khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                        nvdl.getTennvTextfield().requestFocus();
+                        return;
+                    }
 
-                if(nvdl.getGioitinhCombobox().getSelectedItem() == "--" || nvdl.getChucvuCombobox().getSelectedItem() == "--") {
-                    JOptionPane.showMessageDialog(null, "vui long chon 1 chi muc!","thong bao",JOptionPane.INFORMATION_MESSAGE);
-                    return;
-                }
-                NhanVienModel nvm = new NhanVienModel(ten, sdt, gt, cv); // ma nv la auto increment nen dung constructor kh co manv
-                if(NhanVienService.insert(nvm)) {
-                    JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THANH CONG","THONG BAO",JOptionPane.INFORMATION_MESSAGE);
-                    nvdl.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THAT BAI","THONG BAO",JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+                    if(nvdl.getGioitinhCombobox().getSelectedItem() == "--" || nvdl.getChucvuCombobox().getSelectedItem() == "--") {
+                        JOptionPane.showMessageDialog(null, "vui long chon 1 chi muc!","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                    NhanVienModel nvm = new NhanVienModel(ten, sdt, gt, cv); // ma nv la auto increment nen dung constructor kh co manv
+                    if(NhanVienService.insert(nvm)) {
+                        JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THANH CONG","THONG BAO",JOptionPane.INFORMATION_MESSAGE);
+                        nvdl.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THAT BAI","THONG BAO",JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } else if(namebtn.equals("CANCEl")) nvdl.dispose();
             }
-        }
        }
 
     }
@@ -108,6 +110,5 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
     public void keyReleased(KeyEvent e) {
         nv.loadTimeSearch();
     }
-
 
 }

@@ -25,7 +25,6 @@ public class NhanVienDialog extends JDialog{
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
        this.setLocationRelativeTo(null);
         this.init();
-        this.setDetail();
         this.setVisible(true);
     }
 
@@ -75,18 +74,7 @@ public class NhanVienDialog extends JDialog{
         }
     }
 
-    //ham set cho nut chi tiet thi khong dc thay doi text field
-    private void setDetail() {
-        if (tennvTextfield == null || sodienthoaiTextfield == null || gioitinhCombobox == null || chucvuCombobox == null) {
-            System.out.println("errors");
-            return;
-        }
-        boolean check = type.equals("detail");
-        tennvTextfield.setEditable(!check); // khong cho sua 
-        sodienthoaiTextfield.setEditable(!check);
-        gioitinhCombobox.setEnabled(!check);
-        chucvuCombobox.setEnabled(!check);
-    }
+  
 
     //getter setter
     public JLabel getTennvLabel() {

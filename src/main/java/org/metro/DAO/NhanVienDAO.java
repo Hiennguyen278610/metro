@@ -29,8 +29,18 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public int update(NhanVienModel t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        String query = "update nhanvien set tennv = ? sodienthoai = ? gioitinh = ? chucvu = ? where manv = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement prs = c.prepareStatement(query);) {
+                prs.setString(1, t.getTennv());
+                prs.setString(2,t.getSdtnv());
+                prs.setString(3,t.getGioitinh());
+                prs.setString(4,t.getChucvu());
+                return prs.executeUpdate();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
