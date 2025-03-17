@@ -10,9 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import org.metro.view.Component.ToolBar;
 import org.metro.view.Dialog.NhanVienDialog;
 import org.metro.DAO.NhanVienDAO;
@@ -58,24 +55,25 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
 
                 if("create".equals(namebtn)) {
                     new NhanVienDialog(nv.getMf(), namebtn, nv, null).setVisible(true);;
-                }
-                else if("detail".equals(namebtn) || "update".equals(namebtn)) {
+                } else {
                     nvm = nv.getSelectedNhanvien();
                     if(nvm == null) {
                         JOptionPane.showMessageDialog(nv,"Hay chon 1 nhan vien","Thong bao",JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-                    new NhanVienDialog(nv.getMf(), namebtn, nv, nvm).setVisible(true);
-                }
-                else if("delete".equals(namebtn)) {
-                    int confirm = JOptionPane.showConfirmDialog(nv, "Ban co chac muon xoa ? ","Xac nhan",JOptionPane.YES_NO_OPTION);
-                    if(confirm == JOptionPane.YES_OPTION) {
-                        deleteNhanvien();
-                        if(nv.getNhanVienTabel() != null) nv.getNhanVienTabel().updateUI();
+                    if("detail".equals(namebtn) || "update".equals(namebtn)) {
+                        new NhanVienDialog(nv.getMf(), namebtn, nv, nvm).setVisible(true);
                     }
-                } else {
-                    System.out.println("khong co nut nao duoc click");
-                    return;
+                    else if("delete".equals(namebtn)) {
+                        int confirm = JOptionPane.showConfirmDialog(nv, "Ban co chac muon xoa ? ","Xac nhan",JOptionPane.YES_NO_OPTION);
+                        if(confirm == JOptionPane.YES_OPTION) {
+                            deleteNhanvien();
+                            if(nv.getNhanVienTabel() != null) nv.getNhanVienTabel().updateUI();
+                        }
+                    } else {
+                        System.out.println("khong co nut nao duoc click");
+                        return;
+                    }
                 }
             }
         }
@@ -92,34 +90,32 @@ public class NhanVienController implements ActionListener,ItemListener,KeyListen
                     String cv = String.valueOf(nvdl.getChucvuCombobox().getSelectedItem());
 
                     if(ten.isEmpty()) {
-                        JOptionPane.showMessageDialog(null,"ten khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(nvdl,"ten khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
                         nvdl.getTennvTextfield().requestFocus();
                         return;
                     }
                     if(sdt.isEmpty()) {
-                        JOptionPane.showMessageDialog(null,"sdt khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(nvdl,"sdt khong duoc de trong","thong bao",JOptionPane.INFORMATION_MESSAGE);
                         nvdl.getTennvTextfield().requestFocus();
                         return;
                     }
 
                     if(nvdl.getGioitinhCombobox().getSelectedItem() == "--" || nvdl.getChucvuCombobox().getSelectedItem() == "--") {
-                        JOptionPane.showMessageDialog(null, "vui long chon 1 chi muc!","thong bao",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(nvdl, "vui long chon 1 chi muc!","thong bao",JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
                     NhanVienModel nvm = new NhanVienModel(ten, sdt, gt, cv); // ma nv la auto increment nen dung constructor kh co manv
                     if(NhanVienService.insert(nvm)) {
-                        JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THANH CONG","THONG BAO",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(nvdl, "THEM NHAN VIEN THANH CONG","THONG BAO",JOptionPane.INFORMATION_MESSAGE);
                         nvdl.dispose();
                     } else {
-                        JOptionPane.showMessageDialog(null, "THEM NHAN VIEN THAT BAI","THONG BAO",JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(nvdl, "THEM NHAN VIEN THAT BAI","THONG BAO",JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 } else if(namebtn.equals("CANCEl")) nvdl.dispose();
             }
        }
     }
-
-
     //ham xoa nhan vien
     public void deleteNhanvien() {
         nvm = nv.getSelectedNhanvien();

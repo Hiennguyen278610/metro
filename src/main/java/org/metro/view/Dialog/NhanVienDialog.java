@@ -2,7 +2,6 @@ package org.metro.view.Dialog;
 
 import org.metro.controller.NhanVienController;
 import org.metro.model.NhanVienModel;
-import org.metro.service.NhanVienService;
 import org.metro.view.Component.handleComponents;
 import org.metro.view.Panel.NhanVien;
 
@@ -84,7 +83,7 @@ public class NhanVienDialog extends JDialog{
         }
     }
 
-    //check xem nut them,sau,xoa,delete dc nhan
+    //check xem nut them,sua,xoa,delete dc nhan
     public void checkButtonClicked() {
         switch (type) {
             case "create":
@@ -113,13 +112,20 @@ public class NhanVienDialog extends JDialog{
 
     //ham cho phep chinh sua
     public void editEnabled(boolean enabled) {
+        NhanVienModel nhanvienduochon = nv.getSelectedNhanvien();
+        if(nhanvienduochon != null) {
+            this.getTennvTextfield().setText(nhanvienduochon.getTennv());
+            this.getSodienthoaiTextfield().setText(nhanvienduochon.getSdtnv());
+            this.getGioitinhCombobox().setSelectedItem(nhanvienduochon.getGioitinh());
+            this.getChucvuCombobox().setSelectedItem(nhanvienduochon.getChucvu());
+        } else {
+            System.out.println("errors");
+        }
         tennvTextfield.setEnabled(enabled);
         sodienthoaiTextfield.setEnabled(enabled);
         gioitinhCombobox.setEnabled(enabled);
         chucvuCombobox.setEnabled(enabled);
     }
-
-
 
     //getter setter
     public JLabel getTennvLabel() {
@@ -210,5 +216,4 @@ public class NhanVienDialog extends JDialog{
         this.contentPanel = contentPanel;
     }
 
-    
 }

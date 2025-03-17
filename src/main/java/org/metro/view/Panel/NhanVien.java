@@ -9,6 +9,7 @@ import org.metro.model.NhanVienModel;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.ToolBar;
+import org.metro.view.Dialog.NhanVienDialog;
 import org.metro.view.MainFrame;
 
 import java.awt.*;
@@ -29,11 +30,13 @@ public class NhanVien extends JPanel {
     private IntegratedSearch searchfunc;
     private List<NhanVienModel> listNhanVien;
     private Timer timeSearch;
+    private NhanVienDialog nvdl;
     private NhanVienController action = new NhanVienController(this);
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
         timeSearch = new Timer();
+        this.nvdl = nvdl;
         reloadData(); // cap nhap table moi khi run 
     }
 
@@ -134,12 +137,14 @@ public class NhanVien extends JPanel {
 
     public NhanVienModel getSelectedNhanvien() {
         int row = nhanVienTabel.getSelectedRow();
+        System.out.println(row);
         if(row == - 1) return null;
         int manv = (int) nhanVienTabel.getValueAt(row, 0);
         String tennv = (String) nhanVienTabel.getValueAt(row, 1);
         String sdtnv = (String) nhanVienTabel.getValueAt(row, 2);
         String gioitinh = (String) nhanVienTabel.getValueAt(row, 3);
         String chucvu = (String) nhanVienTabel.getValueAt(row, 4);
+
         return new NhanVienModel(manv,tennv,sdtnv,gioitinh,chucvu);
     }
 
