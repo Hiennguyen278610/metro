@@ -97,16 +97,16 @@ create table vetau (
     giave double NOT NULL
 );
 CREATE table tau (
-    matau int NOT NULL,
+    matau int NOT NULL primary key,
     soghe int NOT NULL,
     trangthaitau varchar(100) NOT NULL,
     ngaynhap date NOT NULL
 );
 INSERT into tau(matau, soghe, trangthaitau, ngaynhap)
-values (1, 100, "Dang hoat dong", "2025-01-01"),
-    (2, 100, "Dang hoat dong", "2025-01-02"),
-    (3, 100, "Dang hoat dong", "2025-01-02"),
-    (4, 100, "Dang hoat dong", "2025-01-03");
+values (1, 100, "Đang hoạt động", "2025-01-01"),
+    (2, 100, "Đang bảo trì", "2025-01-02"),
+    (3, 100, "Ngừng hoạt động", "2025-01-02"),
+    (4, 100, "Đang hoạt động", "2025-01-03");
 -- Backup//test
 INSERT INTO vetau (mave, machuyen, makh, giave)
 VALUES (1, 3, 6, 8500.00),
