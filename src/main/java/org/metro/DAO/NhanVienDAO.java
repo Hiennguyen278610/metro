@@ -9,6 +9,8 @@ import java.util.List;
 import org.metro.model.NhanVienModel;
 import org.metro.util.DatabaseUtils;
 
+import javax.xml.crypto.Data;
+
 public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
@@ -20,7 +22,6 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
             prs.setString(2, t.getSdtnv());
             prs.setString(3, t.getGioitinh());
             prs.setString(4, t.getChucvu());
-            c.close();
             return prs.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,15 +31,31 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public int update(NhanVienModel t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        String query = "update nhanvien set tennv = ? sodienthoai = ? gioitinh = ? chucvu = ? where manv = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement prs = c.prepareStatement(query);) {
+                prs.setString(1, t.getTennv());
+                prs.setString(2,t.getSdtnv());
+                prs.setString(3,t.getGioitinh());
+                prs.setString(4,t.getChucvu());
+                return prs.executeUpdate();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public int delete(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
-
+        String query = "delete from nhanvien where manv = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+        PreparedStatement prs = c.prepareStatement(query);) {
+            prs.setInt(1,id);
+            return prs.executeUpdate();
+        }catch(Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
