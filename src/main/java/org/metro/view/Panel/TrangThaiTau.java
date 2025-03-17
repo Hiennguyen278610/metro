@@ -34,14 +34,13 @@ public class TrangThaiTau extends JPanel {
 
         // Bật khử răng cưa để vẽ đẹp hơn
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        System.out.println(trangthai);
         // Vẽ vòng tròn trạng thái
         switch (trangthai) {
             case "Đang hoạt động":
                 g2d.setColor(Color.green);
                 break;
             case "Đang bảo trì":
-                g2d.setColor(Color.yellow);
+                g2d.setColor(Color.orange);
                 break;
             case "Ngừng hoạt động":
                 g2d.setColor(Color.red);
@@ -50,7 +49,6 @@ public class TrangThaiTau extends JPanel {
         g2d.fillOval(10, 10, 20, 20);
 
         // Vẽ chữ trạng thái
-        g2d.setColor(Color.BLACK);
         g2d.setFont(new Font("Arial", Font.BOLD, 14));
         g2d.drawString(trangthai, 40, 25);
     }

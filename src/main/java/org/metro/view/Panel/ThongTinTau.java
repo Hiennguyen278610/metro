@@ -2,12 +2,10 @@ package org.metro.view.Panel;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.metro.model.TauModel;
 import org.metro.view.Component.RoundedPanel;
@@ -40,7 +38,7 @@ public class ThongTinTau extends RoundedPanel {
         // SoGhe.setFont(new Font("Arial", Font.BOLD, 16));
 
         TrangThaiTau trangthai = new TrangThaiTau(tau.getTrangthaitau());
-        trangthai.setBounds(10, 180, 200, 30);
+        trangthai.setBounds(10, 190, 200, 30);
         trangthai.setFont(new Font("Arial", Font.BOLD, 16));
 
         // JLabel NgayNhapTau = new JLabel("Ngày nhập tàu: " +
