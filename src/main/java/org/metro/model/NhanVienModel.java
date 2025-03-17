@@ -7,7 +7,14 @@ public class NhanVienModel {
     private String gioitinh;
     private String chucvu;
 
-    public NhanVienModel(int manv, String tennv, String gioitinh, String sdtnv, String chucvu) {
+    public NhanVienModel(String tennv,String sdtnv,String gioitinh,String chucvu) {
+        this.tennv = tennv;
+        this.sdtnv = sdtnv;
+        this.gioitinh = gioitinh;
+        this.chucvu = chucvu;
+    }
+
+    public NhanVienModel(int manv, String tennv, String sdtnv, String gioitinh, String chucvu) {
         this.manv = manv;
         this.tennv = tennv;
         this.gioitinh = gioitinh;
