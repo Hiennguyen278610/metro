@@ -63,7 +63,7 @@ public class MainFunction extends JToolBar {
         this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
     }
 
-    //getter setter
+    // getter setter
     public HashMap<String, ToolBar> getBtn() {
         return btn;
     }
