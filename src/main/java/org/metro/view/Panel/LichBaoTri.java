@@ -7,6 +7,7 @@ import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 
 public class LichBaoTri extends JPanel {
     private JPanel functionPanel, contentPanel, functionBarPanel;
@@ -48,11 +49,19 @@ public class LichBaoTri extends JPanel {
                 return false;
             }
         };
+        // Object[] row1 = { 1001, 5001, LocalDateTime.of(2025, 3, 16, 10, 30), "Đã hoàn
+        // thành" };
+        // Object[] row2 = { 1002, 5002, LocalDateTime.of(2025, 3, 17, 14, 0), "Đang bảo
+        // trì" };
+        // tableModel.addRow(row1);
+        // tableModel.addRow(row2);
 
-        maintenanceTable = new JTable(tableModel);
+        maintenanceTable = new JTable(); // khong the thay doi model sau khi da khoi tao bang, tru khi goi setModel();
         maintenanceTable.setFillsViewportHeight(true);
         maintenanceTable.getTableHeader().setReorderingAllowed(false);
         maintenanceTable.getTableHeader().setResizingAllowed(false);
+        maintenanceTable.setModel(tableModel);
+        maintenanceTable.setSelectionBackground(new Color(224, 255, 255));
 
         contentPanel = new JPanel();
         contentPanel.setLayout(new BorderLayout());
