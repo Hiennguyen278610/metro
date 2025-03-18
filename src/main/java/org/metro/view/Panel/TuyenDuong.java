@@ -1,6 +1,7 @@
 package org.metro.view.Panel;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.metro.controller.TuyenDuongController;
@@ -8,6 +9,7 @@ import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.ToolBar;
 
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.ui.FlatListCellBorder.Default;
 
 import java.awt.*;
@@ -20,16 +22,32 @@ public class TuyenDuong extends JPanel {
     private DefaultTableModel dataTabelModel;
     private JTable nhanVienTabel;
     private JScrollPane nhanVienScroll;
+    private JPanel XemDoThi;
+    private CardLayout cardLayout;
     private TuyenDuongController action = new TuyenDuongController(this);
+    private JPanel MainPanel;
+    private DoThiTuyenDuong DoThiPanel;
 
     public void initComponent() {
         this.setBackground(Color.white);
-        this.setLayout(new BorderLayout(0, 0));
+        cardLayout = new CardLayout();
+        this.setLayout(cardLayout);
         // headerPanel chua search,combo box,btn reset + 4 function them,sua,xoa,chi
         // tiet
-        JPanel headerPanel = new JPanel(new BorderLayout(5, 5));
 
-        searchfunc = new IntegratedSearch(new String[] { "----", "id", "tên", "sdt", "gioi tinh", "chuc vu" });
+        MainPanel = new JPanel();
+        MainPanel.setLayout(new BorderLayout());
+        MainPanel.setBackground(Color.white);
+
+        DoThiPanel = new DoThiTuyenDuong();
+
+        this.add(MainPanel, "MainPanel");
+        this.add(DoThiPanel, "DoThiPanel");
+
+        JPanel headerPanel = new JPanel(new BorderLayout(5, 5));
+        headerPanel.setBackground(Color.white);
+
+        searchfunc = new IntegratedSearch(new String[] { "----", "Mã tàu", "Trạm bắt đầu", "Trạm đích", "Trạng thái" });
         headerPanel.add(searchfunc, BorderLayout.WEST);
 
         mainfunc = new MainFunction(new String[] { "create", "delete", "update", "detail" });
@@ -39,7 +57,29 @@ public class TuyenDuong extends JPanel {
         functionBarPanel.add(mainfunc);
         headerPanel.add(functionBarPanel, BorderLayout.SOUTH);
 
-        this.add(headerPanel, BorderLayout.NORTH);
+        JPanel XemDoThiPanel = new JPanel();
+        XemDoThiPanel.setBackground(Color.white);
+        XemDoThiPanel.setPreferredSize(new Dimension(200, 52));
+        XemDoThiPanel.setLayout(null);
+
+        XemDoThi = new JPanel();
+        XemDoThi.setBounds(5, 10, 140, 40);
+        XemDoThi.setBackground(Color.white);
+        XemDoThi.setLayout(null);
+        XemDoThi.setBorder(new LineBorder(Color.black, 1));
+        XemDoThiPanel.add(XemDoThi);
+
+        XemDoThi.addMouseListener(action);
+        DoThiPanel.getBack().addMouseListener(action);
+
+        JLabel XemDoThiLabel = new JLabel("XEM TỔNG QUÁT");
+        XemDoThiLabel.setBounds(10, 0, 140, 40);
+        XemDoThiLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        XemDoThi.add(XemDoThiLabel);
+
+        headerPanel.add(XemDoThiPanel, BorderLayout.EAST);
+
+        MainPanel.add(headerPanel, BorderLayout.NORTH);
 
         // panel2 chua table + data
         contentDataPanel = new JPanel();
@@ -56,7 +96,7 @@ public class TuyenDuong extends JPanel {
         };
         // dat ten cho cac row cua table
         dataTabelModel
-                .setColumnIdentifiers(new String[] { "ma NV", "Ten NV", "so dien thoai", "gioi tinh", "chuc vu" });
+                .setColumnIdentifiers(new String[] { "Mã tàu", "Tên tàu", "Trạm bắt đầu", "Trạm đích", "Trạng thái" });
 
         nhanVienTabel = new JTable();
         nhanVienTabel.setFillsViewportHeight(true); // lap day JScrollPane
@@ -70,13 +110,25 @@ public class TuyenDuong extends JPanel {
 
         // action check xem nhan nut nao
         for (ToolBar tb : mainfunc.getBtn().values()) {
-            tb.addActionListener(action);
+            tb.addMouseListener(action);
         }
 
-        this.add(contentDataPanel, BorderLayout.CENTER);
+        MainPanel.add(contentDataPanel, BorderLayout.CENTER);
     }
 
     public TuyenDuong() {
         initComponent();
+    }
+
+    public JPanel getXemDoThi() {
+        return XemDoThi;
+    }
+
+    public void showPanel(String name) {
+        cardLayout.show(this, name);
+    }
+
+    public JLabel getBack() {
+        return DoThiPanel.getBack();
     }
 }
