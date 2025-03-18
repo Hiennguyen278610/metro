@@ -9,9 +9,6 @@ import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.ToolBar;
 
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-import com.formdev.flatlaf.ui.FlatListCellBorder.Default;
-
 import java.awt.*;
 
 public class TuyenDuong extends JPanel {

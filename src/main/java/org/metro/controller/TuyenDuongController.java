@@ -6,7 +6,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import org.metro.view.Panel.DoThiTuyenDuong;
 import org.metro.view.Panel.TuyenDuong;
 
 public class TuyenDuongController implements ItemListener, MouseListener {

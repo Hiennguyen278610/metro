@@ -18,7 +18,6 @@ import org.metro.view.Component.MenuTaskbar;
 import org.metro.view.Component.RoundedPanel;
 
 public class MainFrame extends JFrame {
-    private JPanel TuyenDuongPanel;
     private JPanel DangXuatPanel;
     private JPanel rightPanel;
     private JPanel navbarPanel;
@@ -43,7 +42,6 @@ public class MainFrame extends JFrame {
 
     private void init() {
         JPanel mainPanel = new JPanel();
-        TuyenDuongPanel = new JPanel();
         this.setContentPane(mainPanel);
         Color MainColor = Color.decode("#93BFCF");
         MainController controller = new MainController(this);
@@ -143,7 +141,7 @@ public class MainFrame extends JFrame {
         leftPanel.add(ChucNangPanel);
 
         // Thêm MenuTaskbar vào CENTER
-        MenuTaskbar menuTaskbar = new MenuTaskbar(this);
+        menuTaskbar = new MenuTaskbar(this);
         menuTaskbar.setBorder(new LineBorder(Color.black, 2));
         ChucNangPanel.add(menuTaskbar, BorderLayout.CENTER);
 
