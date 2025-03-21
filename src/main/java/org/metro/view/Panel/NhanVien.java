@@ -9,6 +9,7 @@ import org.metro.model.NhanVienModel;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.ToolBar;
+import org.metro.view.Dialog.NhanVienDialog;
 import org.metro.view.MainFrame;
 
 import java.awt.*;
@@ -29,10 +30,13 @@ public class NhanVien extends JPanel {
     private IntegratedSearch searchfunc;
     private List<NhanVienModel> listNhanVien;
     private Timer timeSearch;
+    private NhanVienDialog nvdl;
+    private NhanVienController action = new NhanVienController(this);
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
         timeSearch = new Timer();
+        this.nvdl = nvdl;
         reloadData(); // cap nhap table moi khi run 
     }
 
@@ -81,31 +85,33 @@ public class NhanVien extends JPanel {
 
 
         //them acction
-        NhanVienController acction = new NhanVienController(this);
-        searchfunc.getCbxChoose().addItemListener(acction);
+        searchfunc.getCbxChoose().addItemListener(action);
 
+        //action check xem nhan nut nao
         for(ToolBar tb : mainfunc.getBtn().values()) {
-            tb.addActionListener(acction);
+            tb.addActionListener(action);
         }
 
         this.add(contentDataPanel, BorderLayout.CENTER);
     }
 
     public void reloadList(List<NhanVienModel> listNhanVien2) {
-            dataTabelModel.setRowCount(0); //xoa het bang de tai lai tu dau
+        dataTabelModel.setRowCount(0); //xoa het bang de tai lai tu dau
+        if(listNhanVien2 != null) {
             for(NhanVienModel nvd : listNhanVien2) {
-            dataTabelModel.addRow(new Object[]{
-                nvd.getManv(),
-                nvd.getTennv(),
-                nvd.getSdtnv(),
-                nvd.getGioitinh(),
-                nvd.getChucvu()
-            });
+                dataTabelModel.addRow(new Object[]{
+                    nvd.getManv(),
+                    nvd.getTennv(),
+                    nvd.getSdtnv(),
+                    nvd.getGioitinh(),
+                    nvd.getChucvu()
+                });
+            }   
         }
     }
     public void reloadData() {
-        listNhanVien = new NhanVienDAO().selectAll();
-        reloadList(listNhanVien);
+        List<NhanVienModel> lst = new NhanVienDAO().selectAll();
+        reloadList(lst);
     }
 
     //tim kiem theo field nhap
@@ -127,6 +133,19 @@ public class NhanVien extends JPanel {
             }
             
         }, 200);
+    }
+
+    public NhanVienModel getSelectedNhanvien() {
+        int row = nhanVienTabel.getSelectedRow();
+        System.out.println(row);
+        if(row == - 1) return null;
+        int manv = (int) nhanVienTabel.getValueAt(row, 0);
+        String tennv = (String) nhanVienTabel.getValueAt(row, 1);
+        String sdtnv = (String) nhanVienTabel.getValueAt(row, 2);
+        String gioitinh = (String) nhanVienTabel.getValueAt(row, 3);
+        String chucvu = (String) nhanVienTabel.getValueAt(row, 4);
+
+        return new NhanVienModel(manv,tennv,sdtnv,gioitinh,chucvu);
     }
 
     //getter setter
@@ -216,4 +235,6 @@ public class NhanVien extends JPanel {
     public void setMf(MainFrame mf) {
         this.mf = mf;
     }
+
+
 }

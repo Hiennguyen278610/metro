@@ -4,15 +4,13 @@ public class VeTauModel {
     private int mave; // Mã vé
     private int machuyen; // Mã chuyến tàu
     private int makh; // Mã khách hàng
-    private int manv; // Mã nhân viên
-    private double price; // Giá vé
+    private double giave; // Giá vé
 
-    public VeTauModel(int mave, int machuyen, int makh, int manv, double price) {
+    public VeTauModel(int mave, int machuyen, int makh, double giave) {
         this.mave = mave;
         this.machuyen = machuyen;
         this.makh = makh;
-        this.manv = manv;
-        this.price = price;
+        this.giave = giave;
     }
 
     public int getMave() {return mave; }
@@ -21,9 +19,7 @@ public class VeTauModel {
 
     public int getMakh() {return makh; }
 
-    public int getManv() {return manv; }
-
-    public double getPrice() {return price; }
+    public double getGiave() {return giave; }
 
     public void setMave(int mave) {this.mave = mave; }
 
@@ -31,7 +27,5 @@ public class VeTauModel {
 
     public void setMakh(int makh) {this.makh = makh; }
 
-    public void setManv(int manv) {this.manv = manv; }
-
-    public void setPrice(double price) {this.price = price; }
+    public void setGiave(double giave) {this.giave = giave; }
 }

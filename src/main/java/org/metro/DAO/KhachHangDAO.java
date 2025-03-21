@@ -14,15 +14,14 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
         List<KhachHangModel> list = new ArrayList<>();
         String query = "SELECT * FROM khachhang";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 KhachHangModel kh = new KhachHangModel(
                         rs.getInt("makh"),
                         rs.getString("tenkh"),
                         rs.getString("sdt"),
-                        rs.getInt("solan")
-                );
+                        rs.getInt("solan"));
                 list.add(kh);
             }
         } catch (SQLException e) {
@@ -36,7 +35,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
         // Giả sử cột makh là AUTO_INCREMENT nên không cần truyền vào
         String sql = "INSERT INTO khachhang (tenkh, sdt, solan) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, t.getTenKh());
             pstmt.setString(2, t.getSdt());
             pstmt.setInt(3, t.getSolan());
@@ -51,7 +50,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
     public int update(KhachHangModel t) {
         String sql = "UPDATE khachhang SET tenkh = ?, sdt = ?, solan = ? WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, t.getTenKh());
             pstmt.setString(2, t.getSdt());
             pstmt.setInt(3, t.getSolan());
@@ -67,7 +66,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
     public int delete(int maKh) {
         String sql = "DELETE FROM khachhang WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maKh);
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
@@ -85,7 +84,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
     public KhachHangModel selectById(int maKh) {
         String sql = "SELECT * FROM khachhang WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maKh);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -93,8 +92,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
                             rs.getInt("makh"),
                             rs.getString("tenkh"),
                             rs.getString("sdt"),
-                            rs.getInt("solan")
-                    );
+                            rs.getInt("solan"));
                 }
             }
         } catch (SQLException ex) {
