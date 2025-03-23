@@ -48,7 +48,7 @@ public class NhanVien extends JPanel {
         //headerPanel chua search,combo box,btn reset + 4 function them,sua,xoa,chi tiet
         JPanel headerPanel = new JPanel(new BorderLayout(5,5));
         
-        searchfunc = new IntegratedSearch(new String[]{"----","id","tên","sdt","gioi tinh","chuc vu"});
+        searchfunc = new IntegratedSearch(new String[]{"----","mã","tên","số điện thoại","giới tính","chức vụ"});
         headerPanel.add(searchfunc,BorderLayout.WEST);
         
         mainfunc = new MainFunction(new String[]{"create","delete","update","detail"});
@@ -74,7 +74,7 @@ public class NhanVien extends JPanel {
             }
         };
         //dat ten cho cac row cua table
-        dataTabelModel.setColumnIdentifiers(new String[]{"ma NV","Ten NV","so dien thoai","gioi tinh","chuc vu"});
+        dataTabelModel.setColumnIdentifiers(new String[]{"MÃ NV","Tên NV","Số điện thoại","Giới tính","Chức vụ"});
         
         nhanVienTabel = new JTable();
         nhanVienTabel.setFillsViewportHeight(true); // lap day JScrollPane 

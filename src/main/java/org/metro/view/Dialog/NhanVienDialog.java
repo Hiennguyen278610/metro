@@ -39,46 +39,57 @@ public class NhanVienDialog extends JDialog{
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5,20,5,20);
+        gbc.insets = new Insets(10,10,5,5);
 
         //label
-        handleComponents.addLabelGBL(contentPanel,"ten nhan vien: ",0,0,gbc);
-        handleComponents.addLabelGBL(contentPanel,"so dien thoai: ",0,1,gbc);
-        handleComponents.addLabelGBL(contentPanel,"gioitinh: ",0,2,gbc);
-        handleComponents.addLabelGBL(contentPanel,"chucvu: ",0,3,gbc);
+        gbc.anchor = GridBagConstraints.LINE_END;
+        handleComponents.addLabelGBL(contentPanel,"Tên nhân viên: ",0,0,gbc);
+        handleComponents.addLabelGBL(contentPanel,"Số điện thoại: ",0,1,gbc);
+        handleComponents.addLabelGBL(contentPanel,"Giới tính: ",0,2,gbc);
+        handleComponents.addLabelGBL(contentPanel,"Chức vụ: ",0,3,gbc);
 
         //textfield
-        tennvTextfield = handleComponents.addTextFieldGBL(contentPanel,20,1,0,gbc);
-        sodienthoaiTextfield = handleComponents.addTextFieldGBL(contentPanel,20,1,1,gbc);
+        gbc.gridwidth = 2;
+        tennvTextfield = handleComponents.addTextFieldGBL(contentPanel,25,1,0,gbc);
+        sodienthoaiTextfield = handleComponents.addTextFieldGBL(contentPanel,25,1,1,gbc);
 
         //combobox
-        String[] gioitinh = {"--","Nam", "Nu"};
+        gbc.gridwidth = 2;
+        String[] gioitinh = {"--","Nam", "Nữ"};
         gioitinhCombobox = handleComponents.addComboBoxGBL(contentPanel,gioitinh,1,2,gbc);
-        String[] chucvu = {"--","Quan li tuyen tau dien","Thu ngan","soat ve","lai tau"};
+
+        String[] chucvu = {"--","Quản lí","Thu ngân","Kiểm vé","Lái tàu"};
         chucvuCombobox = handleComponents.addComboBoxGBL(contentPanel,chucvu,1,3,gbc);
 
         //button
-        ok = handleComponents.addButtonGBL(contentPanel,"THEM",0,4,gbc);
-        cancel = handleComponents.addButtonGBL(contentPanel,"CANCEl",0,5,gbc);
+        gbc.gridy = 4;
+        gbc.weightx = 1;
+        ok = handleComponents.addButtonGBL(contentPanel,"Thêm",0,4,gbc);
+        cancel = handleComponents.addButtonGBL(contentPanel,"Thoát",1,4,gbc);
         
         //them action cho nut ok va cancel
         ok.addActionListener(action);
+        cancel.addActionListener(action);
 
+        gbc.gridy = 5;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        contentPanel.add(new JPanel(),gbc);
         this.add(contentPanel);
     }
 
-    //ham set title cho tung kieu them, xoa ,sua
+    //ham set title cho tung kieu them,sua,xem chi tiet
     private String setTitleType() {
         if(type == null) {
             return null;
         }
         switch (type) {
             case "create":
-                return "THEM NHAN VIEN";
+                return "THÊM NHÂN VIÊN";
             case "update":
-                return "SUA THONG TIN";
+                return "SỬA THÔNG TIN NHÂN VIÊN";
             case "detail":
-                return "THONG TIN NHAN VIEN";
+                return "THÔNG TIN CHI TIẾT NHÂN VIÊN";
             default: return "ERROR";
         }
     }
