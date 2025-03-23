@@ -27,14 +27,15 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
         this.nv = nv;
     }
 
+    //combobox tim kiem theo id,ten,..
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) { // ktra khi combo box dc tich chon
+        if (e.getStateChange() == ItemEvent.SELECTED) { // ktra khi combobox dc tich chon
             JComboBox<String> cbb = (JComboBox<String>) e.getSource();
             String str = (String) cbb.getSelectedItem();
             String selectedCheckbox = (String) nv.getSearchfunc().getCbxChoose().getSelectedItem();
             if (str.equals(selectedCheckbox)) {
-                System.out.println("ban da chon " + nv.getSearchfunc().getCbxChoose().getSelectedItem());
+                System.out.println("Bạn đã chọn" + nv.getSearchfunc().getCbxChoose().getSelectedItem());
             }
         }
 
@@ -42,7 +43,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JComponent c = (JComponent) e.getSource(); // dung combonent de su dung cho nhieu kieu nhu button,label,..
+        JComponent c = (JComponent) e.getSource(); // dung component de su dung cho nhieu kieu nhu button,label,..
         if (nv != null) {
             for (String namebtn : nv.getMainfunc().getBtn().keySet()) {
                 ToolBar tb = nv.getMainfunc().getBtn().get(namebtn);
@@ -54,18 +55,17 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
 
                     if ("create".equals(namebtn)) {
                         new NhanVienDialog(nv.getMf(), namebtn, nv, null).setVisible(true);
-                        ;
                     } else {
                         nvm = nv.getSelectedNhanvien();
                         if (nvm == null) {
-                            JOptionPane.showMessageDialog(nv, "Hay chon 1 nhan vien", "Thong bao",
+                            JOptionPane.showMessageDialog(nv, "Hãy chọn một nhân viên!!!", "Thông báo",
                                     JOptionPane.WARNING_MESSAGE);
                             return;
                         }
                         if ("detail".equals(namebtn) || "update".equals(namebtn)) {
                             new NhanVienDialog(nv.getMf(), namebtn, nv, nvm).setVisible(true);
                         } else if ("delete".equals(namebtn)) {
-                            int confirm = JOptionPane.showConfirmDialog(nv, "Ban co chac muon xoa ? ", "Xac nhan",
+                            int confirm = JOptionPane.showConfirmDialog(nv, "Bạn có chắc muốn xóa ? ", "Xác nhận",
                                     JOptionPane.YES_NO_OPTION);
                             if (confirm == JOptionPane.YES_OPTION) {
                                 deleteNhanvien();
@@ -73,7 +73,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
                                     nv.getNhanVienTabel().updateUI();
                             }
                         } else {
-                            System.out.println("khong co nut nao duoc click");
+                            System.out.println("không có nút nào được click!!!!");
                             return;
                         }
                     }
@@ -85,20 +85,20 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
         if (nvdl != null) {
             String namebtn = e.getActionCommand();
             if (c instanceof JButton) {
-                if (namebtn.equals("THEM")) {
+                if (namebtn.equals("Thêm")) {
                     String ten = String.valueOf(nvdl.getTennvTextfield().getText().trim());
                     String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getText().trim());
                     String gt = String.valueOf(nvdl.getGioitinhCombobox().getSelectedItem());
                     String cv = String.valueOf(nvdl.getChucvuCombobox().getSelectedItem());
 
                     if (ten.isEmpty()) {
-                        JOptionPane.showMessageDialog(nvdl, "ten khong duoc de trong", "thong bao",
+                        JOptionPane.showMessageDialog(nvdl, "tên nhân viên không được để trống", "thông báo",
                                 JOptionPane.INFORMATION_MESSAGE);
                         nvdl.getTennvTextfield().requestFocus();
                         return;
                     }
                     if (sdt.isEmpty()) {
-                        JOptionPane.showMessageDialog(nvdl, "sdt khong duoc de trong", "thong bao",
+                        JOptionPane.showMessageDialog(nvdl, "số điện thoại không được để trống", "thông báo",
                                 JOptionPane.INFORMATION_MESSAGE);
                         nvdl.getTennvTextfield().requestFocus();
                         return;
@@ -106,22 +106,22 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
 
                     if (nvdl.getGioitinhCombobox().getSelectedItem() == "--"
                             || nvdl.getChucvuCombobox().getSelectedItem() == "--") {
-                        JOptionPane.showMessageDialog(nvdl, "vui long chon 1 chi muc!", "thong bao",
+                        JOptionPane.showMessageDialog(nvdl, "vui lòng chọn 1 chỉ mục!", "thông báo",
                                 JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
                     NhanVienModel nvm = new NhanVienModel(ten, sdt, gt, cv); // ma nv la auto increment nen dung
                                                                              // constructor kh co manv
                     if (NhanVienService.insert(nvm)) {
-                        JOptionPane.showMessageDialog(nvdl, "THEM NHAN VIEN THANH CONG", "THONG BAO",
+                        JOptionPane.showMessageDialog(nvdl, "THÊM NHÂN VIÊN THÀNH CÔNG!!!", "Thông báo",
                                 JOptionPane.INFORMATION_MESSAGE);
                         nvdl.dispose();
                     } else {
-                        JOptionPane.showMessageDialog(nvdl, "THEM NHAN VIEN THAT BAI", "THONG BAO",
+                        JOptionPane.showMessageDialog(nvdl, "THÊM NHÂN VIÊN THẤT BẠI", "THÔNG BÁO",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                } else if (namebtn.equals("CANCEl"))
+                } else if (namebtn.equals("Thoát"))
                     nvdl.dispose();
             }
         }
@@ -130,17 +130,15 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     // ham xoa nhan vien
     public void deleteNhanvien() {
         nvm = nv.getSelectedNhanvien();
-        System.out.println("phuong thuc delete");
         if (nvm == null) {
             System.out.println("khong tim thay nhan vien duoc chon");
             return;
         }
-        System.out.println("nhan vien duoc chon de xoa la : " + nvm.getManv());
         if (NhanVienService.delete(nvm.getManv())) {
-            JOptionPane.showMessageDialog(null, "Xoa nhan vien thanh cong", "Thong bao",
+            JOptionPane.showMessageDialog(null, "xÓA NHÂN VIÊN THÀNH CÔNG", "Thông báo",
                     JOptionPane.INFORMATION_MESSAGE);
         } else
-            JOptionPane.showMessageDialog(null, "Xoa nhan vien that bai", "Thong bao", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "XÓA NHÂN VIÊN THẤT BẠI", "Thông báo", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
