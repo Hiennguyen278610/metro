@@ -1,13 +1,18 @@
 package org.metro.view.Panel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
+import org.metro.model.LichBaoTriModel;
+import org.metro.service.LichBaoTriService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
-
+import java.util.List;
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LichBaoTri extends JPanel {
     private JPanel functionPanel, contentPanel, functionBarPanel;
@@ -15,9 +20,14 @@ public class LichBaoTri extends JPanel {
     private MainFunction mainFunction;
     private DefaultTableModel tableModel;
     private JTable maintenanceTable;
+    private LichBaoTriService lbtService = new LichBaoTriService();
+    private List<LichBaoTriModel> dsBaoTri = lbtService.getAll();
+    DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    // private LichBaoTriModel lbtModel;
 
     public LichBaoTri() {
         initComponent();
+        loadData(dsBaoTri);
     }
 
     public void initComponent() {
@@ -33,6 +43,9 @@ public class LichBaoTri extends JPanel {
 
         String[] optMainFunc = { "create", "delete", "update", "detail" };
         mainFunction = new MainFunction(optMainFunc);
+        // for(String opt : optMainFunc){
+        // mainFunction.btn.get(opt).addActionListener(action);
+        // }
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));
         functionBarPanel.setPreferredSize(new Dimension(0, 50));
@@ -49,19 +62,18 @@ public class LichBaoTri extends JPanel {
                 return false;
             }
         };
-        // Object[] row1 = { 1001, 5001, LocalDateTime.of(2025, 3, 16, 10, 30), "Đã hoàn
-        // thành" };
-        // Object[] row2 = { 1002, 5002, LocalDateTime.of(2025, 3, 17, 14, 0), "Đang bảo
-        // trì" };
-        // tableModel.addRow(row1);
-        // tableModel.addRow(row2);
-
         maintenanceTable = new JTable(); // khong the thay doi model sau khi da khoi tao bang, tru khi goi setModel();
         maintenanceTable.setFillsViewportHeight(true);
         maintenanceTable.getTableHeader().setReorderingAllowed(false);
         maintenanceTable.getTableHeader().setResizingAllowed(false);
         maintenanceTable.setModel(tableModel);
         maintenanceTable.setSelectionBackground(new Color(224, 255, 255));
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < maintenanceTable.getColumnCount(); i++) {
+            maintenanceTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
 
         contentPanel = new JPanel();
         contentPanel.setLayout(new BorderLayout());
@@ -75,4 +87,16 @@ public class LichBaoTri extends JPanel {
 
     }
 
+    public void loadData(List<LichBaoTriModel> dsBaoTri) {
+        tableModel.setRowCount(0);
+        for (LichBaoTriModel lbt : dsBaoTri) {
+
+            tableModel.addRow(new Object[] {
+                    lbt.getMabaotri(),
+                    lbt.getMatau(),
+                    lbt.getNgaybaotri().format(formatTime),
+                    lbt.getTrangthaibaotri()
+            });
+        }
+    }
 }
