@@ -22,7 +22,6 @@ public class LoginController implements java.awt.event.ActionListener, MouseInpu
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Lấy thông tin đăng nhập từ LoginFrame
         String username = loginFrame.getUsernameField().getText().trim();
         String password = new String(loginFrame.getPasswordField().getPassword());
         int manv;
@@ -32,23 +31,18 @@ public class LoginController implements java.awt.event.ActionListener, MouseInpu
             JOptionPane.showMessageDialog(loginFrame, "Tên đăng nhập không hợp lệ");
             return;
         }
-        // Sử dụng TaiKhoanService để lấy thông tin tài khoản
         TaiKhoanModel tk = TaiKhoanService.getByID(manv);
         if (tk != null && tk.getMatkhau().equals(password) && tk.getTrangthai() == 1) {
-            // Lưu thông tin user vào session
             SessionManager.setCurrentUser(tk);
             loginFrame.dispose();
-            new MainFrame();  // Mở MainFrame
+            new MainFrame();
         } else {
             JOptionPane.showMessageDialog(loginFrame, "Thông tin đăng nhập không chính xác hoặc tài khoản bị khóa");
         }
     }
-
-    // Các sự kiện chuột (MouseInputListener)
     @Override
     public void mouseClicked(MouseEvent e) {
         Object src = e.getSource();
-        // Có thể xử lý sự kiện click nếu cần
         if (src == loginFrame.getExitButton()) {
             loginFrame.dispose();
             return;
@@ -68,7 +62,6 @@ public class LoginController implements java.awt.event.ActionListener, MouseInpu
     @Override
     public void mouseEntered(MouseEvent e) {
         e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        // Ví dụ: thay đổi màu nền cho nút exit và minimize
         if (e.getSource() == loginFrame.getExitButton()) {
             loginFrame.getExitButton().setBackground(Color.decode("#FE2020"));
         } else if (e.getSource() == loginFrame.getMinimizeButton()) {

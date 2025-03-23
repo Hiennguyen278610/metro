@@ -64,7 +64,7 @@ create table nhanvien (
 
 
 
-DROP table nhanvien;
+# DROP table nhanvien;
 
 DESC nhanvien;
 
@@ -104,6 +104,7 @@ CREATE table tau (
     trangthaitau varchar(100) NOT NULL,
     ngaynhap date NOT NULL
 );
+# drop table tau;
 INSERT into tau(matau, soghe, trangthaitau, ngaynhap)
 values (1, 100, "Đang hoạt động", "2025-01-01"),
     (2, 100, "Đang bảo trì", "2025-01-02"),
@@ -172,7 +173,6 @@ where trangthailichtrinh = 'Hoàn Thành'
 DROP TABLE khachhang;
 select * from khachhang;
 select * from taikhoan;
-select * from users;
 select * from nhanvien;
 select * from tau;
 select * from vetau;

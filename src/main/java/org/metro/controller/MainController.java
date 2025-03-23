@@ -12,7 +12,7 @@ import org.metro.view.MainFrame;
 
 public class MainController implements MouseInputListener {
     private MainFrame frame;
-    private JPanel selectedPanel; // Lưu panel đang được chọn
+    private JPanel selectedPanel;
 
     public MainController(MainFrame frame) {
         this.frame = frame;

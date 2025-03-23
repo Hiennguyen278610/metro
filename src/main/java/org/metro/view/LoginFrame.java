@@ -1,8 +1,11 @@
 package org.metro.view;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import org.metro.controller.LoginController;
 import org.metro.service.SetLogoService;
 
@@ -11,8 +14,7 @@ public class LoginFrame extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JPanel exitPanel, minimizePanel;
-    private JLabel exitIcon, minimizeIcon;
-    private JLabel lblCreateAccount;  // Cho mục "Chưa có tài khoản?"
+    private JLabel exitIcon, minimizeIcon, showPassIcon, hidePassIcon;
 
     public LoginFrame() {
         initFrame();
@@ -23,7 +25,8 @@ public class LoginFrame extends JFrame {
         btnDangNhap.addActionListener(controller);
         exitPanel.addMouseListener(controller);
         minimizePanel.addMouseListener(controller);
-        lblCreateAccount.addMouseListener(controller);
+        // Thêm sự kiện hiển thị/ẩn mật khẩ
+        showPasswordToggle();
         setVisible(true);
     }
 
@@ -96,9 +99,10 @@ public class LoginFrame extends JFrame {
         rightContent.add(lblUsername);
 
         txtUsername = new JTextField("1001");
-        txtUsername.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtUsername.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         txtUsername.setForeground(Color.GRAY);
         txtUsername.setBounds(60, 210, 310, 40);
+        txtUsername.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Thêm padding trái
         rightContent.add(txtUsername);
 
         // Form đăng nhập: Password
@@ -108,50 +112,30 @@ public class LoginFrame extends JFrame {
         lblPassword.setBounds(60, 260, 200, 30);
         rightContent.add(lblPassword);
 
+        // Tạo JLayeredPane để chồng lớp
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setBounds(60, 290, 310, 40);
+        rightContent.add(layeredPane);
+
+        // Ô nhập mật khẩu
         txtPassword = new JPasswordField("0000");
         txtPassword.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         txtPassword.setForeground(Color.GRAY);
-        txtPassword.setEchoChar((char)0); // hiển thị placeholder
-        txtPassword.setBounds(60, 290, 310, 40);
-        rightContent.add(txtPassword);
+        txtPassword.setBounds(0, 0, 310, 40);
+        txtPassword.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 40)); // Tạo khoảng trống bên phải cho icon
+        layeredPane.add(txtPassword, Integer.valueOf(1)); // Đặt mật khẩu ở lớp dưới
 
-        // Placeholder handling for username
-        txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (txtUsername.getText().equals("Nhập tên đăng nhập...")) {
-                    txtUsername.setText("1001");
-                    txtUsername.setForeground(Color.BLACK);
-                }
-            }
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (txtUsername.getText().trim().isEmpty()) {
-                    txtUsername.setText("0000");
-                    txtUsername.setForeground(Color.GRAY);
-                }
-            }
-        });
+        //  mắt mở
+        showPassIcon = new JLabel(new FlatSVGIcon(getClass().getResource("/svg/eye-open.svg")).derive(25, 25));
+        showPassIcon.setBounds(270, 5, 30, 30);
+        layeredPane.add(showPassIcon, Integer.valueOf(2)); // Đặt icon lên trên
 
-        // Placeholder handling for password
-        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusGained(java.awt.event.FocusEvent e) {
-                if (new String(txtPassword.getPassword()).equals("Nhập mật khẩu...")) {
-                    txtPassword.setText("0000");
-                    txtPassword.setForeground(Color.BLACK);
-                    txtPassword.setEchoChar('*');
-                }
-            }
-            @Override
-            public void focusLost(java.awt.event.FocusEvent e) {
-                if (new String(txtPassword.getPassword()).trim().isEmpty()) {
-                    txtPassword.setText("0000");
-                    txtPassword.setForeground(Color.GRAY);
-                    txtPassword.setEchoChar((char)0);
-                }
-            }
-        });
+        //  mắt đóng
+        hidePassIcon = new JLabel(new FlatSVGIcon(getClass().getResource("/svg/eye-close.svg")).derive(25, 25));
+        hidePassIcon.setBounds(270, 5, 30, 30);
+        hidePassIcon.setVisible(false);
+        layeredPane.add(hidePassIcon, Integer.valueOf(2)); // Đặt icon lên trên
+
 
         // Nút đăng nhập
         btnDangNhap = new JButton("ĐĂNG NHẬP");
@@ -160,13 +144,26 @@ public class LoginFrame extends JFrame {
         btnDangNhap.setForeground(Color.white);
         btnDangNhap.setBounds(60, 360, 310, 50);
         rightContent.add(btnDangNhap);
+    }
+    // Hàm xử lý ẩn/hiện mật khẩu
+    private void showPasswordToggle() {
+        showPassIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                txtPassword.setEchoChar((char) 0);  // Hiển thị mật khẩu
+                showPassIcon.setVisible(false);
+                hidePassIcon.setVisible(true);
+            }
+        });
 
-        // Label "Chưa có tài khoản?"
-        lblCreateAccount = new JLabel("<html><u><i>Chưa có tài khoản ?</i></u></html>");
-        lblCreateAccount.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        lblCreateAccount.setForeground(mainColor);
-        lblCreateAccount.setBounds(265, 415, 120, 20);
-        rightContent.add(lblCreateAccount);
+        hidePassIcon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                txtPassword.setEchoChar('*');  // Ẩn mật khẩu
+                hidePassIcon.setVisible(false);
+                showPassIcon.setVisible(true);
+            }
+        });
     }
 
     // Getter cho các trường cần thiết
@@ -191,30 +188,5 @@ public class LoginFrame extends JFrame {
     public JLabel getMinimizeIcon() {
         return minimizeIcon;
     }
-    public JLabel getTaoTaiKhoan() {
-        return lblCreateAccount;
-    }
 
-    // Hàm hiển thị/ẩn mật khẩu (đã được triển khai)
-    public static void showPassword(JPasswordField pf, JLabel show, JLabel hide) {
-        hide.setVisible(false);
-        show.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                pf.setEchoChar((char)0);
-                show.setVisible(false);
-                hide.setVisible(true);
-                pf.requestFocusInWindow();
-            }
-        });
-        hide.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                pf.setEchoChar('*');
-                hide.setVisible(false);
-                show.setVisible(true);
-                pf.requestFocusInWindow();
-            }
-        });
-    }
 }
