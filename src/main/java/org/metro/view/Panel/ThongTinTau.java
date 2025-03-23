@@ -31,20 +31,20 @@ public class ThongTinTau extends RoundedPanel {
 
         JLabel MaTau = new JLabel("Mã tàu: " + tau.getMatau());
         MaTau.setBounds(10, 120, 200, 30);
-        MaTau.setFont(new Font("Arial", Font.BOLD, 16));
+        MaTau.setFont(new Font("Arial", Font.BOLD, 14));
 
-        // JLabel SoGhe = new JLabel("Số ghế: " + list.get(i).getSoghe());
-        // SoGhe.setPreferredSize(new Dimension(200, 30));
-        // SoGhe.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel SoGhe = new JLabel("Sức chứa: " + tau.getSoghe());
+        SoGhe.setBounds(10, 140, 200, 30);
+        SoGhe.setFont(new Font("Arial", Font.BOLD, 14));
 
         TrangThaiTau trangthai = new TrangThaiTau(tau.getTrangthaitau());
         trangthai.setBounds(10, 190, 200, 30);
-        trangthai.setFont(new Font("Arial", Font.BOLD, 16));
+        trangthai.setFont(new Font("Arial", Font.BOLD, 14));
 
-        // JLabel NgayNhapTau = new JLabel("Ngày nhập tàu: " +
-        // list.get(i).getNgaynhap());
-        // NgayNhapTau.setPreferredSize(new Dimension(200, 30));
-        // NgayNhapTau.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel NgayNhapTau = new JLabel("Ngày nhập tàu: " +
+                tau.getNgaynhap());
+        NgayNhapTau.setBounds(10, 160, 200, 30);
+        NgayNhapTau.setFont(new Font("Arial", Font.BOLD, 14));
 
         // JButton SuaTau = new JButton("SỬA");
         // SuaTau.setPreferredSize(new Dimension(100, 30));
@@ -52,6 +52,8 @@ public class ThongTinTau extends RoundedPanel {
         // XoaTau.setPreferredSize(new Dimension(100, 30));
 
         this.add(MaTau);
+        this.add(SoGhe);
+        this.add(NgayNhapTau);
         // this.add(SoGhe);
         this.add(trangthai);
         // this.add(NgayNhapTau);

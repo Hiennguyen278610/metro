@@ -7,7 +7,6 @@ import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 
 import java.awt.*;
-import java.time.LocalDateTime;
 
 public class LichBaoTri extends JPanel {
     private JPanel functionPanel, contentPanel, functionBarPanel;

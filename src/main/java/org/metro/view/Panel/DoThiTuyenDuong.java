@@ -4,9 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.metro.DAO.TramDAO;
+import org.metro.DAO.TuyenDAO;
+import org.metro.model.TramModel;
+import org.metro.model.TuyenDuongModel;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.mxgraph.swing.mxGraphComponent;
@@ -54,10 +62,28 @@ public class DoThiTuyenDuong extends JPanel {
         graph.setCellsDisconnectable(false);
         graph.setCellsSelectable(false);
 
+        List<TramModel> tramList = new TramDAO().selectAll();
+        List<TuyenDuongModel> tuyenList = new TuyenDAO().selectAll();
+        Map<Integer, Object> luuTram = new HashMap<>();
+
         try {
-            Object v1 = graph.insertVertex(parent, null, "Bến Thành", 100, 100, 80, 80, "shape=ellipse");
-            Object v2 = graph.insertVertex(parent, null, "World!", 240, 150, 80, 30);
-            graph.insertEdge(parent, null, "Edge", v1, v2, "endArrow=none");
+            for (TramModel tram : tramList) {
+                Object hihi = graph.insertVertex(parent, null, tram.getTentram(), tram.getX(), tram.getY(), 100, 100,
+                        "shape=ellipse");
+                luuTram.put(tram.getMatram(), hihi);
+            }
+
+            for (TuyenDuongModel tuyen : tuyenList) {
+                // System.out.println(tuyen.getTramdau() + " " + tuyen.getTramdich());
+                Object trambatdau = luuTram.get(tuyen.getTramdau());
+                Object tramketthuc = luuTram.get(tuyen.getTramdich());
+
+                if (trambatdau != null && tramketthuc != null) {
+                    graph.insertEdge(parent, null, "", trambatdau, tramketthuc,
+                            "sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endArrow=none;");
+                }
+            }
+
         } finally {
             graph.getModel().endUpdate();
         }
