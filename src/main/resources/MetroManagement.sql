@@ -37,20 +37,22 @@ VALUES (1, 'Nguyễn Văn Anh', '0387913347', '1'),
     (20, 'Hà Thị Thành', '0188899001', '4'),
     (21, 'Trương Văn Kỉ', '0990011223', '1'),
     (22, 'Lê Hoàng Niệm', '0882233445', '2');
+
+
+-- TAIKHOAN
 CREATE TABLE `taikhoan` (
     `manv` int(11) NOT NULL,
     `matkhau` varchar(255) NOT NULL,
     `manhomquyen` int(11) NOT NULL,
     `trangthai` int(11) NOT NULL
 );
-INSERT INTO `taikhoan` (`manv`, `matkhau`, `manhomquyen`, `trangthai`)
-VALUES (1, '0000', 1, 1),
-    -- Admin
-    (2, '0000', 2, 1),
-    -- User
-    (3, '0000', 3, 1),
-    -- Nhân viên
-    (4, '0000', 2, 0);
+INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai) VALUES
+    (1001, '0000', 1, 1),  -- Admin
+    (1002, '0000', 2, 1),  -- Nhân viên
+    (1003, '0000', 3, 1);  -- Quản lí
+# DROP TABLE taikhoan;
+
+
 -- NHANVIEN
 create table nhanvien ( 
     manv INT AUTO_INCREMENT primary key,
@@ -62,7 +64,7 @@ create table nhanvien (
 
 
 
-DROP table nhanvien;
+# DROP table nhanvien;
 
 DESC nhanvien;
 
@@ -102,6 +104,7 @@ CREATE table tau (
     trangthaitau varchar(100) NOT NULL,
     ngaynhap date NOT NULL
 );
+# drop table tau;
 INSERT into tau(matau, soghe, trangthaitau, ngaynhap)
 values (1, 100, "Đang hoạt động", "2025-01-01"),
     (2, 100, "Đang bảo trì", "2025-01-02"),
@@ -167,11 +170,9 @@ select *
 from lichtrinh
 where trangthailichtrinh = 'Hoàn Thành'
     and MONTH(thoigiankh) = 2;
-# DROP TABLE taikhoan;
 DROP TABLE khachhang;
 select * from khachhang;
 select * from taikhoan;
-select * from users;
 select * from nhanvien;
 select * from tau;
 select * from vetau;

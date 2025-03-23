@@ -14,6 +14,7 @@ import org.metro.service.SetLogoService;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
+import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.MenuTaskbar;
 import org.metro.view.Component.RoundedPanel;
 
@@ -28,6 +29,7 @@ public class MainFrame extends JFrame {
 
     public JPanel MainContent;
     private MenuTaskbar menuTaskbar;
+    private MainFunction mainFunction;
 
     public MainFrame() {
         setSize(1200, 800);
@@ -38,6 +40,7 @@ public class MainFrame extends JFrame {
         this.init();
         SetLogoService.setLogo(this);
         setVisible(true);
+
     }
 
     private void init() {
