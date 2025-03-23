@@ -60,9 +60,7 @@ create table nhanvien (
     gioitinh VARCHAR(50) NOT NULL,
     chucvu VARCHAR(100) NOT NULL
 );
-<< << << < HEAD # DROP table nhanvien;
-== == == = DROP table nhanvien;
->> >> >> > nghia DESC nhanvien;
+# DROP table nhanvien;
 insert into nhanvien(tennv, sodienthoai, gioitinh, chucvu)
 values (
         'Nguyễn Văn A',
