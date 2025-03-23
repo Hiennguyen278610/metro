@@ -51,15 +51,23 @@ VALUES (1001, '0000', 1, 1),
     -- Nhân viên
     (1003, '0000', 3, 1);
 -- Quản lí
+INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai)
+VALUES (1001, '0000', 1, 1),
+    -- Admin
+    (1002, '0000', 2, 1),
+    -- Nhân viên
+    (1003, '0000', 3, 1);
+-- Quản lí
 # DROP TABLE taikhoan;
 -- NHANVIEN
 create table nhanvien (
-    manv INT AUTO_INCREMENT primary key,
-    tennv VARCHAR(100) NOT NULL,
-    sodienthoai VARCHAR(50) NOT NULL,
-    gioitinh VARCHAR(50) NOT NULL,
-    chucvu VARCHAR(100) NOT NULL
-);
+    create table nhanvien (
+        manv INT AUTO_INCREMENT primary key,
+        tennv VARCHAR(100) NOT NULL,
+        sodienthoai VARCHAR(50) NOT NULL,
+        gioitinh VARCHAR(50) NOT NULL,
+        chucvu VARCHAR(100) NOT NULL
+    );
 create table tram(
     matram int AUTO_INCREMENT primary key,
     tentram varchar(255) not null,
