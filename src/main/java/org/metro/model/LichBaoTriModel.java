@@ -8,6 +8,9 @@ public class LichBaoTriModel {
     private LocalDateTime ngaybaotri;
     private String trangthaibaotri;
 
+    public LichBaoTriModel() {
+    }
+
     public LichBaoTriModel(int mabaotri, int matau, LocalDateTime ngaybaotri, String trangthaibaotri) {
         this.mabaotri = mabaotri;
         this.matau = matau;
@@ -15,19 +18,35 @@ public class LichBaoTriModel {
         this.trangthaibaotri = trangthaibaotri;
     }
 
-    public int getMabaotri() { return mabaotri; }
+    public int getMabaotri() {
+        return mabaotri;
+    }
 
-    public void setMabaotri(int mabaotri) { this.mabaotri = mabaotri; }
+    public void setMabaotri(int mabaotri) {
+        this.mabaotri = mabaotri;
+    }
 
-    public int getMatau() { return matau; }
+    public int getMatau() {
+        return matau;
+    }
 
-    public void setMatau(int matau) { this.matau = matau; }
+    public void setMatau(int matau) {
+        this.matau = matau;
+    }
 
-    public LocalDateTime getNgaybaotri() { return ngaybaotri; }
+    public LocalDateTime getNgaybaotri() {
+        return ngaybaotri;
+    }
 
-    public void setNgaybaotri(LocalDateTime ngaybaotri) { this.ngaybaotri = ngaybaotri; }
+    public void setNgaybaotri(LocalDateTime ngaybaotri) {
+        this.ngaybaotri = ngaybaotri;
+    }
 
-    public String getTrangthaibaotri() { return trangthaibaotri; }
+    public String getTrangthaibaotri() {
+        return trangthaibaotri;
+    }
 
-    public void setTrangthaibaotri(String trangthaibaotri) { this.trangthaibaotri = trangthaibaotri; }
+    public void setTrangthaibaotri(String trangthaibaotri) {
+        this.trangthaibaotri = trangthaibaotri;
+    }
 }

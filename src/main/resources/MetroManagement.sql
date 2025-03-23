@@ -52,43 +52,101 @@ VALUES (1, '0000', 1, 1),
     -- Nhân viên
     (4, '0000', 2, 0);
 -- NHANVIEN
-create table nhanvien ( 
+create table nhanvien (
     manv INT AUTO_INCREMENT primary key,
     tennv VARCHAR(100) NOT NULL,
     sodienthoai VARCHAR(50) NOT NULL,
     gioitinh VARCHAR(50) NOT NULL,
     chucvu VARCHAR(100) NOT NULL
 );
-
-
-
 DROP table nhanvien;
-
 DESC nhanvien;
-
-insert into nhanvien(tennv,sodienthoai,gioitinh,chucvu)
-values
-('Nguyễn Văn A', '0901234567', 'Nam', 'Quản lý tuyến tàu điện'),
-('Trần Thị B', '0907654321', 'Nữ', 'Thu ngân'),
-('Lê Văn C', '0909876543', 'Nam', 'Nhân viên soát vé'),
-('Phạm Thị D', '0901112222', 'Nữ', 'Quản lý tuyến tàu điện'),
-('Nguyễn Văn E', '0903334444', 'Nam', 'Thu ngân'),
-('Trần Thị F', '0905556666', 'Nữ', 'Nhân viên soát vé'),
-('Lê Văn G', '0907778888', 'Nam', 'Quản lý tuyến tàu điện'),
-('Phạm Thị H', '0909990000', 'Nữ', 'Thu ngân'),
-('Nguyễn Văn I', '0901231231', 'Nam', 'Nhân viên soát vé'),
-('Trần Thị J', '0904567890', 'Nữ', 'Quản lý tuyến tàu điện'),
-('Lê Văn K', '0909012345', 'Nam', 'Thu ngân'),
-('Phạm Thị L', '0902345678', 'Nữ', 'Nhân viên soát vé'),
-('Nguyễn Văn M', '0903456789', 'Nam', 'Quản lý tuyến tàu điện'),
-('Trần Thị N', '0904567891', 'Nữ', 'Thu ngân'),
-('Lê Văn O', '0905678901', 'Nam', 'Nhân viên soát vé'),
-('Phạm Thị P', '0906789012', 'Nữ', 'Quản lý tuyến tàu điện'),
-('Nguyễn Văn Q', '0907890123', 'Nam', 'Thu ngân'),
-('Trần Thị R', '0908901234', 'Nữ', 'Nhân viên soát vé'),
-('Lê Văn S', '0909012345', 'Nam', 'Quản lý tuyến tàu điện'),
-('Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân');
-
+insert into nhanvien(tennv, sodienthoai, gioitinh, chucvu)
+values (
+        'Nguyễn Văn A',
+        '0901234567',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
+    ('Trần Thị B', '0907654321', 'Nữ', 'Thu ngân'),
+    (
+        'Lê Văn C',
+        '0909876543',
+        'Nam',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Phạm Thị D',
+        '0901112222',
+        'Nữ',
+        'Quản lý tuyến tàu điện'
+    ),
+    ('Nguyễn Văn E', '0903334444', 'Nam', 'Thu ngân'),
+    (
+        'Trần Thị F',
+        '0905556666',
+        'Nữ',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Lê Văn G',
+        '0907778888',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
+    ('Phạm Thị H', '0909990000', 'Nữ', 'Thu ngân'),
+    (
+        'Nguyễn Văn I',
+        '0901231231',
+        'Nam',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Trần Thị J',
+        '0904567890',
+        'Nữ',
+        'Quản lý tuyến tàu điện'
+    ),
+    ('Lê Văn K', '0909012345', 'Nam', 'Thu ngân'),
+    (
+        'Phạm Thị L',
+        '0902345678',
+        'Nữ',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Nguyễn Văn M',
+        '0903456789',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
+    ('Trần Thị N', '0904567891', 'Nữ', 'Thu ngân'),
+    (
+        'Lê Văn O',
+        '0905678901',
+        'Nam',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Phạm Thị P',
+        '0906789012',
+        'Nữ',
+        'Quản lý tuyến tàu điện'
+    ),
+    ('Nguyễn Văn Q', '0907890123', 'Nam', 'Thu ngân'),
+    (
+        'Trần Thị R',
+        '0908901234',
+        'Nữ',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Lê Văn S',
+        '0909012345',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
+    ('Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân');
 -- Tạo bảng vé tàu
 create table vetau (
     mave int NOT NULL,
@@ -330,6 +388,19 @@ VALUES (
         '2025-01-30 10:20:00',
         'Đang khởi hành'
     );
+--Lich bao tri
+CREATE TABLE lichbaotri (
+    mabaotri INT PRIMARY KEY AUTO_INCREMENT,
+    matau INT NOT NULL,
+    ngaybaotri DATETIME NOT NULL,
+    trangthaibaotri VARCHAR(100) NOT NULL
+);
+INSERT INTO lichbaotri (mabaotri, matau, ngaybaotri, trangthaibaotri)
+VALUES (1, 101, '2025-03-23 10:30:00', 'Đang bảo trì'),
+    (2, 102, '2025-03-22 15:45:00', 'Hoàn thành'),
+    (3, 103, '2025-03-21 09:00:00', 'Đang bảo trì'),
+    (4, 104, '2025-03-20 14:20:00', 'Chờ kiểm tra'),
+    (5, 105, '2025-03-19 08:10:00', 'Hoàn thành');
 -- test truy vấn lịch trình đã hoàn thành vào tháng 2
 select *
 from lichtrinh
@@ -349,3 +420,5 @@ select *
 from vetau;
 select *
 from lichtrinh;
+select *
+from lichbaotri;
