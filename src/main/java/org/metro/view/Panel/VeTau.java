@@ -4,17 +4,14 @@ import org.metro.model.VeTauModel;
 import org.metro.service.VeTauService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
-import org.metro.view.Dialog.VeTauDialog;
 import org.metro.controller.VeTauController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class VeTau extends JPanel {
     Color BackgroundColor = new Color(0, 2, 2);
@@ -40,7 +37,7 @@ public class VeTau extends JPanel {
 
         veTauTable = new JTable();
         veTauScrollTable = new JScrollPane();
-        dTable = new DefaultTableModel(){
+        dTable = new DefaultTableModel() {
             @Override
             // tao model voi so cot va hang co dinh khong cho sua chua
             public boolean isCellEditable(int row, int column) {

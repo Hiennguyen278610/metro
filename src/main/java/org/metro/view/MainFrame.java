@@ -14,9 +14,12 @@ import org.metro.service.SetLogoService;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
+import org.metro.model.TaiKhoanModel;
+import org.metro.util.SessionManager;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.MenuTaskbar;
 import org.metro.view.Component.RoundedPanel;
+import org.metro.view.Dialog.UserInfoDialog;
 
 public class MainFrame extends JFrame {
     private JPanel DangXuatPanel;
@@ -115,25 +118,38 @@ public class MainFrame extends JFrame {
         titlePanel.setLayout(null);
         titlePanel.setBackground(Color.decode("#BDCDD6"));
         titlePanel.setBounds(0, 0, 300, 100);
-
+        titlePanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                new UserInfoDialog(MainFrame.this).setVisible(true);
+            }
+        });
         FlatSVGIcon avatarIcon = new FlatSVGIcon(getClass().getResource("/svg/avatar.svg")).derive(60, 60);
 
         JLabel avatarLabel = new JLabel(avatarIcon, JLabel.CENTER);
         avatarLabel.setBounds(0, 0, 100, 100);
         titlePanel.add(avatarLabel);
 
-        JLabel TenNguoiDungLabel = new JLabel("Ten nguoi dung", JLabel.LEADING);
+
+        // Lấy thông tin user từ SessionManager
+        TaiKhoanModel currentUser = SessionManager.getCurrentUser();
+        String usernameDisplay = currentUser != null ? String.valueOf(currentUser.getManv()) : "Chưa đăng nhập";
+        String roleDisplay = currentUser != null ? getRoleName(currentUser.getManhomquyen()) : "Unknown";
+
+        JLabel TenNguoiDungLabel = new JLabel(usernameDisplay, JLabel.LEADING);
         TenNguoiDungLabel.setForeground(Color.black);
         TenNguoiDungLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
         TenNguoiDungLabel.setBounds(100, 0, 200, 80);
 
-        JLabel ChucVuLabel = new JLabel("Vai tro", JLabel.LEADING);
+        JLabel ChucVuLabel = new JLabel(roleDisplay, JLabel.LEADING);
         ChucVuLabel.setForeground(Color.black);
         ChucVuLabel.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         ChucVuLabel.setBounds(100, 20, 200, 90);
 
-        titlePanel.add(ChucVuLabel);
         titlePanel.add(TenNguoiDungLabel);
+        titlePanel.add(ChucVuLabel);
+
+
         leftPanel.add(titlePanel);
 
         // JPanel ChucNangPanel
@@ -242,6 +258,15 @@ public class MainFrame extends JFrame {
     }
 
     public void resetPanel() {
+    }
+    private String getRoleName(int manhomquyen) {
+        // Ví dụ: 1 = Admin, 2 = Nhân viên, 3 = Quản lý
+        switch (manhomquyen) {
+            case 1: return "Admin";
+            case 2: return "Nhân viên";
+            case 3: return "Quản lý";
+            default: return "Unknown";
+        }
     }
 
     public static void main(String[] args) {
