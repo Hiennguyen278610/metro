@@ -50,8 +50,6 @@ INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai) VALUES
     (1001, '0000', 1, 1),  -- Admin
     (1002, '0000', 2, 1),  -- Nhân viên
     (1003, '0000', 3, 1);  -- Quản lí
-# DROP TABLE taikhoan;
-
 
 -- NHANVIEN
 create table nhanvien ( 
@@ -62,9 +60,6 @@ create table nhanvien (
     chucvu VARCHAR(100) NOT NULL
 );
 
-
-
-# DROP table nhanvien;
 
 DESC nhanvien;
 
@@ -104,7 +99,7 @@ CREATE table tau (
     trangthaitau varchar(100) NOT NULL,
     ngaynhap date NOT NULL
 );
-# drop table tau;
+
 INSERT into tau(matau, soghe, trangthaitau, ngaynhap)
 values (1, 100, "Đang hoạt động", "2025-01-01"),
     (2, 100, "Đang bảo trì", "2025-01-02"),
@@ -165,12 +160,13 @@ VALUES (1, 3, 2, 1, '2025-01-05 08:15:00', '2025-01-05 08:45:00', 'Chờ khởi 
        (18, 5, 3, 1, '2025-02-05 12:15:00', '2025-02-05 12:40:00', 'Chờ khởi hành'),
        (19, 4, 1, 1, '2025-03-25 14:00:00', '2025-03-25 14:25:00', 'Hoàn Thành'),
        (20, 2, 4, 1, '2025-01-30 10:00:00', '2025-01-30 10:20:00', 'Đang khởi hành');
+
 -- test truy vấn lịch trình đã hoàn thành vào tháng 2
 select *
 from lichtrinh
 where trangthailichtrinh = 'Hoàn Thành'
     and MONTH(thoigiankh) = 2;
-DROP TABLE khachhang;
+
 select * from khachhang;
 select * from taikhoan;
 select * from nhanvien;
