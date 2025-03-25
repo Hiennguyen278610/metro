@@ -23,7 +23,7 @@ public class itemTaskbar extends JPanel implements MouseListener {
     public final JLabel lblIcon, lblContent;
     private boolean isSelected = false;
 
-    public itemTaskbar(String linkIcon, String content) {
+    public itemTaskbar(String linkIcon, String content,String titlePanel) {
         // Khởi tạo giao diện
         this.setOpaque(true);
         this.setBackground(defaultColor);
@@ -95,4 +95,13 @@ public class itemTaskbar extends JPanel implements MouseListener {
 
     @Override public void mousePressed(MouseEvent e) {}
     @Override public void mouseReleased(MouseEvent e) {}
+
+    //getter
+    public JLabel getLblContent() {
+        return lblContent;
+    }
+
+    public JLabel getLblIcon() {
+        return lblIcon;
+    }
 }

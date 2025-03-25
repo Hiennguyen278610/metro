@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
-public class MainFunction extends JToolBar {
+public class  MainFunction extends JToolBar {
     public HashMap<String, ToolBar> btn = new HashMap<>();
 
     public MainFunction() {
