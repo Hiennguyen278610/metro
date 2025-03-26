@@ -3,11 +3,13 @@ package org.metro.view.Panel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
+import javax.swing.table.TableCellRenderer;
+import org.metro.controller.LichBaoTriController;
 import org.metro.model.LichBaoTriModel;
 import org.metro.service.LichBaoTriService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
+import org.metro.view.Dialog.LichBaoTriDialog;
 import java.util.List;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
@@ -18,8 +20,9 @@ public class LichBaoTri extends JPanel {
     private MainFunction mainFunction;
     private DefaultTableModel tableModel;
     private JTable maintenanceTable;
-    private LichBaoTriService lbtService = new LichBaoTriService();
+    private LichBaoTriService lbtService = new LichBaoTriService(this);
     private List<LichBaoTriModel> dsBaoTri = lbtService.getAll();
+    private LichBaoTriController action = new LichBaoTriController(this);
     DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     // private LichBaoTriModel lbtModel;
 
@@ -41,9 +44,9 @@ public class LichBaoTri extends JPanel {
 
         String[] optMainFunc = { "create", "delete", "update", "detail" };
         mainFunction = new MainFunction(optMainFunc);
-        // for(String opt : optMainFunc){
-        // mainFunction.btn.get(opt).addActionListener(action);
-        // }
+        for (String opt : optMainFunc) {
+            mainFunction.btn.get(opt).addMouseListener(action);
+        }
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));
         functionBarPanel.setPreferredSize(new Dimension(0, 50));
@@ -97,4 +100,45 @@ public class LichBaoTri extends JPanel {
             });
         }
     }
+
+    public MainFunction getMainFunction() {
+        return mainFunction;
+    }
+
+    public void setMainFunction(MainFunction mainFunction) {
+        this.mainFunction = mainFunction;
+    }
+
+    public DefaultTableModel getTableModel() {
+        return tableModel;
+    }
+
+    public void setTableModel(DefaultTableModel tableModel) {
+        this.tableModel = tableModel;
+    }
+
+    public JTable getMaintenanceTable() {
+        return maintenanceTable;
+    }
+
+    public void setMaintenanceTable(JTable maintenanceTable) {
+        this.maintenanceTable = maintenanceTable;
+    }
+
+    public List<LichBaoTriModel> getDsBaoTri() {
+        return dsBaoTri;
+    }
+
+    public void setDsBaoTri(List<LichBaoTriModel> dsBaoTri) {
+        this.dsBaoTri = dsBaoTri;
+    }
+
+    public LichBaoTriService getLbtService() {
+        return lbtService;
+    }
+
+    public void setLbtService(LichBaoTriService lbtService) {
+        this.lbtService = lbtService;
+    }
+
 }
