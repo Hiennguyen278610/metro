@@ -1,9 +1,10 @@
 package org.metro.DAO;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.metro.model.LichBaoTriModel;
@@ -13,14 +14,11 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
 
     @Override
     public int insert(LichBaoTriModel t) {
-        String query = "INSERT INTO lichbaotri(matau,ngay,trangthai) VALUES (?,?,?)";
+        String query = "INSERT INTO lichbaotri(matau,ngaybaotri,trangthaibaotri) VALUES (?,?,?)";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setInt(1, t.getMatau());
-            // java.sql.Timestamp timestamp = (t.getNgaybaotri() != null) ?
-            // Timestamp.valueOf(t.getNgaybaotri()) : null;
-            // prs.setTimestamp(2, timestamp);
-
+            prs.setTimestamp(2, Timestamp.valueOf(t.getNgaybaotri()));
             prs.setString(3, t.getTrangthaibaotri());
             return prs.executeUpdate();
 
@@ -32,11 +30,12 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
 
     @Override
     public int update(LichBaoTriModel t) {
-        String query = "UPDATE lichbaotri SET trangthai = ? WHERE mabaotri = ? ";
+        String query = "UPDATE lichbaotri SET matau = ?,trangthaibaotri = ? WHERE mabaotri = ? ";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
-            prs.setString(1, t.getTrangthaibaotri());
-            prs.setInt(2, t.getMabaotri());
+            prs.setInt(1, t.getMatau());
+            prs.setString(2, t.getTrangthaibaotri());
+            prs.setInt(3, t.getMabaotri());
             return prs.executeUpdate();
 
         } catch (Exception e) {

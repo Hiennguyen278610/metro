@@ -1,12 +1,14 @@
 package org.metro.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LichBaoTriModel {
     private int mabaotri;
     private int matau;
     private LocalDateTime ngaybaotri;
     private String trangthaibaotri;
+    private DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     public LichBaoTriModel() {
     }
@@ -16,6 +18,10 @@ public class LichBaoTriModel {
         this.matau = matau;
         this.ngaybaotri = ngaybaotri;
         this.trangthaibaotri = trangthaibaotri;
+    }
+
+    public String convertLocalDateTime() {
+        return this.ngaybaotri.format(formatTime);
     }
 
     public int getMabaotri() {
