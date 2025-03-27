@@ -128,4 +128,13 @@ public class TuyenDuong extends JPanel {
     public JLabel getBack() {
         return DoThiPanel.getBack();
     }
+
+    public IntegratedSearch getSearchfunc() {
+        return searchfunc;
+    }
+
+    public MainFunction getMainfunc() {
+        return mainfunc;
+    }
+
 }

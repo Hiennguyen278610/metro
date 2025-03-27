@@ -57,6 +57,7 @@ VALUES (1001, '0000', 1, 1),
     (1002, '0000', 2, 1),
     -- Nhân viên
     (1003, '0000', 3, 1);
+drop table nhanvien;
 -- Quản lí
 # DROP TABLE taikhoan;
 -- NHANVIEN
