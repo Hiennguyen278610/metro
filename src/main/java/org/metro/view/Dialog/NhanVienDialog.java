@@ -29,32 +29,30 @@ public class NhanVienDialog extends JDialog{
         this.setTitle(setTitleType());
         this.setSize(500,500);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(parent);
         this.init();
         checkButtonClicked();
+        this.setResizable(false);
     }
 
     private void init() {
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5,10,5,10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10,10,5,5);
 
         //label
-        gbc.anchor = GridBagConstraints.LINE_END;
         handleComponents.addLabelGBL(contentPanel,"Tên nhân viên: ",0,0,gbc);
         handleComponents.addLabelGBL(contentPanel,"Số điện thoại: ",0,1,gbc);
         handleComponents.addLabelGBL(contentPanel,"Giới tính: ",0,2,gbc);
         handleComponents.addLabelGBL(contentPanel,"Chức vụ: ",0,3,gbc);
 
         //textfield
-        gbc.gridwidth = 2;
         tennvTextfield = handleComponents.addTextFieldGBL(contentPanel,25,1,0,gbc);
         sodienthoaiTextfield = handleComponents.addTextFieldGBL(contentPanel,25,1,1,gbc);
 
         //combobox
-        gbc.gridwidth = 2;
         String[] gioitinh = {"--","Nam", "Nữ"};
         gioitinhCombobox = handleComponents.addComboBoxGBL(contentPanel,gioitinh,1,2,gbc);
 
@@ -62,8 +60,6 @@ public class NhanVienDialog extends JDialog{
         chucvuCombobox = handleComponents.addComboBoxGBL(contentPanel,chucvu,1,3,gbc);
 
         //button
-        gbc.gridy = 4;
-        gbc.weightx = 1;
         ok = handleComponents.addButtonGBL(contentPanel,"Thêm",0,4,gbc);
         cancel = handleComponents.addButtonGBL(contentPanel,"Thoát",1,4,gbc);
         
@@ -123,12 +119,11 @@ public class NhanVienDialog extends JDialog{
 
     //ham cho phep chinh sua
     public void editEnabled(boolean enabled) {
-        NhanVienModel nhanvienduochon = nv.getSelectedNhanvien();
-        if(nhanvienduochon != null) {
-            this.getTennvTextfield().setText(nhanvienduochon.getTennv());
-            this.getSodienthoaiTextfield().setText(nhanvienduochon.getSdtnv());
-            this.getGioitinhCombobox().setSelectedItem(nhanvienduochon.getGioitinh());
-            this.getChucvuCombobox().setSelectedItem(nhanvienduochon.getChucvu());
+        if(nvm != null) {
+            this.getTennvTextfield().setText(nvm.getTennv());
+            this.getSodienthoaiTextfield().setText(nvm.getSdtnv());
+            this.getGioitinhCombobox().setSelectedItem(nvm.getGioitinh());
+            this.getChucvuCombobox().setSelectedItem(nvm.getChucvu());
         } else {
             System.out.println("errors");
         }

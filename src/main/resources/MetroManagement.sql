@@ -61,13 +61,13 @@ VALUES (1001, '0000', 1, 1),
 # DROP TABLE taikhoan;
 -- NHANVIEN
 create table nhanvien (
-    create table nhanvien (
         manv INT AUTO_INCREMENT primary key,
         tennv VARCHAR(100) NOT NULL,
         sodienthoai VARCHAR(50) NOT NULL,
         gioitinh VARCHAR(50) NOT NULL,
         chucvu VARCHAR(100) NOT NULL
     );
+
 create table tram(
     matram int AUTO_INCREMENT primary key,
     tentram varchar(255) not null,
@@ -90,6 +90,7 @@ create table tuyen(
 INSERT into tuyen(trambatdau, tramketthuc, thoigian, trangthai)
 values (1, 2, 40, "Hoat dong");
 DESC nhanvien;
+
 insert into nhanvien(tennv, sodienthoai, gioitinh, chucvu)
 values (
         'Nguyễn Văn A',
