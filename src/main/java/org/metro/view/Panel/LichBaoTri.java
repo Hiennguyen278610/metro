@@ -18,18 +18,19 @@ import java.time.format.DateTimeFormatter;
 public class LichBaoTri extends JPanel {
     private JPanel functionPanel, contentPanel, functionBarPanel;
     private IntegratedSearch search;
+
     private MainFunction mainFunction;
     private DefaultTableModel tableModel;
     private JTable maintenanceTable;
-    private LichBaoTriService lbtService = new LichBaoTriService(this);
-    private List<LichBaoTriModel> dsBaoTri = lbtService.getAll();
+    private LichBaoTriService lbtService = new LichBaoTriService();
+    // private List<LichBaoTriModel> dsBaoTri = lbtService.getAll();
     private LichBaoTriController action = new LichBaoTriController(this);
     DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     // private LichBaoTriModel lbtModel;
 
     public LichBaoTri() {
         initComponent();
-        loadData(dsBaoTri);
+        loadData(lbtService.getDsBaoTri());
     }
 
     public void initComponent() {
@@ -42,6 +43,10 @@ public class LichBaoTri extends JPanel {
         String[] optSearch = { "Tất cả", "Mã bảo trì", "Mã tàu", "Ngày bảo trì", "Trạng thái" };
         search = new IntegratedSearch(optSearch);
         functionPanel.add(search, BorderLayout.WEST);
+
+        search.getCbxChoose().addItemListener(action);
+        search.getTxtSearchForm().addKeyListener(action);
+        search.getBtnReset().addMouseListener(action);
 
         String[] optMainFunc = { "create", "delete", "update", "detail" };
         mainFunction = new MainFunction(optMainFunc);
@@ -102,6 +107,10 @@ public class LichBaoTri extends JPanel {
         }
     }
 
+    public IntegratedSearch getSearch() {
+        return search;
+    }
+
     public MainFunction getMainFunction() {
         return mainFunction;
     }
@@ -124,14 +133,6 @@ public class LichBaoTri extends JPanel {
 
     public void setMaintenanceTable(JTable maintenanceTable) {
         this.maintenanceTable = maintenanceTable;
-    }
-
-    public List<LichBaoTriModel> getDsBaoTri() {
-        return dsBaoTri;
-    }
-
-    public void setDsBaoTri(List<LichBaoTriModel> dsBaoTri) {
-        this.dsBaoTri = dsBaoTri;
     }
 
     public LichBaoTriService getLbtService() {
