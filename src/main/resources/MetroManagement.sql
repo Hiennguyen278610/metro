@@ -191,10 +191,10 @@ CREATE table tau (
 );
 # drop table tau;
 INSERT into tau(matau, soghe, trangthaitau, ngaynhap)
-values (1, 100, "Đang hoạt động", "2025-01-01"),
-    (2, 100, "Đang bảo trì", "2025-01-02"),
+values (2, 50, "Đang hoạt động", "2025-01-01"),
+    (1, 20, "Đang bảo trì", "2025-01-02"),
     (3, 100, "Ngừng hoạt động", "2025-01-02"),
-    (4, 100, "Đang hoạt động", "2025-01-03");
+    (4, 25, "Đang hoạt động", "2025-01-03");
 -- Backup//test
 INSERT INTO vetau (mave, machuyen, makh, giave)
 VALUES (1, 3, 6, 8500.00),
