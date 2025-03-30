@@ -418,6 +418,52 @@ VALUES (
         '2025-01-30 10:20:00',
         'Đang khởi hành'
     );
+--Lich bao tri
+CREATE TABLE lichbaotri (
+    mabaotri INT PRIMARY KEY AUTO_INCREMENT,
+    matau INT NOT NULL,
+    ngaybaotri DATE NOT NULL,
+    trangthaibaotri VARCHAR(100) NOT NULL,
+    ngaytao DATETIME NOT NULL
+);
+ALTER TABLE lichbaotri
+MODIFY COLUMN ngaybaotri DATE;
+drop table lichbaotri
+INSERT INTO lichbaotri (
+        mabaotri,
+        matau,
+        ngaybaotri,
+        trangthaibaotri,
+        ngaytao
+    )
+VALUES (
+        1,
+        1,
+        '2025-03-23 10:30:00',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        2,
+        2,
+        '2025-03-22 15:45:00',
+        'Hoàn thành',
+        '2025-03-21 15:45:00'
+    ),
+    (
+        3,
+        3,
+        '2025-03-21 09:00:00',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        4,
+        4,
+        '2025-03-20 14:20:00',
+        'Chờ kiểm tra',
+        '2025-03-22 15:45:00'
+    );
 -- test truy vấn lịch trình đã hoàn thành vào tháng 2
 select *
 from lichtrinh
