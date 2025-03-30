@@ -25,7 +25,6 @@ public class LichBaoTri extends JPanel {
     private LichBaoTriService lbtService = new LichBaoTriService();
     // private List<LichBaoTriModel> dsBaoTri = lbtService.getAll();
     private LichBaoTriController action = new LichBaoTriController(this);
-    DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     // private LichBaoTriModel lbtModel;
 
     public LichBaoTri() {
@@ -101,7 +100,7 @@ public class LichBaoTri extends JPanel {
             tableModel.addRow(new Object[] {
                     lbt.getMabaotri(),
                     lbt.getMatau(),
-                    lbt.getNgaybaotri().format(formatTime),
+                    lbt.convertLocalDate(),
                     lbt.getTrangthaibaotri()
             });
         }

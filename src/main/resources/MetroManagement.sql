@@ -393,16 +393,49 @@ VALUES (
 CREATE TABLE lichbaotri (
     mabaotri INT PRIMARY KEY AUTO_INCREMENT,
     matau INT NOT NULL,
-    ngaybaotri DATETIME NOT NULL,
-    trangthaibaotri VARCHAR(100) NOT NULL
+    ngaybaotri DATE NOT NULL,
+    trangthaibaotri VARCHAR(100) NOT NULL,
+    ngaytao DATETIME NOT NULL
 );
-INSERT INTO lichbaotri (mabaotri, matau, ngaybaotri, trangthaibaotri)
-VALUES (1, 101, '2025-03-23 10:30:00', 'Đang bảo trì'),
-    (2, 102, '2025-03-22 15:45:00', 'Hoàn thành'),
-    (3, 103, '2025-03-21 09:00:00', 'Đang bảo trì'),
-    (4, 104, '2025-03-20 14:20:00', 'Chờ kiểm tra'),
-    (5, 105, '2025-03-19 08:10:00', 'Hoàn thành');
->> >> >> > nghia -- test truy vấn lịch trình đã hoàn thành vào tháng 2
+ALTER TABLE lichbaotri
+MODIFY COLUMN ngaybaotri DATE;
+drop table lichbaotri
+INSERT INTO lichbaotri (
+        mabaotri,
+        matau,
+        ngaybaotri,
+        trangthaibaotri,
+        ngaytao
+    )
+VALUES (
+        1,
+        1,
+        '2025-03-23 10:30:00',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        2,
+        2,
+        '2025-03-22 15:45:00',
+        'Hoàn thành',
+        '2025-03-21 15:45:00'
+    ),
+    (
+        3,
+        3,
+        '2025-03-21 09:00:00',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        4,
+        4,
+        '2025-03-20 14:20:00',
+        'Chờ kiểm tra',
+        '2025-03-22 15:45:00'
+    );
+-- test truy vấn lịch trình đã hoàn thành vào tháng 2
 select *
 from lichtrinh
 where trangthailichtrinh = 'Hoàn Thành'

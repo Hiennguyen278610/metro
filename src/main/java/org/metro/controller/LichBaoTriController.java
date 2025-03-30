@@ -8,7 +8,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -23,6 +25,7 @@ public class LichBaoTriController implements MouseListener, ItemListener, KeyLis
     private LichBaoTri lbt;
     private LichBaoTriDialog lbtDialog;
     private JFrame parent;
+    DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public LichBaoTriController(LichBaoTri lbt, LichBaoTriDialog lbtDialog) {
         this.lbt = lbt;
@@ -83,12 +86,11 @@ public class LichBaoTriController implements MouseListener, ItemListener, KeyLis
                         JOptionPane.INFORMATION_MESSAGE);
             }
         } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnExit()) {
-            System.out.println("hihiiih");
             lbtDialog.dispose();
         } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnUpdate()) {
             LichBaoTriModel updatelbt = lbtDialog.getLichBaoTriModel();
             if (updatelbt != null) {
-                if (lbt.getLbtService().update(lbtDialog.getLichBaoTriModel())) {
+                if (lbt.getLbtService().update(updatelbt)) {
                     JOptionPane.showMessageDialog(lbt, "Cập nhật thành công", "THÔNG BÁO",
                             JOptionPane.INFORMATION_MESSAGE);
                     lbtDialog.dispose();
@@ -98,9 +100,10 @@ public class LichBaoTriController implements MouseListener, ItemListener, KeyLis
         } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnAdd() && lbtDialog.validation()) {
             int mabaotri = lbt.getLbtService().getNextID();
             int matau = Integer.parseInt(lbtDialog.getMatauField());
-            LocalDateTime now = LocalDateTime.now();
+            LocalDate ngaybaotri = LocalDate.parse(lbtDialog.getTimeField(), formatTime);
             String trangthaibaotri = lbtDialog.getStatusField();
-            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, now, trangthaibaotri);
+            LocalDateTime now = LocalDateTime.now();
+            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, ngaybaotri, trangthaibaotri, now);
             if (lbt.getLbtService().insert(newlbt)) {
                 JOptionPane.showMessageDialog(lbt, "Thêm thành công", "THÔNG BÁO",
                         JOptionPane.INFORMATION_MESSAGE);

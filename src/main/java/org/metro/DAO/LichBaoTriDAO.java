@@ -1,11 +1,10 @@
 package org.metro.DAO;
 
-import java.sql.Timestamp;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.metro.model.LichBaoTriModel;
@@ -15,12 +14,13 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
 
     @Override
     public int insert(LichBaoTriModel t) {
-        String query = "INSERT INTO lichbaotri(matau,ngaybaotri,trangthaibaotri) VALUES (?,?,?)";
+        String query = "INSERT INTO lichbaotri(matau,ngaybaotri,trangthaibaotri,ngaytao) VALUES (?,?,?,?)";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setInt(1, t.getMatau());
-            prs.setTimestamp(2, Timestamp.valueOf(t.getNgaybaotri()));
+            prs.setDate(2, Date.valueOf(t.getNgaybaotri()));
             prs.setString(3, t.getTrangthaibaotri());
+            prs.setTimestamp(4, Timestamp.valueOf(t.getNgaytao()));
             return prs.executeUpdate();
 
         } catch (Exception e) {
@@ -31,12 +31,13 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
 
     @Override
     public int update(LichBaoTriModel t) {
-        String query = "UPDATE lichbaotri SET matau = ?,trangthaibaotri = ? WHERE mabaotri = ? ";
+        String query = "UPDATE lichbaotri SET matau = ?,ngaybaotri = ?,trangthaibaotri = ? WHERE mabaotri = ? ";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setInt(1, t.getMatau());
-            prs.setString(2, t.getTrangthaibaotri());
-            prs.setInt(3, t.getMabaotri());
+            prs.setDate(2, Date.valueOf(t.getNgaybaotri()));
+            prs.setString(3, t.getTrangthaibaotri());
+            prs.setInt(4, t.getMabaotri());
             return prs.executeUpdate();
 
         } catch (Exception e) {
@@ -69,12 +70,14 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
                 LichBaoTriModel lbt = new LichBaoTriModel();
                 lbt.setMabaotri(rs.getInt(1));
                 lbt.setMatau(rs.getInt(2));
-                java.sql.Timestamp timestamp = rs.getTimestamp(3);
-                if (timestamp != null) {
-                    lbt.setNgaybaotri(timestamp.toLocalDateTime());
+                java.sql.Date date = rs.getDate(3);
+                if (date != null) {
+                    lbt.setNgaybaotri(date.toLocalDate());
                 }
                 lbt.setTrangthaibaotri(rs.getString(4));
                 dsBaoTri.add(lbt);
+                LocalDateTime localDateTime = rs.getTimestamp(5).toLocalDateTime();
+                lbt.setNgaytao(localDateTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,7 +98,7 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
                     lbt.setMatau(rs.getInt(2));
                     java.sql.Timestamp timestamp = rs.getTimestamp(3);
                     if (timestamp != null) {
-                        lbt.setNgaybaotri(timestamp.toLocalDateTime());
+                        // lbt.setNgaybaotri(timestamp.toLocalDateTime());
                     }
                     lbt.setTrangthaibaotri(rs.getString(4));
                     return lbt;

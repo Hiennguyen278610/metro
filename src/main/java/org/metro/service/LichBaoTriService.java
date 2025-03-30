@@ -57,7 +57,7 @@ public class LichBaoTriService {
     // "Trạng thái" };
     public List<LichBaoTriModel> search(String text, String type) {
         List<LichBaoTriModel> result = new ArrayList<>();
-        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         text = text.toLowerCase();
         switch (type) {
             case "Tất cả":
