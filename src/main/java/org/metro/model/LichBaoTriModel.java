@@ -1,27 +1,36 @@
 package org.metro.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class LichBaoTriModel {
     private int mabaotri;
     private int matau;
-    private LocalDateTime ngaybaotri;
+    private LocalDate ngaybaotri;
     private String trangthaibaotri;
-    private DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private LocalDateTime ngaytao;
 
-    public LichBaoTriModel() {
-    }
+    private DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public LichBaoTriModel(int mabaotri, int matau, LocalDateTime ngaybaotri, String trangthaibaotri) {
+    public LichBaoTriModel(int mabaotri, int matau, LocalDate ngaybaotri, String trangthaibaotri,
+            LocalDateTime ngaytao) {
         this.mabaotri = mabaotri;
         this.matau = matau;
         this.ngaybaotri = ngaybaotri;
         this.trangthaibaotri = trangthaibaotri;
+        this.ngaytao = ngaytao;
+    }
+
+    public LichBaoTriModel() {
+    }
+
+    public String convertLocalDate() {
+        return this.ngaybaotri.format(formatTime);
     }
 
     public String convertLocalDateTime() {
-        return this.ngaybaotri.format(formatTime);
+        return this.ngaytao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
 
     public int getMabaotri() {
@@ -40,11 +49,11 @@ public class LichBaoTriModel {
         this.matau = matau;
     }
 
-    public LocalDateTime getNgaybaotri() {
+    public LocalDate getNgaybaotri() {
         return ngaybaotri;
     }
 
-    public void setNgaybaotri(LocalDateTime ngaybaotri) {
+    public void setNgaybaotri(LocalDate ngaybaotri) {
         this.ngaybaotri = ngaybaotri;
     }
 
@@ -54,5 +63,13 @@ public class LichBaoTriModel {
 
     public void setTrangthaibaotri(String trangthaibaotri) {
         this.trangthaibaotri = trangthaibaotri;
+    }
+
+    public LocalDateTime getNgaytao() {
+        return ngaytao;
+    }
+
+    public void setNgaytao(LocalDateTime ngaytao) {
+        this.ngaytao = ngaytao;
     }
 }

@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.MatteBorder;
 
 import org.metro.DAO.TauDAO;
+import org.metro.controller.NhanVienController;
+import org.metro.controller.TauController;
 import org.metro.model.TauModel;
 
 import java.awt.*;
@@ -13,6 +15,9 @@ import java.util.List;
 public class Tau extends JPanel {
     Color BackgroundColor = new Color(0, 2, 2);
     List<TauModel> listTau;
+    JComboBox<String> SortComboBox;
+    DanhSachTau DanhSachTauPanel;
+    private TauController action = new TauController(this);
 
     public void initComponent() {
         this.setBackground(Color.white);
@@ -88,14 +93,18 @@ public class Tau extends JPanel {
         SortLabel.setFont(new Font("Arial", Font.BOLD, 16));
         SortLabel.setBounds(650, 5, 200, 40);
         TongSoTauPanel.add(SortLabel);
-        JComboBox<String> SortComboBox = new JComboBox<>();
+
+        SortComboBox = new JComboBox<>();
         SortComboBox.addItem("Mã tàu");
-        SortComboBox.addItem("Trạng thái tàu");
+        SortComboBox.addItem("Sức chứa");
         SortComboBox.addItem("Ngày nhập tàu");
+        SortComboBox.addItem("Trạng thái tàu");
         SortComboBox.setBounds(760, 14, 100, 20);
         TongSoTauPanel.add(SortComboBox);
 
-        JPanel DanhSachTauPanel = new DanhSachTau();
+        SortComboBox.addItemListener(action);
+
+        DanhSachTauPanel = new DanhSachTau(listTau);
 
         JScrollPane DanhSachTauScrollPane = new JScrollPane(DanhSachTauPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -106,7 +115,19 @@ public class Tau extends JPanel {
     }
 
     public Tau() {
-        listTau = new ArrayList<>();
+        listTau = new TauDAO().selectAll();
         initComponent();
+    }
+
+    public JComboBox<String> getSortComboBox() {
+        return SortComboBox;
+    }
+
+    public List<TauModel> getListTau() {
+        return listTau;
+    }
+
+    public DanhSachTau getDanhSachTauPanel() {
+        return DanhSachTauPanel;
     }
 }
