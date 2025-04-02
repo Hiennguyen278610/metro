@@ -1,11 +1,13 @@
 package org.metro.view.Panel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import org.metro.DAO.NhanVienDAO;
 import org.metro.controller.NhanVienController;
 import org.metro.model.NhanVienModel;
+import org.metro.service.NhanVienService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.ToolBar;
@@ -20,7 +22,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class NhanVien extends JPanel {
-    Color BackgroundColor = new Color(0, 2, 2);
     private MainFrame mf;
     private JPanel contentDataPanel,functionBarPanel;
     private JTable nhanVienTabel;
@@ -30,23 +31,22 @@ public class NhanVien extends JPanel {
     private IntegratedSearch searchfunc;
     private List<NhanVienModel> listNhanVien;
     private Timer timeSearch;
-    private NhanVienDialog nvdl;
-    private NhanVienController action = new NhanVienController(this);
+    private NhanVienController action = new NhanVienController(this,null);
+    private NhanVienService nvs = new NhanVienService(this);
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
         timeSearch = new Timer();
-        this.nvdl = nvdl;
         reloadData(); // cap nhap table moi khi run 
     }
 
     public void initComponent() {
         //layout tong the
-        this.setLayout(new BorderLayout(0,0));
-        this.setBackground(BackgroundColor);
+        this.setLayout(new BorderLayout(10,10));
+        this.setBackground(Color.decode("#dfe6e9"));
 
         //headerPanel chua search,combo box,btn reset + 4 function them,sua,xoa,chi tiet
-        JPanel headerPanel = new JPanel(new BorderLayout(5,5));
+        JPanel headerPanel = new JPanel(new BorderLayout());
         
         searchfunc = new IntegratedSearch(new String[]{"----","mã","tên","số điện thoại","giới tính","chức vụ"});
         headerPanel.add(searchfunc,BorderLayout.WEST);
@@ -64,7 +64,7 @@ public class NhanVien extends JPanel {
         contentDataPanel = new JPanel();
         contentDataPanel.setBackground(new Color(130,190,223));
         contentDataPanel.setPreferredSize(new Dimension(1100,600));
-        contentDataPanel.setLayout(new BorderLayout(10,10));
+        contentDataPanel.setLayout(new BorderLayout());
         
         dataTabelModel = new DefaultTableModel(){
             @Override
@@ -77,34 +77,43 @@ public class NhanVien extends JPanel {
         dataTabelModel.setColumnIdentifiers(new String[]{"MÃ NV","Tên NV","Số điện thoại","Giới tính","Chức vụ"});
         
         nhanVienTabel = new JTable();
-        nhanVienTabel.setFillsViewportHeight(true); // lap day JScrollPane 
         nhanVienTabel.setRowSelectionAllowed(true); // cho phep chon hang
+        nhanVienTabel.setBackground(Color.decode("#ecf0f1"));
+        nhanVienTabel.setShowGrid(true);
+        nhanVienTabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        nhanVienTabel.setForeground(Color.decode("#22a6b3"));
+        nhanVienTabel.setRowHeight(40);
         nhanVienTabel.setModel(dataTabelModel);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for(int i = 0 ; i < nhanVienTabel.getColumnCount();++i) {
+            nhanVienTabel.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
         nhanVienScroll = new JScrollPane(nhanVienTabel);
         contentDataPanel.add(nhanVienScroll,BorderLayout.CENTER);
 
 
         //them acction
         searchfunc.getCbxChoose().addItemListener(action);
+        searchfunc.getTxtSearchForm().addKeyListener(action);
+        searchfunc.getBtnReset().addActionListener(action);
 
-        //action check xem nhan nut nao
-        for(ToolBar tb : mainfunc.getBtn().values()) {
-            tb.addActionListener(action);
+        for(String tb : mainfunc.getBtn().keySet()) {
+           mainfunc.getBtn().get(tb).addActionListener(action);
         }
-
         this.add(contentDataPanel, BorderLayout.CENTER);
     }
 
     public void reloadList(List<NhanVienModel> listNhanVien2) {
         dataTabelModel.setRowCount(0); //xoa het bang de tai lai tu dau
         if(listNhanVien2 != null) {
-            for(NhanVienModel nvd : listNhanVien2) {
+            for(NhanVienModel nvm : listNhanVien2) {
                 dataTabelModel.addRow(new Object[]{
-                    nvd.getManv(),
-                    nvd.getTennv(),
-                    nvd.getSdtnv(),
-                    nvd.getGioitinh(),
-                    nvd.getChucvu()
+                    nvm.getManv(),
+                    nvm.getTennv(),
+                    nvm.getSdtnv(),
+                    nvm.getGioitinh(),
+                    nvm.getChucvu()
                 });
             }   
         }
@@ -117,8 +126,14 @@ public class NhanVien extends JPanel {
     //tim kiem theo field nhap
     public void searchByKeyWord() {
         String key = (String) searchfunc.getCbxChoose().getSelectedItem();
-        String word = (String) searchfunc.getTxtSearchForm().getText(); 
-        
+        String word = searchfunc.getTxtSearchForm().getText();
+        System.out.println("tim kiem theo tu khoa: " + key + "type: " + word);
+        if(word != null || !(word.trim().isEmpty())) {
+            List<NhanVienModel> lst = NhanVienService.searchByKeyWord(key,word);
+            reloadList(lst);
+        } else {
+            reloadData();
+        }
     }
     
     //load thoi gian tim kiem moi 0.2s
@@ -129,7 +144,8 @@ public class NhanVien extends JPanel {
 
             @Override
             public void run() {
-                
+                System.out.println("Tìm kiếm với từ khóa...");
+                searchByKeyWord();
             }
             
         }, 200);
@@ -137,7 +153,6 @@ public class NhanVien extends JPanel {
 
     public NhanVienModel getSelectedNhanvien() {
         int row = nhanVienTabel.getSelectedRow();
-        System.out.println(row);
         if(row == - 1) return null;
         int manv = (int) nhanVienTabel.getValueAt(row, 0);
         String tennv = (String) nhanVienTabel.getValueAt(row, 1);
@@ -149,10 +164,6 @@ public class NhanVien extends JPanel {
     }
 
     //getter setter
-    public Color getBackgroundColor() {
-        return BackgroundColor;
-    }
-
     public JPanel getContentDataPanel() {
         return contentDataPanel;
     }
@@ -187,10 +198,6 @@ public class NhanVien extends JPanel {
 
     public MainFrame getMf() {
         return mf;
-    }
-
-    public void setBackgroundColor(Color backgroundColor) {
-        BackgroundColor = backgroundColor;
     }
 
     public void setContentDataPanel(JPanel contentDataPanel) {
@@ -236,5 +243,7 @@ public class NhanVien extends JPanel {
         this.mf = mf;
     }
 
-
+    public NhanVienService getNvs() {
+        return nvs;
+    }
 }

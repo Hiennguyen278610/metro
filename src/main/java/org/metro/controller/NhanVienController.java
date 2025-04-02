@@ -18,122 +18,125 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     private NhanVien nv;
     private NhanVienDialog nvdl;
     private NhanVienModel nvm;
+    private JFrame parent;
 
-    public NhanVienController(NhanVienDialog nvdl) {
+    public NhanVienController(NhanVien nv,NhanVienDialog nvdl) {
         this.nvdl = nvdl;
-    }
-
-    public NhanVienController(NhanVien nv) {
         this.nv = nv;
     }
 
     //combobox tim kiem theo id,ten,..
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) { // ktra khi combobox dc tich chon
-            JComboBox<String> cbb = (JComboBox<String>) e.getSource();
-            String str = (String) cbb.getSelectedItem();
-            String selectedCheckbox = (String) nv.getSearchfunc().getCbxChoose().getSelectedItem();
-            if (str.equals(selectedCheckbox)) {
-                System.out.println("Bạn đã chọn" + nv.getSearchfunc().getCbxChoose().getSelectedItem());
-            }
-        }
-
+        String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
+        String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
+        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JComponent c = (JComponent) e.getSource(); // dung component de su dung cho nhieu kieu nhu button,label,..
-        if (nv != null) {
-            for (String namebtn : nv.getMainfunc().getBtn().keySet()) {
-                ToolBar tb = nv.getMainfunc().getBtn().get(namebtn);
-                if (c.equals(tb)) {
-                    if (namebtn == null || namebtn.trim().isEmpty()) {
-                        System.err.println("errors");
-                        return;
-                    }
+       JButton c = (JButton) e.getSource();
+       if(nv != null) {
+           for(String namebtn : nv.getMainfunc().getBtn().keySet()) {
+               ToolBar tb =nv.getMainfunc().getBtn().get(namebtn);
+               if(c.equals(tb)) {
+                   if(namebtn == null || namebtn.trim().isEmpty()) return;
 
-                    if ("create".equals(namebtn)) {
-                        new NhanVienDialog(nv.getMf(), namebtn, nv, null).setVisible(true);
-                    } else {
-                        nvm = nv.getSelectedNhanvien();
-                        if (nvm == null) {
-                            JOptionPane.showMessageDialog(nv, "Hãy chọn một nhân viên!!!", "Thông báo",
-                                    JOptionPane.WARNING_MESSAGE);
-                            return;
-                        }
-                        if ("detail".equals(namebtn) || "update".equals(namebtn)) {
-                            new NhanVienDialog(nv.getMf(), namebtn, nv, nvm).setVisible(true);
-                        } else if ("delete".equals(namebtn)) {
-                            int confirm = JOptionPane.showConfirmDialog(nv, "Bạn có chắc muốn xóa ? ", "Xác nhận",
-                                    JOptionPane.YES_NO_OPTION);
-                            if (confirm == JOptionPane.YES_OPTION) {
-                                deleteNhanvien();
-                                if (nv.getNhanVienTabel() != null)
-                                    nv.getNhanVienTabel().updateUI();
-                            }
-                        } else {
-                            System.out.println("không có nút nào được click!!!!");
-                            return;
-                        }
-                    }
-                }
-            }
-        }
+                   if("create".equals(namebtn)) {
+                       NhanVienDialog nvDialog = new NhanVienDialog(nv.getMf(),namebtn,nv,null);
+                       nvDialog.setVisible(true);
+                   } else {
+                       nvm = nv.getSelectedNhanvien();
+                       if (nvm == null) {
+                           JOptionPane.showMessageDialog(nvdl,"Vui lòng chọn một nhân viên","thông báo ", JOptionPane.ERROR_MESSAGE);
+                           return;
+                       }
+                       if("update".equals(namebtn) || "detail".equals(namebtn)) {
+                          NhanVienDialog nvDialog =  new NhanVienDialog(null,namebtn,nv,nvm);
+                          nvDialog.setVisible(true);
+                       } else if("delete".equals(namebtn)) {
+                           deleteNhanVien();
+                       }
+                   }
+               }
+           }
+       }
+       if(nvdl != null) {
+           String namebtn = e.getActionCommand();
+           if(c instanceof JButton) {
+               if("Thêm".equals(namebtn)) {
+                   String ten = String.valueOf(nvdl.getTennvTextfield().getTxtInput().getText().trim());
+                   String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getTxtInput().getText().trim());
+                   String gt = String.valueOf(nvdl.getGioitinhTextfield().getTxtInput().getText().trim());
+                   String cv = String.valueOf(nvdl.getChucvuTextfield().getTxtInput().getText().trim());
 
-        // xu li khi an nut them de xac nhan them 1 nhan vien
-        if (nvdl != null) {
-            String namebtn = e.getActionCommand();
-            if (c instanceof JButton) {
-                if (namebtn.equals("Thêm")) {
-                    String ten = String.valueOf(nvdl.getTennvTextfield().getText().trim());
-                    String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getText().trim());
-                    String gt = String.valueOf(nvdl.getGioitinhCombobox().getSelectedItem());
-                    String cv = String.valueOf(nvdl.getChucvuCombobox().getSelectedItem());
+                   if(ten.isEmpty() || sdt.isEmpty() || gt.isEmpty() || cv.isEmpty()) {
+                       JOptionPane.showMessageDialog(nvdl,"Vui lòng nhập đầy đủ thông tin","thông báo", JOptionPane.ERROR_MESSAGE);
+                       return;
+                   }
+                   NhanVienModel newnv = new NhanVienModel(ten,sdt,gt,cv);
+                   if(NhanVienService.insert(newnv)) {
+                       JOptionPane.showMessageDialog(nvdl,"Thêm thông tin thành công","Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                       nvdl.dispose();
+                   } else {
+                       JOptionPane.showMessageDialog(nvdl,"Thêm  thất bại ","Thông báo", JOptionPane.ERROR_MESSAGE);
+                       nvdl.requestFocus();
+                       return;
+                   }
+               } else if("Cập nhật".equals(namebtn)) {
+                   System.out.println("da nhan nut cap nhat");
+                   if(nv == null) {
+                       System.out.println("nv = null, đối tượng không tồn tại!");
+                       return;
+                   }
 
-                    if (ten.isEmpty()) {
-                        JOptionPane.showMessageDialog(nvdl, "tên nhân viên không được để trống", "thông báo",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        nvdl.getTennvTextfield().requestFocus();
-                        return;
-                    }
-                    if (sdt.isEmpty()) {
-                        JOptionPane.showMessageDialog(nvdl, "số điện thoại không được để trống", "thông báo",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        nvdl.getTennvTextfield().requestFocus();
-                        return;
-                    }
+                   nvm = nv.getSelectedNhanvien();
 
-                    if (nvdl.getGioitinhCombobox().getSelectedItem() == "--"
-                            || nvdl.getChucvuCombobox().getSelectedItem() == "--") {
-                        JOptionPane.showMessageDialog(nvdl, "vui lòng chọn 1 chỉ mục!", "thông báo",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        return;
-                    }
-                    NhanVienModel nvm = new NhanVienModel(ten, sdt, gt, cv); // ma nv la auto increment nen dung
-                                                                             // constructor kh co manv
-                    if (NhanVienService.insert(nvm)) {
-                        JOptionPane.showMessageDialog(nvdl, "THÊM NHÂN VIÊN THÀNH CÔNG!!!", "Thông báo",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        nvdl.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(nvdl, "THÊM NHÂN VIÊN THẤT BẠI", "THÔNG BÁO",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                } else if (namebtn.equals("Thoát"))
-                    nvdl.dispose();
-            }
-        }
+                   if(nvm == null) {
+                       System.out.println("Lỗi: Không có nhân viên nào được chọn!");
+                       JOptionPane.showMessageDialog(nvdl, "Vui lòng chọn một nhân viên để cập nhật!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                       return;
+                   }
+                   if(nv != null) {
+                       if(nvm != null) {
+                           System.out.println("da chon nhan vien" + nvm.getManv());
+                            nvm.setTennv(nvdl.getTennvTextfield().getTxtInput().getText().trim());
+                            nvm.setSdtnv(nvdl.getSodienthoaiTextfield().getTxtInput().getText().trim());
+                            nvm.setGioitinh(nvdl.getGioitinhTextfield().getTxtInput().getText().trim());
+                            nvm.setChucvu(nvdl.getChucvuTextfield().getTxtInput().getText().trim());
+                            int ma = nvm.getManv();
+                            String ten = nvm.getTennv();
+                            String sdt = nvm.getSdtnv();
+                            String gt = nvm.getGioitinh();
+                            String cv = nvm.getChucvu();
+                           if(ten.isEmpty() || sdt.isEmpty() || gt.isEmpty() || cv.isEmpty()) {
+                               JOptionPane.showMessageDialog(nvdl,"Vui lòng nhập đầy đủ thông tin","thông báo", JOptionPane.ERROR_MESSAGE);
+                               return;
+                           }
+                           NhanVienModel newnv = new NhanVienModel(ma,ten,sdt,gt,cv);
+                           if(NhanVienService.update(newnv)) {
+                               JOptionPane.showMessageDialog(nvdl,"Cập nhật thành công","Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                               nvdl.dispose();
+                           } else {
+                               JOptionPane.showMessageDialog(nvdl,"Cập nhật thất bại","Thông báo", JOptionPane.ERROR_MESSAGE);
+                               return;
+                           }
+                       }
+                   }
+               }  else if("".equals(namebtn)) {
+                   c.setEnabled(false);
+               } else if("Thoát".equals(namebtn)) nvdl.dispose();
+           }
+       }
+       if(c.equals(nv.getSearchfunc().getBtnReset())) {
+           nv.getSearchfunc().getTxtSearchForm().setText("");
+           nv.getSearchfunc().getCbxChoose().setSelectedItem(0);
+           nv.reloadData();
+       }
     }
 
     // ham xoa nhan vien
-    public void deleteNhanvien() {
-        nvm = nv.getSelectedNhanvien();
-        if (nvm == null) {
-            System.out.println("khong tim thay nhan vien duoc chon");
-            return;
-        }
+    public void deleteNhanVien() {
         if (NhanVienService.delete(nvm.getManv())) {
             JOptionPane.showMessageDialog(null, "xÓA NHÂN VIÊN THÀNH CÔNG", "Thông báo",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -153,7 +156,9 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
 
     @Override
     public void keyReleased(KeyEvent e) {
-        nv.loadTimeSearch();
+        String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
+        String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
+        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
     }
 
 }

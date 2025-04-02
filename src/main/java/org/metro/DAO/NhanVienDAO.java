@@ -3,6 +3,7 @@ package org.metro.DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +32,14 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public int update(NhanVienModel t) {
-        String query = "update nhanvien set tennv = ? sodienthoai = ? gioitinh = ? chucvu = ? where manv = ?";
+        String query = "UPDATE nhanvien SET tennv = ?, sodienthoai = ?, gioitinh = ?, chucvu = ? where manv = ?";
         try(Connection c = DatabaseUtils.getConnection();
-            PreparedStatement prs = c.prepareStatement(query);) {
+            PreparedStatement prs = c.prepareStatement(query)) {
                 prs.setString(1, t.getTennv());
                 prs.setString(2,t.getSdtnv());
                 prs.setString(3,t.getGioitinh());
                 prs.setString(4,t.getChucvu());
+                prs.setInt(5, t.getManv());
                 return prs.executeUpdate();
         } catch(Exception e) {
             e.printStackTrace();
@@ -71,7 +73,7 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
                     rs.getInt("manv"), rs.getString("tennv"), rs.getString("sodienthoai"), rs.getString("gioitinh"), rs.getString("chucvu")); 
                     listnv.add(nvd);  
             }
-
+            System.out.println("so luong nhan vien: " + listnv.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,8 +82,23 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public NhanVienModel selectById(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'selectById'");
+        String query = "select * from nhanvien where manv = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement prs = c.prepareStatement(query); ) {
+            prs.setInt(1,id);
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    return new NhanVienModel(rs.getInt("manv"),
+                                                            rs.getString("tennv"),
+                                                            rs.getString("sodienthoai"),
+                                                            rs.getString("gioitinh"),
+                                                            rs.getString("chucvu"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     

@@ -61,13 +61,13 @@ VALUES (1001, '0000', 1, 1),
 # DROP TABLE taikhoan;
 -- NHANVIEN
 create table nhanvien (
-    create table nhanvien (
         manv INT AUTO_INCREMENT primary key,
         tennv VARCHAR(100) NOT NULL,
         sodienthoai VARCHAR(50) NOT NULL,
         gioitinh VARCHAR(50) NOT NULL,
         chucvu VARCHAR(100) NOT NULL
     );
+# drop table nhanvien;
 create table tram(
     matram int AUTO_INCREMENT primary key,
     tentram varchar(255) not null,
@@ -90,6 +90,7 @@ create table tuyen(
 INSERT into tuyen(trambatdau, tramketthuc, thoigian, trangthai)
 values (1, 2, 40, "Hoat dong");
 DESC nhanvien;
+
 insert into nhanvien(tennv, sodienthoai, gioitinh, chucvu)
 values (
         'Nguyễn Văn A',
@@ -418,7 +419,7 @@ VALUES (
         '2025-01-30 10:20:00',
         'Đang khởi hành'
     );
---Lich bao tri
+# lich bao tri
 CREATE TABLE lichbaotri (
     mabaotri INT PRIMARY KEY AUTO_INCREMENT,
     matau INT NOT NULL,
@@ -428,7 +429,7 @@ CREATE TABLE lichbaotri (
 );
 ALTER TABLE lichbaotri
 MODIFY COLUMN ngaybaotri DATE;
-drop table lichbaotri
+# drop table lichbaotri
 INSERT INTO lichbaotri (
         mabaotri,
         matau,
