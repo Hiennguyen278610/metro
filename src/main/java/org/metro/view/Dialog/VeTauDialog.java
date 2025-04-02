@@ -1,7 +1,9 @@
 package org.metro.view.Dialog;
 
 import org.metro.controller.VeTauController;
+import org.metro.model.KhachHangModel;
 import org.metro.model.VeTauModel;
+import org.metro.service.KhachHangService;
 import org.metro.service.VeTauService;
 import org.metro.view.Component.handleComponents;
 import org.metro.view.Panel.VeTau;
@@ -10,13 +12,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class VeTauDialog extends JDialog {
-    private JTextField maveTextField, machuyenTextField, makhTextField, giaveTextField;
+    private JTextField machuyenTextField, sdtKhachTextField, giaveTextField;
     private JButton ok, cancel;
     private String type;
     private JPanel contentPanel;
     private VeTau veTau;
     private VeTauModel vetauModel;
     private VeTauController action;
+    private KhachHangDialog khachHangDialog;
 
     // Dialog thêm, sửa, chi tiết vé tàu
     public VeTauDialog(Frame parent, String type, VeTau veTau, VeTauModel vetauModel) {
@@ -25,6 +28,7 @@ public class VeTauDialog extends JDialog {
         this.type = type;
         this.vetauModel = vetauModel;
         this.action = new VeTauController(veTau, this);
+        this.khachHangDialog = new KhachHangDialog();
         this.setTitle(setTitleType());
         this.setSize(500, 400);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -37,11 +41,11 @@ public class VeTauDialog extends JDialog {
         super();
         this.type = "default";
         this.contentPanel = new JPanel(new GridBagLayout());
-        this.maveTextField = new JTextField(20);
         this.machuyenTextField = new JTextField(20);
-        this.makhTextField = new JTextField(20);
+        this.sdtKhachTextField = new JTextField(20);
         this.giaveTextField = new JTextField(20);
         this.ok = new JButton("OK");
+        this.khachHangDialog = new KhachHangDialog();
     }
 
     private void init() {
@@ -52,27 +56,25 @@ public class VeTauDialog extends JDialog {
         gbc.insets = new Insets(5, 20, 5, 20);
 
         // Labels
-        handleComponents.addLabelGBL(contentPanel, "Mã vé:", 0, 0, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Mã chuyến:", 0, 1, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Mã khách hàng:", 0, 2, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Giá vé:", 0, 3, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Mã chuyến:", 0, 0, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Số điện thoại khách:", 0, 1, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Giá vé:", 0, 2, gbc);
 
         // TextFields
-        maveTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 0, gbc);
-        machuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 1, gbc);
-        makhTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 2, gbc);
-        giaveTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 3, gbc);
+        machuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 0, gbc);
+        sdtKhachTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 1, gbc);
+        giaveTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 2, gbc);
 
         // Buttons - Đặt text chính xác cho mỗi loại dialog
         gbc.gridwidth = 1;
         if ("create".equals(type)) {
-            ok = handleComponents.addButtonGBL(contentPanel, "THÊM", 0, 4, gbc);
-            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 4, gbc);
+            ok = handleComponents.addButtonGBL(contentPanel, "THÊM", 0, 3, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 3, gbc);
         } else if ("update".equals(type)) {
-            ok = handleComponents.addButtonGBL(contentPanel, "CẬP NHẬT", 0, 4, gbc);
-            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 4, gbc);
+            ok = handleComponents.addButtonGBL(contentPanel, "CẬP NHẬT", 0, 3, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 3, gbc);
         } else {
-            ok = handleComponents.addButtonGBL(contentPanel, "HỦY", 0, 4, gbc);
+            ok = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, 3, gbc);
         }
 
         // Thêm action listener cho nút OK và Cancel
@@ -84,6 +86,11 @@ public class VeTauDialog extends JDialog {
         }
 
         this.add(contentPanel);
+    }
+
+    // Hàm check SDT khách hàng tồn tại và trả về mã khách
+    public KhachHangModel checkSdtKhachHang(String sdt) {
+        return KhachHangService.getBySdt(sdt);
     }
 
     // Hàm set title cho dialog
@@ -100,23 +107,6 @@ public class VeTauDialog extends JDialog {
                 return "THÔNG TIN VÉ TÀU";
             default:
                 return "ERROR";
-        }
-    }
-
-    // Hàm lấy text cho nút OK
-    private String getButtonText() {
-        if (type == null) {
-            return "OK";
-        }
-        switch (type) {
-            case "create":
-                return "THÊM";
-            case "update":
-                return "CẬP NHẬT";
-            case "detail":
-                return "ĐÓNG";
-            default:
-                return "OK";
         }
     }
 
@@ -149,9 +139,8 @@ public class VeTauDialog extends JDialog {
 
     // Hàm thiết lập khả năng chỉnh sửa của các trường
     public void editEnabled(boolean enabled) {
-        if (maveTextField != null) maveTextField.setEnabled(enabled);
         if (machuyenTextField != null) machuyenTextField.setEnabled(enabled);
-        if (makhTextField != null) makhTextField.setEnabled(enabled);
+        if (sdtKhachTextField != null) sdtKhachTextField.setEnabled(enabled);
         if (giaveTextField != null) giaveTextField.setEnabled(enabled);
     }
 
@@ -159,51 +148,22 @@ public class VeTauDialog extends JDialog {
     private void loadVeTauData() {
         VeTauModel veTauSelected = (vetauModel != null) ? vetauModel : veTau.getSelectedVeTau();
         if (veTauSelected != null) {
-            maveTextField.setText(String.valueOf(veTauSelected.getMave()));
+            // Lấy thông tin khách hàng theo mã khách hàng để hiển thị số điện thoại
+            KhachHangModel kh = KhachHangService.getById(veTauSelected.getMakh());
+
             machuyenTextField.setText(String.valueOf(veTauSelected.getMachuyen()));
-            makhTextField.setText(String.valueOf(veTauSelected.getMakh()));
+            sdtKhachTextField.setText(kh != null ? kh.getSdt() : "Không tìm thấy");
             giaveTextField.setText(String.valueOf(veTauSelected.getGiave()));
         } else {
             System.err.println("Không có dữ liệu vé tàu để hiển thị");
         }
     }
 
-    // Các phương thức cũ giữ lại để tương thích ngược
-    public void showAddVeTauDialog(Component parent, Runnable updateCallback) {
-        Frame frame = JOptionPane.getFrameForComponent(parent);
-        VeTauDialog dialog = new VeTauDialog(frame, "create", (VeTau) parent, null);
-        dialog.setVisible(true);
-    }
-
-    public void showUpdateVeTauDialog(Component parent, int mave, Runnable updateCallback) {
-        VeTauModel vetau = VeTauService.getById(mave);
-        if (vetau == null) {
-            JOptionPane.showMessageDialog(parent, "Không tìm thấy thông tin vé tàu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Frame frame = JOptionPane.getFrameForComponent(parent);
-        VeTauDialog dialog = new VeTauDialog(frame, "update", (VeTau) parent, vetau);
-        dialog.setVisible(true);
-    }
-
-    public void showVeTauDetailDialog(Component parent, VeTauModel vetau) {
-        if (vetau == null) {
-            JOptionPane.showMessageDialog(parent, "Không có thông tin vé tàu để hiển thị!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Frame frame = JOptionPane.getFrameForComponent(parent);
-        VeTauDialog dialog = new VeTauDialog(frame, "detail", (VeTau) parent, vetau);
-        dialog.setVisible(true);
-    }
-
-    // Phương thức lấy dữ liệu từ form
+    // Phương thức lấy dữ liệu từ form và tạo đối tượng VeTauModel
     public VeTauModel getVeTauFromForm() {
         try {
             // Kiểm tra null trước khi truy cập các thành phần
-            if (maveTextField == null || machuyenTextField == null ||
-                    makhTextField == null || giaveTextField == null) {
+            if (machuyenTextField == null || sdtKhachTextField == null || giaveTextField == null) {
                 JOptionPane.showMessageDialog(this,
                         "Lỗi: Các trường dữ liệu chưa được khởi tạo!",
                         "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
@@ -216,24 +176,14 @@ public class VeTauDialog extends JDialog {
                 machuyenTextField.requestFocus();
                 return null;
             }
-            if (makhTextField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                makhTextField.requestFocus();
+            if (sdtKhachTextField.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                sdtKhachTextField.requestFocus();
                 return null;
             }
             if (giaveTextField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập giá vé!", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 giaveTextField.requestFocus();
-                return null;
-            }
-
-            // Xử lý trường mã vé
-            int mave;
-            try {
-                mave = Integer.parseInt(maveTextField.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã vé phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                maveTextField.requestFocus();
                 return null;
             }
 
@@ -246,12 +196,27 @@ public class VeTauDialog extends JDialog {
                 return null;
             }
 
-            int makh;
-            try {
-                makh = Integer.parseInt(makhTextField.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã khách hàng phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                makhTextField.requestFocus();
+            // Kiểm tra SĐT khách hàng có tồn tại trong DB không
+            String sdtKhach = sdtKhachTextField.getText().trim();
+            KhachHangModel khachHang = checkSdtKhachHang(sdtKhach);
+
+            // Nếu không tìm thấy khách hàng, hiển thị dialog thêm khách hàng mới
+            if (khachHang == null) {
+                int choice = JOptionPane.showConfirmDialog(this,
+                        "Số điện thoại này chưa có trong hệ thống. Bạn có muốn thêm khách hàng mới không?",
+                        "Thông báo", JOptionPane.YES_NO_OPTION);
+
+                if (choice == JOptionPane.YES_OPTION) {
+                    // Hiển thị dialog thêm khách hàng mới với callback để tạo vé sau khi thêm thành công
+                    khachHangDialog.showAddKhachHangDialog(this, () -> {
+                        // Kiểm tra lại sau khi thêm khách hàng
+                        KhachHangModel newCustomer = checkSdtKhachHang(sdtKhach);
+                        if (newCustomer != null) {
+                            // Tạo vé tàu với khách hàng mới
+                            createVeTauWithCustomer(machuyen, newCustomer, giaveTextField.getText().trim());
+                        }
+                    });
+                }
                 return null;
             }
 
@@ -264,7 +229,8 @@ public class VeTauDialog extends JDialog {
                 return null;
             }
 
-            return new VeTauModel(mave, machuyen, makh, giave);
+            // mave = 0 để đánh dấu tự động tăng
+            return new VeTauModel(0, machuyen, khachHang.getMaKh(), giave);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -272,17 +238,33 @@ public class VeTauDialog extends JDialog {
         }
     }
 
-    // Getters và Setters
-    public JTextField getMaveTextField() {
-        return maveTextField;
+    // Tạo vé tàu với thông tin khách hàng đã có
+    private void createVeTauWithCustomer(int machuyen, KhachHangModel khachHang, String giaveText) {
+        try {
+            double giave = Double.parseDouble(giaveText.replace(",", "."));
+            VeTauModel veTau = new VeTauModel(0, machuyen, khachHang.getMaKh(), giave);
+
+            if (VeTauService.insert(veTau)) {
+                JOptionPane.showMessageDialog(this, "THÊM VÉ TÀU THÀNH CÔNG", "THÔNG BÁO",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                if (this.veTau != null) this.veTau.loadDataTable();
+            } else {
+                JOptionPane.showMessageDialog(this, "THÊM VÉ TÀU THẤT BẠI", "THÔNG BÁO",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Giá vé phải là số thực!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
+    // Getters và Setters
     public JTextField getMachuyenTextField() {
         return machuyenTextField;
     }
 
-    public JTextField getMakhTextField() {
-        return makhTextField;
+    public JTextField getSdtKhachTextField() {
+        return sdtKhachTextField;
     }
 
     public JTextField getGiaveTextField() {
@@ -292,7 +274,6 @@ public class VeTauDialog extends JDialog {
     public JButton getOk() {
         return ok;
     }
-
 
     public VeTau getVeTau() {
         return veTau;
