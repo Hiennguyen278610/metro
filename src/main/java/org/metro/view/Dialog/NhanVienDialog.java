@@ -1,225 +1,250 @@
-package org.metro.view.Dialog;
+    package org.metro.view.Dialog;
 
-import org.metro.controller.NhanVienController;
-import org.metro.model.NhanVienModel;
-import org.metro.view.Component.handleComponents;
-import org.metro.view.Panel.NhanVien;
+    import org.metro.controller.NhanVienController;
+    import org.metro.model.NhanVienModel;
+    import org.metro.view.Component.ButtonEdit;
+    import org.metro.view.Component.InputField;
+    import org.metro.view.Panel.NhanVien;
 
-import java.awt.*;
+    import java.awt.*;
 
-import javax.swing.*;
+    import javax.swing.*;
 
-public class NhanVienDialog extends JDialog{
-    private JLabel tennvLabel,sodienthoaiLabel,gioitinhLabel,chucvuLabel;
-    private JComboBox<String> gioitinhCombobox,chucvuCombobox;
-    private JTextField tennvTextfield,sodienthoaiTextfield;
-    private JButton ok,cancel;
-    private String type;
-    private JPanel contentPanel;
-    private NhanVien nv;
-    private NhanVienModel nvm;
-    private NhanVienController action = new NhanVienController(this);
+    public class NhanVienDialog extends JDialog{
+        private InputField manvTextfield,tennvTextfield,sodienthoaiTextfield,gioitinhTextfield,chucvuTextfield;
+        private JButton ok,cancel;
+        private String nhanVienType;
+        private JPanel contentPanel;
+        private JPanel bottomPanel;
+        private NhanVien nv;
+        private NhanVienModel nvm;
+        private NhanVienController action;
 
-    // dialog them, sua , chi tiet nhanvien
-    public NhanVienDialog(Frame parent, String type,NhanVien nv,NhanVienModel nvm) {
-        super(parent,true);
-        this.nv = nv;
-        this.type = type;
-        this.nvm = nvm;
-        this.setTitle(setTitleType());
-        this.setSize(500,500);
-        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(parent);
-        this.init();
-        checkButtonClicked();
-        this.setResizable(false);
-    }
+            // dialog them, sua , chi tiet nhanvien
+            public NhanVienDialog(Frame parent, String nhanVienType,NhanVien nv,NhanVienModel nvm) {
+                super(parent,true);
+                this.nv = nv;
+                this.nhanVienType = nhanVienType;
+                this.nvm = nvm;
+                action = new NhanVienController(this.nv,this);
+                this.setLayout(new BorderLayout());
+                this.setTitle(setTitleType());
+                this.setSize(700,400);
+                this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                this.setLocationRelativeTo(parent);
+                this.init();
+                checkButtonClicked();
+                this.setResizable(true);
+            }
 
-    private void init() {
-        contentPanel = new JPanel();
-        contentPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,10,5,10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        //label
-        handleComponents.addLabelGBL(contentPanel,"Tên nhân viên: ",0,0,gbc);
-        handleComponents.addLabelGBL(contentPanel,"Số điện thoại: ",0,1,gbc);
-        handleComponents.addLabelGBL(contentPanel,"Giới tính: ",0,2,gbc);
-        handleComponents.addLabelGBL(contentPanel,"Chức vụ: ",0,3,gbc);
-
-        //textfield
-        tennvTextfield = handleComponents.addTextFieldGBL(contentPanel,25,1,0,gbc);
-        sodienthoaiTextfield = handleComponents.addTextFieldGBL(contentPanel,25,1,1,gbc);
-
-        //combobox
-        String[] gioitinh = {"--","Nam", "Nữ"};
-        gioitinhCombobox = handleComponents.addComboBoxGBL(contentPanel,gioitinh,1,2,gbc);
-
-        String[] chucvu = {"--","Quản lí","Thu ngân","Kiểm vé","Lái tàu"};
-        chucvuCombobox = handleComponents.addComboBoxGBL(contentPanel,chucvu,1,3,gbc);
-
-        //button
-        ok = handleComponents.addButtonGBL(contentPanel,"Thêm",0,4,gbc);
-        cancel = handleComponents.addButtonGBL(contentPanel,"Thoát",1,4,gbc);
-        
-        //them action cho nut ok va cancel
-        ok.addActionListener(action);
-        cancel.addActionListener(action);
-
-        gbc.gridy = 5;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        contentPanel.add(new JPanel(),gbc);
-        this.add(contentPanel);
-    }
-
-    //ham set title cho tung kieu them,sua,xem chi tiet
-    private String setTitleType() {
-        if(type == null) {
-            return null;
-        }
-        switch (type) {
-            case "create":
-                return "THÊM NHÂN VIÊN";
-            case "update":
-                return "SỬA THÔNG TIN NHÂN VIÊN";
-            case "detail":
-                return "THÔNG TIN CHI TIẾT NHÂN VIÊN";
-            default: return "ERROR";
-        }
-    }
-
-    //check xem nut them,sua,xoa,delete dc nhan
-    public void checkButtonClicked() {
-        switch (type) {
-            case "create":
-                editEnabled(true);
-                break;
-            case "update":
-                editEnabled(true);
-                if(nv != null) {
-                    nv.reloadData();
+            private void init() {
+                contentPanel = new JPanel();
+                bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                if("create".equals(this.getNhanVienType())) {
+                    contentPanel.setLayout(new GridLayout(4,1,2,2));
+                    this.add(createDialog(contentPanel),BorderLayout.CENTER);
+                } else if("update".equals(this.getNhanVienType()) || "detail".equals(this.getNhanVienType())) {
+                    contentPanel.setLayout(new GridLayout(4,1,2,2));
+                    this.add(updateANDdetailDialog(contentPanel),BorderLayout.CENTER);
                 }
-                break;
-            case "detail":
-                editEnabled(false);
-                if(nv != null) {
-                    nv.reloadData();
+                ok = setNameBtn(getNhanVienType());
+                cancel = ButtonEdit.createButton("Thoát",80,30);
+                bottomPanel.add(ok);
+                bottomPanel.add(cancel);
+                this.add(bottomPanel,BorderLayout.SOUTH);
+
+                // thêm sự kiện cho nút bấm
+                ok.addActionListener(action);
+                cancel.addActionListener(action);
+            }
+
+            public JButton setNameBtn(String name) {
+                String buttonName;
+                switch (name) {
+                    case "create":
+                        buttonName = "Thêm";
+                        break;
+                    case "update":
+                        buttonName = "Cập nhật";
+                        break;
+                    default:
+                        buttonName = "";
+                        break;
                 }
-                break;
-            case "delete":
-//                this.dispose();
-                break;
-            default:
-                System.err.println("button duoc nhan la " + type);
+                return ButtonEdit.createButton(buttonName,80,30);
+            }
 
+            public JPanel createDialog(JPanel contentPanel) {
+                tennvTextfield = new InputField("tên nhân viên",200,10);
+                sodienthoaiTextfield = new InputField("số điện thoại ",200,10);
+                gioitinhTextfield = new InputField("giới tính ",200,10);
+                chucvuTextfield = new InputField("chức vụ",200,10);
+                contentPanel.add(tennvTextfield);
+                contentPanel.add(sodienthoaiTextfield);
+                contentPanel.add(gioitinhTextfield);
+                contentPanel.add(chucvuTextfield);
+                return contentPanel;
+            }
+
+            public JPanel updateANDdetailDialog(JPanel contentPanel) {
+                tennvTextfield = new InputField("tên nhân viên",200,30);
+                sodienthoaiTextfield = new InputField("số điện thoại ",200,30);
+                gioitinhTextfield = new InputField("giới tính ",200,30);
+                chucvuTextfield = new InputField("chức vụ",200,30);
+                contentPanel.add(tennvTextfield);
+                contentPanel.add(sodienthoaiTextfield);
+                contentPanel.add(gioitinhTextfield);
+                contentPanel.add(chucvuTextfield);
+                return contentPanel;
+            }
+
+            //ham set title cho tung kieu them,sua,xem chi tiet
+            private String setTitleType() {
+                if(nhanVienType == null) {
+                    return null;
+                }
+                switch (nhanVienType) {
+                    case "create":
+                        return "THÊM NHÂN VIÊN";
+                    case "update":
+                        return "SỬA THÔNG TIN NHÂN VIÊN";
+                    case "detail":
+                        return "THÔNG TIN CHI TIẾT NHÂN VIÊN";
+                    default: return "ERROR";
+                }
+            }
+
+            //check xem nut them,sua,xoa,delete dc nhan
+            public void checkButtonClicked() {
+                switch (nhanVienType) {
+                    case "update":
+                        editEnabled(true);
+                        break;
+                    case "detail":
+                        editEnabled(false);
+                        break;
+                    default:
+                        System.err.println("button duoc nhan la " + nhanVienType);
+
+                }
+            }
+
+            //ham cho phep chinh sua
+            public void editEnabled(boolean enabled) {
+                NhanVienModel nhanvienduocchon = nv.getSelectedNhanvien();
+                if(nhanvienduocchon != null) {
+                    this.getTennvTextfield().getTxtInput().setText(nhanvienduocchon.getTennv());
+                    this.getSodienthoaiTextfield().getTxtInput().setText(nhanvienduocchon.getSdtnv());
+                    this.getGioitinhTextfield().getTxtInput().setText(nhanvienduocchon.getGioitinh());
+                    this.getChucvuTextfield().getTxtInput().setText(nhanvienduocchon.getChucvu());
+                }
+                if(tennvTextfield != null) tennvTextfield.getTxtInput().setEnabled(enabled);
+                if(sodienthoaiTextfield != null) sodienthoaiTextfield.getTxtInput().setEnabled(enabled);
+                if(gioitinhTextfield != null) gioitinhTextfield.getTxtInput().setEnabled(enabled);
+                if(chucvuTextfield != null) chucvuTextfield.getTxtInput().setEnabled(enabled);
+            }
+
+        public InputField getManvTextfield() {
+            return manvTextfield;
+        }
+
+        public void setManvTextfield(InputField manvTextfield) {
+            this.manvTextfield = manvTextfield;
+        }
+
+        public InputField getTennvTextfield() {
+            return tennvTextfield;
+        }
+
+        public void setTennvTextfield(InputField tennvTextfield) {
+            this.tennvTextfield = tennvTextfield;
+        }
+
+        public InputField getSodienthoaiTextfield() {
+            return sodienthoaiTextfield;
+        }
+
+        public void setSodienthoaiTextfield(InputField sodienthoaiTextfield) {
+            this.sodienthoaiTextfield = sodienthoaiTextfield;
+        }
+
+        public InputField getGioitinhTextfield() {
+            return gioitinhTextfield;
+        }
+
+        public void setGioitinhTextfield(InputField gioitinhTextfield) {
+            this.gioitinhTextfield = gioitinhTextfield;
+        }
+
+        public InputField getChucvuTextfield() {
+            return chucvuTextfield;
+        }
+
+        public void setChucvuTextfield(InputField chucvuTextfield) {
+            this.chucvuTextfield = chucvuTextfield;
+        }
+
+        public JButton getOk() {
+            return ok;
+        }
+
+        public void setOk(JButton ok) {
+            this.ok = ok;
+        }
+
+        public JButton getCancel() {
+            return cancel;
+        }
+
+        public void setCancel(JButton cancel) {
+            this.cancel = cancel;
+        }
+
+        public String getNhanVienType() {
+            return nhanVienType;
+        }
+
+        public void setNhanVienType(String nhanVienType) {
+            this.nhanVienType = nhanVienType;
+        }
+
+        public JPanel getContentPanel() {
+            return contentPanel;
+        }
+
+        public void setContentPanel(JPanel contentPanel) {
+            this.contentPanel = contentPanel;
+        }
+
+        public JPanel getBottomPanel() {
+            return bottomPanel;
+        }
+
+        public void setBottomPanel(JPanel bottomPanel) {
+            this.bottomPanel = bottomPanel;
+        }
+
+        public NhanVien getNv() {
+            return nv;
+        }
+
+        public void setNv(NhanVien nv) {
+            this.nv = nv;
+        }
+
+        public NhanVienModel getNvm() {
+            return nvm;
+        }
+
+        public void setNvm(NhanVienModel nvm) {
+            this.nvm = nvm;
+        }
+
+        public NhanVienController getAction() {
+            return action;
+        }
+
+        public void setAction(NhanVienController action) {
+            this.action = action;
         }
     }
-
-    //ham cho phep chinh sua
-    public void editEnabled(boolean enabled) {
-        if(nvm != null) {
-            this.getTennvTextfield().setText(nvm.getTennv());
-            this.getSodienthoaiTextfield().setText(nvm.getSdtnv());
-            this.getGioitinhCombobox().setSelectedItem(nvm.getGioitinh());
-            this.getChucvuCombobox().setSelectedItem(nvm.getChucvu());
-        } else {
-            System.out.println("errors");
-        }
-        tennvTextfield.setEnabled(enabled);
-        sodienthoaiTextfield.setEnabled(enabled);
-        gioitinhCombobox.setEnabled(enabled);
-        chucvuCombobox.setEnabled(enabled);
-    }
-
-    //getter setter
-    public JLabel getTennvLabel() {
-        return tennvLabel;
-    }
-
-    public void setTennvLabel(JLabel tennvLabel) {
-        this.tennvLabel = tennvLabel;
-    }
-
-    public JLabel getSodienthoaiLabel() {
-        return sodienthoaiLabel;
-    }
-
-    public void setSodienthoaiLabel(JLabel sodienthoaiLabel) {
-        this.sodienthoaiLabel = sodienthoaiLabel;
-    }
-
-    public JLabel getGioitinhLabel() {
-        return gioitinhLabel;
-    }
-
-    public void setGioitinhLabel(JLabel gioitinhLabel) {
-        this.gioitinhLabel = gioitinhLabel;
-    }
-
-    public JLabel getChucvuLabel() {
-        return chucvuLabel;
-    }
-
-    public void setChucvuLabel(JLabel chucvuLabel) {
-        this.chucvuLabel = chucvuLabel;
-    }
-
-    public JComboBox<String> getGioitinhCombobox() {
-        return gioitinhCombobox;
-    }
-
-    public void setGioitinhCombobox(JComboBox<String> gioitinhCombobox) {
-        this.gioitinhCombobox = gioitinhCombobox;
-    }
-
-    public JComboBox<String> getChucvuCombobox() {
-        return chucvuCombobox;
-    }
-
-    public void setChucvuCombobox(JComboBox<String> chucvuCombobox) {
-        this.chucvuCombobox = chucvuCombobox;
-    }
-
-    public JTextField getTennvTextfield() {
-        return tennvTextfield;
-    }
-
-    public void setTennvTextfield(JTextField tennvTextfield) {
-        this.tennvTextfield = tennvTextfield;
-    }
-
-    public JTextField getSodienthoaiTextfield() {
-        return sodienthoaiTextfield;
-    }
-
-    public void setSodienthoaiTextfield(JTextField sodienthoaiTextfield) {
-        this.sodienthoaiTextfield = sodienthoaiTextfield;
-    }
-
-    public JButton getOk() {
-        return ok;
-    }
-
-    public void setOk(JButton ok) {
-        this.ok = ok;
-    }
-
-    public JButton getCancel() {
-        return cancel;
-    }
-
-    public void setCancel(JButton cancel) {
-        this.cancel = cancel;
-    }
-
-    public JPanel getContentPanel() {
-        return contentPanel;
-    }
-
-    public void setContentPanel(JPanel contentPanel) {
-        this.contentPanel = contentPanel;
-    }
-
-}

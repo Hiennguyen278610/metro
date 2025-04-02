@@ -419,7 +419,7 @@ VALUES (
         '2025-01-30 10:20:00',
         'Đang khởi hành'
     );
---Lich bao tri
+# lich bao tri
 CREATE TABLE lichbaotri (
     mabaotri INT PRIMARY KEY AUTO_INCREMENT,
     matau INT NOT NULL,
@@ -429,7 +429,7 @@ CREATE TABLE lichbaotri (
 );
 ALTER TABLE lichbaotri
 MODIFY COLUMN ngaybaotri DATE;
-drop table lichbaotri
+# drop table lichbaotri
 INSERT INTO lichbaotri (
         mabaotri,
         matau,

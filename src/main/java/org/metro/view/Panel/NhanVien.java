@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import org.metro.DAO.NhanVienDAO;
 import org.metro.controller.NhanVienController;
 import org.metro.model.NhanVienModel;
+import org.metro.service.NhanVienService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.ToolBar;
@@ -30,13 +31,13 @@ public class NhanVien extends JPanel {
     private IntegratedSearch searchfunc;
     private List<NhanVienModel> listNhanVien;
     private Timer timeSearch;
-    private NhanVienDialog nvdl;
-    private NhanVienController action = new NhanVienController(this);
+    private NhanVienController action = new NhanVienController(this,null);
+    private NhanVienService nvs;
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
         timeSearch = new Timer();
-        this.nvdl = nvdl;
+        nvs = new NhanVienService(this);
         reloadData(); // cap nhap table moi khi run 
     }
 
@@ -97,7 +98,7 @@ public class NhanVien extends JPanel {
         searchfunc.getCbxChoose().addItemListener(action);
 
         for(String tb : mainfunc.getBtn().keySet()) {
-            mainfunc.getBtn().get(tb).addActionListener(action);
+           mainfunc.getBtn().get(tb).addActionListener(action);
         }
         this.add(contentDataPanel, BorderLayout.CENTER);
     }
@@ -124,8 +125,14 @@ public class NhanVien extends JPanel {
     //tim kiem theo field nhap
     public void searchByKeyWord() {
         String key = (String) searchfunc.getCbxChoose().getSelectedItem();
-        String word = (String) searchfunc.getTxtSearchForm().getText(); 
-        
+        String word = searchfunc.getTxtSearchForm().getText();
+        System.out.println("tim kiem theo tu khoa: " + key + "type: " + word);
+        if(word != null || !(word.trim().isEmpty())) {
+            List<NhanVienModel> lst = NhanVienService.searchByKeyWord(key,word);
+            reloadList(lst);
+        } else {
+            reloadData();
+        }
     }
     
     //load thoi gian tim kiem moi 0.2s
@@ -136,7 +143,8 @@ public class NhanVien extends JPanel {
 
             @Override
             public void run() {
-                
+                System.out.println("Tìm kiếm với từ khóa...");
+                searchByKeyWord();
             }
             
         }, 200);
@@ -144,7 +152,6 @@ public class NhanVien extends JPanel {
 
     public NhanVienModel getSelectedNhanvien() {
         int row = nhanVienTabel.getSelectedRow();
-        System.out.println(row);
         if(row == - 1) return null;
         int manv = (int) nhanVienTabel.getValueAt(row, 0);
         String tennv = (String) nhanVienTabel.getValueAt(row, 1);
