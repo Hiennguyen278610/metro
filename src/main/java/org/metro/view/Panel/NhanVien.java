@@ -32,12 +32,11 @@ public class NhanVien extends JPanel {
     private List<NhanVienModel> listNhanVien;
     private Timer timeSearch;
     private NhanVienController action = new NhanVienController(this,null);
-    private NhanVienService nvs;
+    private NhanVienService nvs = new NhanVienService(this);
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
         timeSearch = new Timer();
-        nvs = new NhanVienService(this);
         reloadData(); // cap nhap table moi khi run 
     }
 
@@ -96,6 +95,8 @@ public class NhanVien extends JPanel {
 
         //them acction
         searchfunc.getCbxChoose().addItemListener(action);
+        searchfunc.getTxtSearchForm().addKeyListener(action);
+        searchfunc.getBtnReset().addActionListener(action);
 
         for(String tb : mainfunc.getBtn().keySet()) {
            mainfunc.getBtn().get(tb).addActionListener(action);
@@ -242,5 +243,7 @@ public class NhanVien extends JPanel {
         this.mf = mf;
     }
 
-
+    public NhanVienService getNvs() {
+        return nvs;
+    }
 }

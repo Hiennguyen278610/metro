@@ -73,7 +73,7 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
                     rs.getInt("manv"), rs.getString("tennv"), rs.getString("sodienthoai"), rs.getString("gioitinh"), rs.getString("chucvu")); 
                     listnv.add(nvd);  
             }
-
+            System.out.println("so luong nhan vien: " + listnv.size());
         } catch (Exception e) {
             e.printStackTrace();
         }

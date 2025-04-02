@@ -67,7 +67,7 @@ create table nhanvien (
         gioitinh VARCHAR(50) NOT NULL,
         chucvu VARCHAR(100) NOT NULL
     );
-
+# drop table nhanvien;
 create table tram(
     matram int AUTO_INCREMENT primary key,
     tentram varchar(255) not null,

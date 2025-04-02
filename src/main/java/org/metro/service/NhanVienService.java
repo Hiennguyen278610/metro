@@ -23,6 +23,65 @@ public class NhanVienService {
         listnv = nvd.selectAll();
         return listnv;
     }
+    public static List<NhanVienModel> searchByKeyWord(String key,String word) {
+        getListnv();
+        List<NhanVienModel> lst = new ArrayList<>();
+        word = word.toLowerCase();
+        switch (key) {
+            case "----":
+                for (NhanVienModel nvm : listnv) {
+                    if (String.valueOf(nvm.getManv()).toLowerCase().contains(word) ||
+                            String.valueOf(nvm.getTennv()).toLowerCase().contains(word) ||
+                            nvm.getGioitinh().toLowerCase().contains(word) ||
+                            nvm.getChucvu().toLowerCase().contains(word)) {
+                        lst.add(nvm);
+                    }
+                }
+                break;
+            case "mã":
+                for (NhanVienModel nvm : listnv) {
+                    if (String.valueOf(nvm.getManv()).toLowerCase().contains(word)) {
+                        lst.add(nvm);
+                    }
+                }
+                break;
+            case "tên":
+                for (NhanVienModel nvm : listnv) {
+                    if (String.valueOf(nvm.getTennv()).toLowerCase().contains(word)) {
+                        lst.add(nvm);
+                    }
+                }
+                break;
+            case "số điện thoại":
+                for (NhanVienModel nvm : listnv) {
+                    if (nvm.getSdtnv().toLowerCase().contains(word)) {
+                        lst.add(nvm);
+                    }
+                }
+                break;
+            case "giới tính":
+                for (NhanVienModel nvm : listnv) {
+                    if (nvm.getGioitinh().toLowerCase().contains(word)) {
+                        lst.add(nvm);
+                    }
+                }
+                break;
+            case "chức vụ":
+                for (NhanVienModel nvm : listnv) {
+                    if (nvm.getChucvu().toLowerCase().contains(word)) {
+                        lst.add(nvm);
+                    }
+                }
+            default:
+                System.out.println("Khong the tim kiem");
+                break;
+        }
+        System.out.println("danh sach sau tim kiem: " + lst.size());
+        return lst;
+    }
+    public static NhanVienModel getById(int maKh) {
+        return nvd.selectById(maKh);
+    }
     public static boolean insert(NhanVienModel nvm) {
         if(nvd.insert(nvm) > 0) {
            if(nv != null) nv.reloadData();
@@ -47,54 +106,5 @@ public class NhanVienService {
        return false;
     }
 
-    public static List<NhanVienModel> searchByKeyWord(String key,String word) {
-        getListnv();
-        List<NhanVienModel> lst = new ArrayList<>();
-        String lowWord = word.toLowerCase();
-        for(NhanVienModel nvm : listnv) {
-            boolean check = false;
-            switch (key) {
-                case "manv":
-                    if(String.valueOf(nvm.getManv()).contains(lowWord)) {
-                        check = true;
-                    }
-                    break;
-                case "tennv":
-                    if(String.valueOf(nvm.getTennv()).contains(lowWord)) {
-                        check = true;
-                    }
-                    break;
-                case "sodienthoai":
-                    if(String.valueOf(nvm.getSdtnv()).contains(lowWord)) {
-                        check = true;
-                    }
-                    break;
-                case "gioitinh":
-                    if(String.valueOf(nvm.getGioitinh()).contains(lowWord)) {
-                        check = true;
-                    }
-                    break;
-                case "chucvu":
-                    if(String.valueOf(nvm.getChucvu()).contains(lowWord)) {
-                        check = true;
-                    }
-                    break;
-                case "----":
-                    check = true;
-                    break;
-                default:
-                    break;
-            }
-            if(check) {
-                lst.add(nvm);
-            }
-        }
-        if (lst.isEmpty()) {
-            JOptionPane.showMessageDialog(null,"Không tìm thấy nhân viên","thông báo",JOptionPane.ERROR_MESSAGE);
-        }
-        return lst;
-    }
-    public static NhanVienModel getById(int maKh) {
-        return nvd.selectById(maKh);
-    }
+
 }

@@ -28,16 +28,9 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     //combobox tim kiem theo id,ten,..
     @Override
     public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) { // ktra khi combobox dc tich chon
-            JComboBox<String> cbb = (JComboBox<String>) e.getSource();
-            String str = (String) cbb.getSelectedItem();
-            String selectedCheckbox = (String) nv.getSearchfunc().getCbxChoose().getSelectedItem();
-            if (str.equals(selectedCheckbox)) {
-                System.out.println("Bạn đã chọn: " + nv.getSearchfunc().getCbxChoose().getSelectedItem());
-            }
-            nv.searchByKeyWord();
-        }
-
+        String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
+        String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
+        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
     }
 
     @Override
@@ -135,6 +128,11 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
                } else if("Thoát".equals(namebtn)) nvdl.dispose();
            }
        }
+       if(c.equals(nv.getSearchfunc().getBtnReset())) {
+           nv.getSearchfunc().getTxtSearchForm().setText("");
+           nv.getSearchfunc().getCbxChoose().setSelectedItem(0);
+           nv.reloadData();
+       }
     }
 
     // ham xoa nhan vien
@@ -158,11 +156,9 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(nv != null) {
-            nv.loadTimeSearch();
-        } else {
-            System.out.println("nhan vien bi null roi");
-        }
+        String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
+        String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
+        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
     }
 
 }
