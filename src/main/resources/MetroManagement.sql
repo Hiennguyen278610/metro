@@ -50,14 +50,7 @@ VALUES (1001, '0000', 1, 1),
     (1002, '0000', 2, 1),
     -- Nhân viên
     (1003, '0000', 3, 1);
--- Quản lí
-INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai)
-VALUES (1001, '0000', 1, 1),
-    -- Admin
-    (1002, '0000', 2, 1),
-    -- Nhân viên
-    (1003, '0000', 3, 1);
--- Quản lí
+
 # DROP TABLE taikhoan;
 -- NHANVIEN
 create table nhanvien (
