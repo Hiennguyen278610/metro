@@ -7,6 +7,8 @@ public class NhanVienModel {
     private String gioitinh;
     private String chucvu;
 
+    public NhanVienModel() {}
+
     public NhanVienModel(String tennv,String sdtnv,String gioitinh,String chucvu) {
         this.tennv = tennv;
         this.sdtnv = sdtnv;
@@ -28,7 +30,7 @@ public class NhanVienModel {
 
     public String getTennv() { return tennv; }
 
-    public void setTennv(String tennv) { this.tennv = tennv; }
+    public void setTennv(String tennv) { this.tennv = tennv;}
 
     public String getSdtnv() { return sdtnv; }
 

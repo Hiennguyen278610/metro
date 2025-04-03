@@ -31,14 +31,23 @@ public class VeTauDAO implements IBaseDAO<VeTauModel>{
 
     @Override
     public int insert(VeTauModel t) {
-        String sql = "INSERT INTO vetau (mave, machuyen, makh, giave) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO vetau (machuyen, makh, giave) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, t.getMave());
-            pstmt.setInt(2, t.getMachuyen());
-            pstmt.setInt(3, t.getMakh());
-            pstmt.setDouble(4, t.getGiave());
-            return pstmt.executeUpdate();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, t.getMachuyen());
+            pstmt.setInt(2, t.getMakh());
+            pstmt.setDouble(3, t.getGiave());
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return affectedRows;
+                    }
+                }
+            }
+            return affectedRows;
         } catch (SQLException ex) {
             ex.printStackTrace();
             return 0;

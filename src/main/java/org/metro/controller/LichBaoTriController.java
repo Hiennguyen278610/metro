@@ -2,9 +2,15 @@ package org.metro.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,10 +21,11 @@ import org.metro.view.Component.MainFunction;
 import org.metro.view.Dialog.LichBaoTriDialog;
 import org.metro.view.Panel.LichBaoTri;
 
-public class LichBaoTriController implements MouseListener {
+public class LichBaoTriController implements MouseListener, ItemListener, KeyListener {
     private LichBaoTri lbt;
     private LichBaoTriDialog lbtDialog;
     private JFrame parent;
+    DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public LichBaoTriController(LichBaoTri lbt, LichBaoTriDialog lbtDialog) {
         this.lbt = lbt;
@@ -48,7 +55,7 @@ public class LichBaoTriController implements MouseListener {
             int index = lbt.getMaintenanceTable().getSelectedRow();
             if (index != -1) {
                 lbtDialog = new LichBaoTriDialog(parent, "Cập nhật lịch bảo trì", "update",
-                        lbt.getDsBaoTri().get(index), lbt);
+                        lbt.getLbtService().getDsBaoTri().get(index), lbt);
             } else {
                 JOptionPane.showMessageDialog(parent, "Vui lòng chọn dòng cần cập nhật", "Thông báo",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -57,7 +64,7 @@ public class LichBaoTriController implements MouseListener {
             int index = lbt.getMaintenanceTable().getSelectedRow();
             if (index != -1) {
                 lbtDialog = new LichBaoTriDialog(parent, "Chi tiết lịch bảo trì", "detail",
-                        lbt.getDsBaoTri().get(index), lbt);
+                        lbt.getLbtService().getDsBaoTri().get(index), lbt);
             } else {
                 JOptionPane.showMessageDialog(parent, "Vui lòng chọn dòng xem chi tiết", "Thông báo",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -68,9 +75,9 @@ public class LichBaoTriController implements MouseListener {
                 int input = JOptionPane.showConfirmDialog(parent, "Bạn có chắc muốn xóa?", "Xác nhận xóa",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (input == JOptionPane.OK_OPTION) {
-                    lbt.getLbtService().delete(lbt.getDsBaoTri().get(index).getMabaotri());
-                    lbt.getDsBaoTri().remove(index);
-                    lbt.loadData(lbt.getDsBaoTri());
+                    lbt.getLbtService().delete(lbt.getLbtService().getDsBaoTri().get(index).getMabaotri());
+                    lbt.getLbtService().getDsBaoTri().remove(index);
+                    lbt.loadData(lbt.getLbtService().getDsBaoTri());
                     JOptionPane.showMessageDialog(parent, "Xóa thành công!", "Thông báo",
                             JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -78,31 +85,36 @@ public class LichBaoTriController implements MouseListener {
                 JOptionPane.showMessageDialog(parent, "Vui lòng chọn dòng muốn xóa", "Thông báo",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-        } else if (e.getSource() == lbtDialog.getBtnExit() && lbtDialog != null) {
+        } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnExit()) {
             lbtDialog.dispose();
-        } else if (e.getSource() == lbtDialog.getBtnUpdate() && lbtDialog != null) {
+        } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnUpdate()) {
             LichBaoTriModel updatelbt = lbtDialog.getLichBaoTriModel();
             if (updatelbt != null) {
-                if (lbt.getLbtService().update(lbtDialog.getLichBaoTriModel())) {
+                if (lbt.getLbtService().update(updatelbt)) {
                     JOptionPane.showMessageDialog(lbt, "Cập nhật thành công", "THÔNG BÁO",
                             JOptionPane.INFORMATION_MESSAGE);
                     lbtDialog.dispose();
-                    lbt.loadData(lbt.getDsBaoTri());
+                    lbt.loadData(lbt.getLbtService().getDsBaoTri());
                 }
             }
-        } else if (e.getSource() == lbtDialog.getBtnAdd() && lbtDialog != null && lbtDialog.validation()) {
-            int mabaotri = lbt.getDsBaoTri().size() + 1;
+        } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnAdd() && lbtDialog.validation()) {
+            int mabaotri = lbt.getLbtService().getNextID();
             int matau = Integer.parseInt(lbtDialog.getMatauField());
-            LocalDateTime now = LocalDateTime.now();
+            LocalDate ngaybaotri = LocalDate.parse(lbtDialog.getTimeField(), formatTime);
             String trangthaibaotri = lbtDialog.getStatusField();
-            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, now, trangthaibaotri);
+            LocalDateTime now = LocalDateTime.now();
+            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, ngaybaotri, trangthaibaotri, now);
             if (lbt.getLbtService().insert(newlbt)) {
                 JOptionPane.showMessageDialog(lbt, "Thêm thành công", "THÔNG BÁO",
                         JOptionPane.INFORMATION_MESSAGE);
                 lbtDialog.dispose();
-                lbt.loadData(lbt.getDsBaoTri());
+                lbt.loadData(lbt.getLbtService().getDsBaoTri());
             }
 
+        } else if (e.getSource() == lbt.getSearch().getBtnReset()) {
+            lbt.getSearch().getCbxChoose().setSelectedIndex(0);
+            lbt.getSearch().getTxtSearchForm().setText("");
+            lbt.loadData(lbt.getLbtService().getDsBaoTri());
         }
     }
 
@@ -116,6 +128,32 @@ public class LichBaoTriController implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        String text = lbt.getSearch().getTxtSearchForm().getText();
+        String type = (String) lbt.getSearch().getCbxChoose().getSelectedItem();
+
+        lbt.loadData(lbt.getLbtService().search(text, type));
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        String type = (String) lbt.getSearch().getCbxChoose().getSelectedItem();
+        String text = lbt.getSearch().getTxtSearchForm().getText();
+
+        lbt.loadData(lbt.getLbtService().search(text, type));
     }
 
 }

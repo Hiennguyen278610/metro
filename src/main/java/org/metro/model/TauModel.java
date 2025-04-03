@@ -1,8 +1,10 @@
 package org.metro.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class TauModel {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private String matau; // Mã tàu
     private int soghe; // Số ghế trên tàu
     private String trangthaitau; // Trạng thái (Đang vận hành, bảo trì)
@@ -21,8 +23,8 @@ public class TauModel {
         this.ngaynhap = ngaynhap;
     }
 
-    public LocalDate getNgaynhap() {
-        return ngaynhap;
+    public String getNgaynhap() {
+        return ngaynhap.format(FORMATTER);
     }
 
     public void setNgaynhap(LocalDate ngaynhap) {
