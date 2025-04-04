@@ -69,4 +69,12 @@ public class KhachHangService {
     public static KhachHangModel getById(int maKh) {
         return khachHangDAO.selectById(maKh);
     }
+
+    // Lấy thông tin khách hàng theo số điện thoại
+    public static KhachHangModel getBySdt(String sdt) {
+        loadData();
+        for (KhachHangModel kh : allCustomers)
+            if (kh.getSdt() != null && kh.getSdt().equals(sdt)) return kh;
+        return null;
+    }
 }

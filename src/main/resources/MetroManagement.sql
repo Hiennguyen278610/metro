@@ -54,13 +54,13 @@ VALUES (1001, '0000', 1, 1),
 # DROP TABLE taikhoan;
 -- NHANVIEN
 create table nhanvien (
-    create table nhanvien (
         manv INT AUTO_INCREMENT primary key,
         tennv VARCHAR(100) NOT NULL,
         sodienthoai VARCHAR(50) NOT NULL,
         gioitinh VARCHAR(50) NOT NULL,
         chucvu VARCHAR(100) NOT NULL
     );
+# drop table nhanvien;
 create table tram(
     matram int AUTO_INCREMENT primary key,
     tentram varchar(255) not null,
@@ -83,6 +83,7 @@ create table tuyen(
 INSERT into tuyen(trambatdau, tramketthuc, thoigian, trangthai)
 values (1, 2, 40, "Hoat dong");
 DESC nhanvien;
+
 insert into nhanvien(tennv, sodienthoai, gioitinh, chucvu)
 values (
         'Nguyễn Văn A',
@@ -171,11 +172,36 @@ values (
     ('Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân');
 -- Tạo bảng vé tàu
 create table vetau (
-    mave int NOT NULL,
+    mave int AUTO_INCREMENT NOT NULL PRIMARY KEY,
     machuyen int NOT NULL,
     makh int NOT NULL,
     giave double NOT NULL
 );
+
+-- Backup/test
+INSERT INTO vetau (machuyen, makh,giave)
+VALUES (3, 6,8500.00),
+       (3, 15,21000.00),
+       (3, 9,13750.50),
+       (3, 2,9000.00),
+       (3, 21,23000.00),
+       (3, 1,15000.00),
+       (6, 19,7450.00),
+       (6, 14,18000.00),
+       (6, 8,23900.00),
+       (6, 17,7100.00),
+       (6, 10,20000.00),
+       (6, 6,16000.00),
+       (6, 3,9500.00),
+       (6, 22,22200.00),
+       (6, 7,12350.00),
+       (9, 11, 14000.00),
+       (9, 20,23500.00),
+       (9, 12,10000.00),
+       (9, 13,18800.00),
+       (9, 4,7800.00),
+       (9, 12,10000.00);
+
 CREATE table tau (
     matau int NOT NULL primary key,
     soghe int NOT NULL,
@@ -184,33 +210,11 @@ CREATE table tau (
 );
 # drop table tau;
 INSERT into tau(matau, soghe, trangthaitau, ngaynhap)
-values (1, 100, "Đang hoạt động", "2025-01-01"),
-    (2, 100, "Đang bảo trì", "2025-01-02"),
+values (2, 50, "Đang hoạt động", "2025-01-01"),
+    (1, 20, "Đang bảo trì", "2025-01-02"),
     (3, 100, "Ngừng hoạt động", "2025-01-02"),
-    (4, 100, "Đang hoạt động", "2025-01-03");
--- Backup//test
-INSERT INTO vetau (mave, machuyen, makh, giave)
-VALUES (1, 3, 6, 8500.00),
-    (2, 3, 15, 21000.00),
-    (3, 3, 9, 13750.50),
-    (4, 3, 2, 9000.00),
-    (5, 3, 21, 23000.00),
-    (6, 3, 1, 15000.00),
-    (7, 6, 19, 7450.00),
-    (8, 6, 14, 18000.00),
-    (9, 6, 8, 23900.00),
-    (10, 6, 17, 7100.00),
-    (11, 6, 10, 20000.00),
-    (12, 6, 6, 16000.00),
-    (13, 6, 3, 9500.00),
-    (14, 6, 22, 22200.00),
-    (15, 6, 7, 12350.00),
-    (16, 9, 11, 14000.00),
-    (17, 9, 20, 23500.00),
-    (18, 9, 12, 10000.00),
-    (19, 9, 13, 18800.00),
-    (20, 9, 4, 7800.00),
-    (21, 9, 12, 10000.00);
+    (4, 25, "Đang hoạt động", "2025-01-03");
+
 -- Tạo bảng lịch trình
 create table lichtrinh (
     machuyen int NOT NULL,
@@ -410,6 +414,52 @@ VALUES (
         '2025-01-30 10:00:00',
         '2025-01-30 10:20:00',
         'Đang khởi hành'
+    );
+# lich bao tri
+CREATE TABLE lichbaotri (
+    mabaotri INT PRIMARY KEY AUTO_INCREMENT,
+    matau INT NOT NULL,
+    ngaybaotri DATE NOT NULL,
+    trangthaibaotri VARCHAR(100) NOT NULL,
+    ngaytao DATETIME NOT NULL
+);
+ALTER TABLE lichbaotri
+MODIFY COLUMN ngaybaotri DATE;
+# drop table lichbaotri
+INSERT INTO lichbaotri (
+        mabaotri,
+        matau,
+        ngaybaotri,
+        trangthaibaotri,
+        ngaytao
+    )
+VALUES (
+        1,
+        1,
+        '2025-03-23 10:30:00',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        2,
+        2,
+        '2025-03-22 15:45:00',
+        'Hoàn thành',
+        '2025-03-21 15:45:00'
+    ),
+    (
+        3,
+        3,
+        '2025-03-21 09:00:00',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        4,
+        4,
+        '2025-03-20 14:20:00',
+        'Chờ kiểm tra',
+        '2025-03-22 15:45:00'
     );
 -- test truy vấn lịch trình đã hoàn thành vào tháng 2
 select *

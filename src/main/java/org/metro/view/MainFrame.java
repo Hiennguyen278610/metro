@@ -16,7 +16,6 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import org.metro.model.TaiKhoanModel;
 import org.metro.util.SessionManager;
-import org.metro.view.Component.MainFunction;
 import org.metro.view.Component.MenuTaskbar;
 import org.metro.view.Component.RoundedPanel;
 import org.metro.view.Dialog.UserInfoDialog;
@@ -32,7 +31,6 @@ public class MainFrame extends JFrame {
 
     public JPanel MainContent;
     private MenuTaskbar menuTaskbar;
-    private MainFunction mainFunction;
 
     public MainFrame() {
         setSize(1200, 800);
@@ -130,7 +128,6 @@ public class MainFrame extends JFrame {
         avatarLabel.setBounds(0, 0, 100, 100);
         titlePanel.add(avatarLabel);
 
-
         // Lấy thông tin user từ SessionManager
         TaiKhoanModel currentUser = SessionManager.getCurrentUser();
         String usernameDisplay = currentUser != null ? String.valueOf(currentUser.getManv()) : "Chưa đăng nhập";
@@ -148,7 +145,6 @@ public class MainFrame extends JFrame {
 
         titlePanel.add(TenNguoiDungLabel);
         titlePanel.add(ChucVuLabel);
-
 
         leftPanel.add(titlePanel);
 
@@ -259,13 +255,18 @@ public class MainFrame extends JFrame {
 
     public void resetPanel() {
     }
+
     private String getRoleName(int manhomquyen) {
         // Ví dụ: 1 = Admin, 2 = Nhân viên, 3 = Quản lý
         switch (manhomquyen) {
-            case 1: return "Admin";
-            case 2: return "Nhân viên";
-            case 3: return "Quản lý";
-            default: return "Unknown";
+            case 1:
+                return "Admin";
+            case 2:
+                return "Nhân viên";
+            case 3:
+                return "Quản lý";
+            default:
+                return "Unknown";
         }
     }
 

@@ -2,18 +2,12 @@ package org.metro.view.Component;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
-import mdlaf.components.button.MaterialButtonUI;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.metal.MetalButtonUI;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.ImageObserver;
 import java.net.URL;
-import java.text.AttributedCharacterIterator;
 
 public class IntegratedSearch extends JPanel {
     public JTextField txtSearchForm;
@@ -29,7 +23,7 @@ public class IntegratedSearch extends JPanel {
         this.setBackground(Color.WHITE);
 
         cbxChoose = new JComboBox<>(options);
-        cbxChoose.setPreferredSize(new Dimension(100, 30));
+        cbxChoose.setPreferredSize(new Dimension(150, 30));
 
         txtSearchForm = new JTextField();
         txtSearchForm.setPreferredSize(new Dimension(200, 30));
@@ -46,11 +40,14 @@ public class IntegratedSearch extends JPanel {
         btnReset.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                if(e.getSource() == btnReset) btnReset.setBackground(Color.BLUE);
+                if (e.getSource() == btnReset)
+                    btnReset.setBackground(Color.BLUE);
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
-                if(e.getSource() == btnReset) btnReset.setBackground(Color.CYAN);
+                if (e.getSource() == btnReset)
+                    btnReset.setBackground(Color.CYAN);
             }
         });
         btnReset.setPreferredSize(new Dimension(30, 30));
@@ -58,10 +55,9 @@ public class IntegratedSearch extends JPanel {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(Color.WHITE);
 
-        cbxChoose.setBackground(new Color(250, 250, 250)); 
+        cbxChoose.setBackground(new Color(250, 250, 250));
         txtSearchForm.setBackground(new Color(250, 250, 250));
         btnReset.setBackground(new Color(130, 190, 223));
-
 
         searchPanel.add(cbxChoose);
         searchPanel.add(txtSearchForm);
@@ -96,6 +92,6 @@ public class IntegratedSearch extends JPanel {
         this.btnReset = btnReset;
     }
 
-    //getter va setter
-    
+    // getter va setter
+
 }
