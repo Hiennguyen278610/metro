@@ -29,6 +29,7 @@ public class MainController implements MouseInputListener {
             return;
         }
         if (src == frame.getExitButton()) {
+            // System.exit(0);
             frame.dispose();
             return;
         }
@@ -67,10 +68,21 @@ public class MainController implements MouseInputListener {
         }
     }
 
-    @Override public void mousePressed(MouseEvent e) {}
-    @Override public void mouseReleased(MouseEvent e) {}
-    @Override public void mouseDragged(MouseEvent e) {}
-    @Override public void mouseMoved(MouseEvent e) {}
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
 
     // Hàm đặt màu cho panel được chọn
     private void setSelectedColor(JPanel panel) {

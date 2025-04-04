@@ -6,6 +6,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JComboBox;
+
 import org.metro.view.Panel.TuyenDuong;
 
 public class TuyenDuongController implements ItemListener, MouseListener {
@@ -17,6 +19,14 @@ public class TuyenDuongController implements ItemListener, MouseListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) { // ktra khi combobox dc tich chon
+            JComboBox<String> cbb = (JComboBox<String>) e.getSource();
+            String str = (String) cbb.getSelectedItem();
+            String selectedCheckbox = (String) tuyenDuong.getSearchfunc().getCbxChoose().getSelectedItem();
+            if (str.equals(selectedCheckbox)) {
+                System.out.println("Bạn đã chọn" + tuyenDuong.getSearchfunc().getCbxChoose().getSelectedItem());
+            }
+        }
     }
 
     @Override

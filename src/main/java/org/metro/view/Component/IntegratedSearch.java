@@ -2,18 +2,12 @@ package org.metro.view.Component;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
-import mdlaf.components.button.MaterialButtonUI;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.metal.MetalButtonUI;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.ImageObserver;
 import java.net.URL;
-import java.text.AttributedCharacterIterator;
 
 public class IntegratedSearch extends JPanel {
     public JTextField txtSearchForm;
