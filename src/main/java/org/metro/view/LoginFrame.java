@@ -98,7 +98,7 @@ public class LoginFrame extends JFrame {
         lblUsername.setBounds(60, 180, 200, 30);
         rightContent.add(lblUsername);
 
-        txtUsername = new JTextField("1001");
+        txtUsername = new JTextField("1");
         txtUsername.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         txtUsername.setForeground(Color.GRAY);
         txtUsername.setBounds(60, 210, 310, 40);
