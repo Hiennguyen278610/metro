@@ -6,8 +6,8 @@ import org.metro.controller.LichTrinhController;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 import java.util.List;
 import java.util.Timer;
 import javax.swing.table.DefaultTableModel;
@@ -27,8 +27,8 @@ public class LichTrinh extends JPanel {
 
     public LichTrinh() {
         initComponent();
-//        controller = new LichTrinhController(this);
-//        setupListeners();
+        controller = new LichTrinhController(this);
+        setupListeners();
     }
 
     public void initComponent() {
@@ -69,7 +69,7 @@ public class LichTrinh extends JPanel {
 
         search = new IntegratedSearch(new String[] { "Tất cả", "Mã chuyến", "Mã nhân viên", "Mã tàu", "Mã tuyến", "Hướng đi", "Thời gian khởi hành", "Thời gian đến thực tế", "Trạng thái lịch trình" });
 
-        String[] actions = { "creat", "update", "delete", "detail" };
+        String[] actions = { "create", "update", "delete", "detail" };
         mainFunction = new MainFunction(actions);
 
         functionBar.add(mainFunction);
@@ -112,15 +112,15 @@ public class LichTrinh extends JPanel {
         populateTable(result);
     }
 
-//    public void setupListeners() {
-//        search.getCbxChoose().addItemListener(controller);
-//        search.getTxtSearchForm().addKeyListener(controller);
-//        search.getBtnReset().addActionListener(controller);
-//
-//        for (String key : mainFunction.getBtn().keySet()) {
-//            mainFunction.getBtn().get(key).addActionListener(controller);
-//        }
-//    }
+    public void setupListeners() {
+        search.getCbxChoose().addItemListener(controller);
+        search.getTxtSearchForm().addKeyListener(controller);
+        search.getBtnReset().addActionListener(controller);
+
+        for (String key : mainFunction.getBtn().keySet()) {
+            mainFunction.getBtn().get(key).addActionListener(controller);
+        }
+    }
 
     public LichTrinhModel getSelectedLichTrinh() {
         int selectedRow = lichTrinhTable.getSelectedRow();
