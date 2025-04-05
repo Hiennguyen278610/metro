@@ -13,12 +13,13 @@ public class TramDAO implements IBaseDAO<TramModel> {
 
     @Override
     public int insert(TramModel t) {
-        String query = "INSERT INTO tram(matram, tentram,diachi ) VALUES (?,?,?)";
+        String query = "INSERT INTO tram(tentram,diachi,x,y ) VALUES (?,?,?,?)";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
-            prs.setInt(1, t.getMatram());
-            prs.setString(2, t.getTentram());
-            prs.setString(3, t.getDiachi());
+            prs.setString(1, t.getTentram());
+            prs.setString(2, t.getDiachi());
+            prs.setInt(3, t.getX());
+            prs.setInt(4, t.getY());
             return prs.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,12 +29,15 @@ public class TramDAO implements IBaseDAO<TramModel> {
 
     @Override
     public int update(TramModel t) {
-        String query = "UPDATE tram set tentram = ?, dichi = ? WHERE matram = ?";
+        String query = "UPDATE tram SET tentram = ?, diachi = ?,x = ?, y = ? WHERE matram = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setString(1, t.getTentram());
             prs.setString(2, t.getDiachi());
-            prs.setInt(3, t.getMatram());
+            prs.setInt(3, t.getX());
+            prs.setInt(4, t.getY());
+            prs.setInt(5, t.getMatram());
+            System.out.println(prs.executeUpdate());
             return prs.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,7 +70,9 @@ public class TramDAO implements IBaseDAO<TramModel> {
                 int ma = rs.getInt("matram");
                 String tentram = rs.getString("tentram");
                 String diachi = rs.getString("diachi");
-                dsTram.add(new TramModel(ma, tentram, diachi));
+                int x = rs.getInt("x");
+                int y = rs.getInt("y");
+                dsTram.add(new TramModel(ma, tentram, diachi, x, y));
             }
 
         } catch (Exception e) {

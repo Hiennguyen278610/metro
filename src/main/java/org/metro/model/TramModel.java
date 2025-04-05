@@ -7,6 +7,14 @@ public class TramModel {
     private int x;
     private int y;
 
+    public TramModel(int matram, String tentram, String diachi, int x, int y) {
+        this.matram = matram;
+        this.tentram = tentram;
+        this.diachi = diachi;
+        this.x = x;
+        this.y = y;
+    }
+
     public TramModel(int matram, String tentram, String diachi) {
         this.matram = matram;
         this.tentram = tentram;

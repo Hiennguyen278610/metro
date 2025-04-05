@@ -3,7 +3,11 @@ package org.metro.view.Panel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
+import java.util.List;
+
+import org.metro.controller.TramController;
 import org.metro.model.TramModel;
 import org.metro.service.TramService;
 import org.metro.view.Component.IntegratedSearch;
@@ -17,11 +21,12 @@ public class Tram extends JPanel {
     private DefaultTableModel tableModel;
     private JTable tramTable;
     private TramService tramService = new TramService();
+    private TramController action;
 
     public void initComponent() {
         this.setLayout(new BorderLayout(0, 10));
         this.setBackground(Color.WHITE);
-
+        action = new TramController(this);
         functionPanel = new JPanel();
         functionPanel.setBackground(Color.WHITE);
         functionPanel.setLayout(new BorderLayout(5, 10));
@@ -30,15 +35,15 @@ public class Tram extends JPanel {
         search = new IntegratedSearch(optSearch);
         functionPanel.add(search, BorderLayout.WEST);
 
-        // search.getCbxChoose().addItemListener(action);
-        // search.getTxtSearchForm().addKeyListener(action);
-        // search.getBtnReset().addMouseListener(action);
+        search.getCbxChoose().addItemListener(action);
+        search.getTxtSearchForm().addKeyListener(action);
+        search.getBtnReset().addMouseListener(action);
 
         String[] optMainFunc = { "create", "delete", "update" };
         mainFunction = new MainFunction(optMainFunc);
-        // for (String opt : optMainFunc) {
-        // mainFunction.btn.get(opt).addMouseListener(action);
-        // }
+        for (String opt : optMainFunc) {
+            mainFunction.btn.get(opt).addMouseListener(action);
+        }
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));
         functionBarPanel.setPreferredSize(new Dimension(0, 50));
@@ -65,9 +70,15 @@ public class Tram extends JPanel {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < tramTable.getColumnCount() - 1; i++) {
+        for (int i = 0; i < tramTable.getColumnCount(); i++) {
             tramTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
+        TableColumnModel columnModel = tramTable.getColumnModel();
+
+        // Đặt độ rộng cho từng cột (theo pixel)
+        columnModel.getColumn(0).setPreferredWidth(100); // Cột 1: 100px
+        columnModel.getColumn(1).setPreferredWidth(230); // Cột 2: 200px
+        columnModel.getColumn(2).setPreferredWidth(770); // Cột 3: 150px
 
         contentPanel = new JPanel();
         contentPanel.setLayout(new BorderLayout());
@@ -82,19 +93,20 @@ public class Tram extends JPanel {
 
     public Tram() {
         initComponent();
-        // loadData();
+        loadData(tramService.getDsTram());
     }
 
-    // public void loadData() {
-    // tableModel.setRowCount(0);
-    // for (TramModel tram : dsTram) {
-    // tableModel.addRow(new Object[] {
-    // tram.getMatram(),
-    // tram.getTentram(),
-    // tram.getDiachi(),
-    // });
-    // }
-    // }
+    public void loadData(List<TramModel> dsTram) {
+        tableModel.setRowCount(0);
+        for (TramModel tram : dsTram) {
+            tableModel.addRow(new Object[] {
+                    tram.getMatram(),
+                    tram.getTentram(),
+                    tram.getDiachi(),
+            });
+        }
+    }
+
     public IntegratedSearch getSearch() {
         return search;
     }

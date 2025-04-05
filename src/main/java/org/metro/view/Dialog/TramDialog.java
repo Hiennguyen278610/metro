@@ -22,10 +22,10 @@ public class TramDialog extends JDialog {
         super(parent, title, true);
         this.tram = tram;
         action = new TramController(tram, this);
-        tenField = new InputField("Tên trạm", 300, 50);
-        addressField = new InputField("Địa chỉ", 300, 50);
-        xField = new InputField("Nhập tọa độ x", 300, 50);
-        yField = new InputField("Nhập tọa độ y", 300, 50);
+        tenField = new InputField("Tên trạm", 300, 60);
+        addressField = new InputField("Địa chỉ", 300, 60);
+        xField = new InputField("Nhập tọa độ x", 300, 60);
+        yField = new InputField("Nhập tọa độ y", 300, 60);
         init(type);
     }
 
@@ -34,26 +34,22 @@ public class TramDialog extends JDialog {
         this.tram = tram;
         action = new TramController(tram, this);
         this.tramModel = tramModel;
-        maField = new InputField("Mã trạm", String.valueOf(tramModel.getMatram()), 300, 50);
-        tenField = new InputField("Tên trạm", tramModel.getTentram(), 300, 50);
-        addressField = new InputField("Địa chỉ", tramModel.getDiachi(), 300, 50);
-        xField = new InputField("Nhập tọa độ x", String.valueOf(tramModel.getX()), 300, 50);
-        yField = new InputField("Nhập tọa độ y", String.valueOf(tramModel.getY()), 300, 50);
+        tenField = new InputField("Tên trạm", 300, 60);
+        addressField = new InputField("Địa chỉ", 300, 60);
+        xField = new InputField("Nhập tọa độ x", 300, 60);
+        yField = new InputField("Nhập tọa độ y", 300, 60);
         init(type);
     }
 
     public void init(String type) {
-        this.setSize(400, 300);
+        this.setSize(400, 320);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 0));
 
         contentPanel = new JPanel();
         contentPanel.setPreferredSize(new Dimension(400, 250));
-        contentPanel.setLayout(new GridLayout(5, 1));
+        contentPanel.setLayout(new GridLayout(4, 1));
 
-        if (maField != null) {
-            contentPanel.add(maField);
-        }
         contentPanel.add(tenField);
         contentPanel.add(addressField);
         contentPanel.add(xField);
@@ -62,7 +58,7 @@ public class TramDialog extends JDialog {
         bottomPanel = new JPanel(new FlowLayout());
         bottomPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
         bottomPanel.setBackground(Color.WHITE);
-        bottomPanel.setPreferredSize(new Dimension(400, 50));
+        bottomPanel.setPreferredSize(new Dimension(400, 70));
         bottomPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
 
         Font font = new Font("Segoe UI", Font.BOLD, 16);
@@ -70,17 +66,17 @@ public class TramDialog extends JDialog {
         btnAdd = new JButton("Thêm");
         btnAdd.setFont(font);
         btnAdd.setFocusPainted(false);
-        // btnAdd.addMouseListener(action);
+        btnAdd.addMouseListener(action);
 
         btnUpdate = new JButton("Cập nhật");
         btnUpdate.setFont(font);
         btnUpdate.setFocusPainted(false);
-        // btnUpdate.addMouseListener(action);
+        btnUpdate.addMouseListener(action);
 
         btnExit = new JButton("Thoát");
         btnExit.setFont(font);
         btnExit.setFocusPainted(false);
-        // btnExit.addMouseListener(action);
+        btnExit.addMouseListener(action);
 
         switch (type) {
             case "create":
@@ -88,6 +84,11 @@ public class TramDialog extends JDialog {
                 break;
             case "update":
                 bottomPanel.add(btnUpdate);
+                // setMaField(tramModel.getMatram());
+                setTenField(tramModel.getTentram().trim());
+                setAddressField(tramModel.getDiachi().trim());
+                setxField(tramModel.getX());
+                setyField(tramModel.getY());
             default:
                 break;
         }
@@ -99,10 +100,7 @@ public class TramDialog extends JDialog {
     }
 
     public boolean validation() {
-        if (getMaField().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã trạm không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (getTenField().isEmpty()) {
+        if (getTenField().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên trạm không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
         } else if (getAddressField().isEmpty()) {
@@ -116,6 +114,18 @@ public class TramDialog extends JDialog {
             return false;
         }
         return true;
+    }
+
+    public TramModel getTramModel() {
+        if (validation()) {
+            int matram = tramModel.getMatram();
+            String tentram = getTenField();
+            String diachi = getAddressField();
+            int x = Integer.parseInt(getxField());
+            int y = Integer.parseInt(getyField());
+            return new TramModel(matram, tentram, diachi, x, y);
+        }
+        return null;
     }
 
     public JButton getBtnAdd() {

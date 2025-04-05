@@ -42,13 +42,10 @@ public class TramService {
     public boolean update(TramModel tramModel) {
         if (tramDAO.update(tramModel) > 0) {
             dsTram.set(getIndexByMaTram(tramModel.getMatram()), tramModel);
+            System.out.println("hihihi");
             return true;
         }
         return false;
-    }
-
-    public List<TramModel> getDsTram() {
-        return dsTram;
     }
 
     public List<TramModel> search(String text, String type) {
@@ -102,6 +99,10 @@ public class TramService {
 
     public void setDsTram(List<TramModel> dsTram) {
         this.dsTram = dsTram;
+    }
+
+    public List<TramModel> getDsTram() {
+        return dsTram;
     }
 
     public TramService() {
