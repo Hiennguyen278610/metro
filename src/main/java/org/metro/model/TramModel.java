@@ -4,6 +4,8 @@ public class TramModel {
     private int matram; // Mã trạm
     private String tentram; // Tên trạm
     private String diachi; // Địa chỉ trạm
+    private int x;
+    private int y;
 
     public TramModel(int matram, String tentram, String diachi) {
         this.matram = matram;
@@ -11,15 +13,43 @@ public class TramModel {
         this.diachi = diachi;
     }
 
-    public int getMatram() { return matram; }
+    public int getX() {
+        return x;
+    }
 
-    public String getTentram() { return tentram; }
+    public void setX(int x) {
+        this.x = x;
+    }
 
-    public String getDiachi() { return diachi; }
+    public int getY() {
+        return y;
+    }
 
-    public void setMatram(int matram) { this.matram = matram; }
+    public void setY(int y) {
+        this.y = y;
+    }
 
-    public void setTentram(String tentram) { this.tentram = tentram; }
+    public int getMatram() {
+        return matram;
+    }
 
-    public void setDiachi(String diachi) { this.diachi = diachi; }
+    public String getTentram() {
+        return tentram;
+    }
+
+    public String getDiachi() {
+        return diachi;
+    }
+
+    public void setMatram(int matram) {
+        this.matram = matram;
+    }
+
+    public void setTentram(String tentram) {
+        this.tentram = tentram;
+    }
+
+    public void setDiachi(String diachi) {
+        this.diachi = diachi;
+    }
 }

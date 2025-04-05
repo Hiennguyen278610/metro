@@ -141,7 +141,11 @@ public class LichBaoTriDialog extends JDialog {
             JOptionPane.showMessageDialog(this, "Mã tàu không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
         } else if (!checkMaTau(matauField.getTxtInput().getText())) {
-            JOptionPane.showMessageDialog(this, "Mã tàu không hợp lệ!Hãy kiểm tra và nhập lại", "Cảnh báo",
+            JOptionPane.showMessageDialog(this, "Mã tàu không hợp lệ!Hãy nhập lại", "Cảnh báo",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (timeField.getTxtInput().getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ngày bảo trì không được rỗng", "Cảnh báo",
                     JOptionPane.WARNING_MESSAGE);
             return false;
         } else if (statusField.getTxtInput().getText().isEmpty()) {

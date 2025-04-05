@@ -3,17 +3,13 @@ package org.metro.view.Panel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import org.metro.controller.LichBaoTriController;
 import org.metro.model.LichBaoTriModel;
 import org.metro.service.LichBaoTriService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
-import org.metro.view.Dialog.LichBaoTriDialog;
 import java.util.List;
 import java.awt.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class LichBaoTri extends JPanel {
     private JPanel functionPanel, contentPanel, functionBarPanel;
@@ -23,9 +19,7 @@ public class LichBaoTri extends JPanel {
     private DefaultTableModel tableModel;
     private JTable maintenanceTable;
     private LichBaoTriService lbtService = new LichBaoTriService();
-    // private List<LichBaoTriModel> dsBaoTri = lbtService.getAll();
     private LichBaoTriController action = new LichBaoTriController(this);
-    // private LichBaoTriModel lbtModel;
 
     public LichBaoTri() {
         initComponent();
