@@ -19,9 +19,7 @@ public class LichBaoTri extends JPanel {
     private DefaultTableModel tableModel;
     private JTable maintenanceTable;
     private LichBaoTriService lbtService = new LichBaoTriService();
-    // private List<LichBaoTriModel> dsBaoTri = lbtService.getAll();
     private LichBaoTriController action = new LichBaoTriController(this);
-    // private LichBaoTriModel lbtModel;
 
     public LichBaoTri() {
         initComponent();

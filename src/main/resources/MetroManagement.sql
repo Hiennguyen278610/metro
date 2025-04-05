@@ -12,10 +12,8 @@ DROP TABLE IF EXISTS chitietquyen;
 DROP TABLE IF EXISTS nhomchucnang;
 DROP TABLE IF EXISTS nhomquyen;
 DROP TABLE IF EXISTS khachhang;
-
 CREATE DATABASE IF NOT EXISTS quanlymetro;
 USE quanlymetro;
-
 -- ----------------------------------------------------------------
 -- Bảng KHACHHANG
 CREATE TABLE khachhang (
@@ -25,9 +23,8 @@ CREATE TABLE khachhang (
     solan INT NOT NULL,
     PRIMARY KEY (makh)
 );
-
-INSERT INTO khachhang (tenkh, sdt, solan) VALUES
-    ('Nguyễn Văn Anh', '0387913347', 1),
+INSERT INTO khachhang (tenkh, sdt, solan)
+VALUES ('Nguyễn Văn Anh', '0387913347', 1),
     ('Trần Thị Chỉ', '0912345678', 2),
     ('Lê Hoàng Xem', '0987654321', 3),
     ('Phạm Minh Em', '0971122334', 4),
@@ -47,7 +44,6 @@ INSERT INTO khachhang (tenkh, sdt, solan) VALUES
     ('Đinh Ngọc Cho', '0956677889', 2),
     ('Châu Văn Nói', '0977788990', 3),
     ('Hà Thị Thành', '0988899001', 4);
-
 -- ----------------------------------------------------------------
 -- Bảng NHOMQUYEN
 CREATE TABLE nhomquyen (
@@ -55,14 +51,12 @@ CREATE TABLE nhomquyen (
     tennhomquyen VARCHAR(100) NOT NULL,
     PRIMARY KEY (manhomquyen)
 );
-
-INSERT INTO nhomquyen (tennhomquyen) VALUES
-    ('Quản lí hệ thống'),
+INSERT INTO nhomquyen (tennhomquyen)
+VALUES ('Quản lí hệ thống'),
     ('Nhân viên soát vé'),
     ('Nhân viên thống kê'),
     ('Nhân viên điều hành'),
     ('Kế toán');
-
 -- ----------------------------------------------------------------
 -- Bảng NHOMCHUCNANG
 CREATE TABLE nhomchucnang (
@@ -70,14 +64,12 @@ CREATE TABLE nhomchucnang (
     tenchucnang VARCHAR(100) NOT NULL,
     PRIMARY KEY (machucnang)
 );
-
-INSERT INTO nhomchucnang (tenchucnang) VALUES
-    ('Quản lý khách hàng'),
+INSERT INTO nhomchucnang (tenchucnang)
+VALUES ('Quản lý khách hàng'),
     ('Quản lý nhân viên'),
     ('Quản lý nhóm quyền'),
     ('Quản lý tài khoản'),
     ('Thống kê báo cáo');
-
 -- ----------------------------------------------------------------
 -- Bảng CHITIETQUYEN
 CREATE TABLE chitietquyen (
@@ -88,14 +80,27 @@ CREATE TABLE chitietquyen (
     CONSTRAINT fk_chitietquyen_nhomquyen FOREIGN KEY (manhomquyen) REFERENCES nhomquyen(manhomquyen) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_chitietquyen_nhomchucnang FOREIGN KEY (machucnang) REFERENCES nhomchucnang(machucnang) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-INSERT INTO chitietquyen (manhomquyen, machucnang, hanhdong) VALUES
-    (1, 1, 'create'), (1, 1, 'delete'), (1, 1, 'update'), (1, 1, 'view'),
-    (1, 2, 'create'), (1, 2, 'delete'), (1, 2, 'update'), (1, 2, 'view'),
-    (1, 3, 'create'), (1, 3, 'delete'), (1, 3, 'update'), (1, 3, 'view'),
-    (1, 4, 'create'), (1, 4, 'delete'), (1, 4, 'update'), (1, 4, 'view'),
-    (1, 5, 'create'), (1, 5, 'delete'), (1, 5, 'update'), (1, 5, 'view');
-
+INSERT INTO chitietquyen (manhomquyen, machucnang, hanhdong)
+VALUES (1, 1, 'create'),
+    (1, 1, 'delete'),
+    (1, 1, 'update'),
+    (1, 1, 'view'),
+    (1, 2, 'create'),
+    (1, 2, 'delete'),
+    (1, 2, 'update'),
+    (1, 2, 'view'),
+    (1, 3, 'create'),
+    (1, 3, 'delete'),
+    (1, 3, 'update'),
+    (1, 3, 'view'),
+    (1, 4, 'create'),
+    (1, 4, 'delete'),
+    (1, 4, 'update'),
+    (1, 4, 'view'),
+    (1, 5, 'create'),
+    (1, 5, 'delete'),
+    (1, 5, 'update'),
+    (1, 5, 'view');
 -- ----------------------------------------------------------------
 -- Bảng NHANVIEN
 CREATE TABLE nhanvien (
@@ -106,29 +111,92 @@ CREATE TABLE nhanvien (
     chucvu VARCHAR(100) NOT NULL,
     PRIMARY KEY (manv)
 );
-
-INSERT INTO nhanvien (tennv, sodienthoai, gioitinh, chucvu) VALUES
-    ('Nguyễn Văn A', '0901234567', 'Nam', 'Quản lý tuyến tàu điện'),
+INSERT INTO nhanvien (tennv, sodienthoai, gioitinh, chucvu)
+VALUES (
+        'Nguyễn Văn A',
+        '0901234567',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
     ('Trần Thị B', '0907654321', 'Nữ', 'Thu ngân'),
-    ('Lê Văn C', '0909876543', 'Nam', 'Nhân viên soát vé'),
-    ('Phạm Thị D', '0901112222', 'Nữ', 'Quản lý tuyến tàu điện'),
+    (
+        'Lê Văn C',
+        '0909876543',
+        'Nam',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Phạm Thị D',
+        '0901112222',
+        'Nữ',
+        'Quản lý tuyến tàu điện'
+    ),
     ('Nguyễn Văn E', '0903334444', 'Nam', 'Thu ngân'),
-    ('Trần Thị F', '0905556666', 'Nữ', 'Nhân viên soát vé'),
-    ('Lê Văn G', '0907778888', 'Nam', 'Quản lý tuyến tàu điện'),
+    (
+        'Trần Thị F',
+        '0905556666',
+        'Nữ',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Lê Văn G',
+        '0907778888',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
     ('Phạm Thị H', '0909990000', 'Nữ', 'Thu ngân'),
-    ('Nguyễn Văn I', '0901231231', 'Nam', 'Nhân viên soát vé'),
-    ('Trần Thị J', '0904567890', 'Nữ', 'Quản lý tuyến tàu điện'),
+    (
+        'Nguyễn Văn I',
+        '0901231231',
+        'Nam',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Trần Thị J',
+        '0904567890',
+        'Nữ',
+        'Quản lý tuyến tàu điện'
+    ),
     ('Lê Văn K', '0909012345', 'Nam', 'Thu ngân'),
-    ('Phạm Thị L', '0902345678', 'Nữ', 'Nhân viên soát vé'),
-    ('Nguyễn Văn M', '0903456789', 'Nam', 'Quản lý tuyến tàu điện'),
+    (
+        'Phạm Thị L',
+        '0902345678',
+        'Nữ',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Nguyễn Văn M',
+        '0903456789',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
     ('Trần Thị N', '0904567891', 'Nữ', 'Thu ngân'),
-    ('Lê Văn O', '0905678901', 'Nam', 'Nhân viên soát vé'),
-    ('Phạm Thị P', '0906789012', 'Nữ', 'Quản lý tuyến tàu điện'),
+    (
+        'Lê Văn O',
+        '0905678901',
+        'Nam',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Phạm Thị P',
+        '0906789012',
+        'Nữ',
+        'Quản lý tuyến tàu điện'
+    ),
     ('Nguyễn Văn Q', '0907890123', 'Nam', 'Thu ngân'),
-    ('Trần Thị R', '0908901234', 'Nữ', 'Nhân viên soát vé'),
-    ('Lê Văn S', '0909012345', 'Nam', 'Quản lý tuyến tàu điện'),
+    (
+        'Trần Thị R',
+        '0908901234',
+        'Nữ',
+        'Nhân viên soát vé'
+    ),
+    (
+        'Lê Văn S',
+        '0909012345',
+        'Nam',
+        'Quản lý tuyến tàu điện'
+    ),
     ('Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân');
-
 -- ----------------------------------------------------------------
 -- Bảng TAIKHOAN
 CREATE TABLE taikhoan (
@@ -140,12 +208,10 @@ CREATE TABLE taikhoan (
     CONSTRAINT FK_taikhoan_nhanvien FOREIGN KEY (manv) REFERENCES nhanvien(manv) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT FK_taikhoan_nhomquyen FOREIGN KEY (manhomquyen) REFERENCES nhomquyen(manhomquyen) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-
-INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai) VALUES
-    (1, '0000', 1, 1),
+INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai)
+VALUES (1, '0000', 1, 1),
     (2, '0000', 2, 1),
     (3, '0000', 3, 1);
-
 -- ----------------------------------------------------------------
 -- Bảng TRAM
 CREATE TABLE tram (
@@ -155,9 +221,8 @@ CREATE TABLE tram (
     y INT NOT NULL,
     PRIMARY KEY (matram)
 );
-
-INSERT INTO tram (tentram, x, y) VALUES
-    ('Tram Ben Thanh', 100, 100),
+INSERT INTO tram (tentram, x, y)
+VALUES ('Tram Ben Thanh', 100, 100),
     ('Tram Sai Gon', 300, 100),
     ('Tram Hoa Hung', 500, 100),
     ('Tram Tan Binh', 700, 100),
@@ -167,7 +232,6 @@ INSERT INTO tram (tentram, x, y) VALUES
     ('Tram Thu Duc', 500, 300),
     ('Tram Quan 7', 700, 300),
     ('Tram Nha Be', 900, 300);
-
 -- ----------------------------------------------------------------
 -- Bảng TUYEN
 CREATE TABLE tuyen (
@@ -180,14 +244,12 @@ CREATE TABLE tuyen (
     CONSTRAINT FK_tuyen_trambatdau FOREIGN KEY (trambatdau) REFERENCES tram(matram) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT FK_tuyen_tramketthuc FOREIGN KEY (tramketthuc) REFERENCES tram(matram) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-
-INSERT INTO tuyen (trambatdau, tramketthuc, thoigian, trangthai) VALUES
-    (1, 2, 40, 'Hoat dong'),
+INSERT INTO tuyen (trambatdau, tramketthuc, thoigian, trangthai)
+VALUES (1, 2, 40, 'Hoat dong'),
     (3, 4, 35, 'Hoat dong'),
     (5, 6, 50, 'Hoat dong'),
     (7, 8, 45, 'Hoat dong'),
     (9, 10, 55, 'Hoat dong');
-
 -- ----------------------------------------------------------------
 -- Bảng TAU
 CREATE TABLE tau (
@@ -197,13 +259,11 @@ CREATE TABLE tau (
     ngaynhap DATE NOT NULL,
     PRIMARY KEY (matau)
 );
-
-INSERT INTO tau (soghe, trangthaitau, ngaynhap) VALUES
-    (50, 'Đang hoạt động', '2025-01-01'),
+INSERT INTO tau (soghe, trangthaitau, ngaynhap)
+VALUES (50, 'Đang hoạt động', '2025-01-01'),
     (20, 'Đang bảo trì', '2025-01-02'),
     (100, 'Ngừng hoạt động', '2025-01-02'),
     (25, 'Đang hoạt động', '2025-01-03');
-
 -- ----------------------------------------------------------------
 -- Bảng TUYEN_TRAM
 CREATE TABLE tuyen_tram (
@@ -214,13 +274,17 @@ CREATE TABLE tuyen_tram (
     CONSTRAINT FK_tuyen_tram_matram FOREIGN KEY (matram) REFERENCES tram(matram) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT FK_tuyen_tram_matuyen FOREIGN KEY (matuyen) REFERENCES tuyen(matuyen) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-
-INSERT INTO tuyen_tram (matram, matuyen, thutu) VALUES
-    (1, 1, 1), (2, 1, 2), (3, 1, 3),
-    (4, 2, 1), (5, 2, 2), (6, 2, 3),
-    (7, 3, 1), (8, 3, 2), (9, 3, 3),
+INSERT INTO tuyen_tram (matram, matuyen, thutu)
+VALUES (1, 1, 1),
+    (2, 1, 2),
+    (3, 1, 3),
+    (4, 2, 1),
+    (5, 2, 2),
+    (6, 2, 3),
+    (7, 3, 1),
+    (8, 3, 2),
+    (9, 3, 3),
     (10, 4, 1);
-
 -- ----------------------------------------------------------------
 -- Bảng LICHTRINH
 CREATE TABLE lichtrinh (
@@ -237,19 +301,105 @@ CREATE TABLE lichtrinh (
     CONSTRAINT FK_lichtrinh_tau FOREIGN KEY (matau) REFERENCES tau(matau) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT FK_lichtrinh_tuyen FOREIGN KEY (matuyen) REFERENCES tuyen(matuyen) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-
-INSERT INTO lichtrinh (manv, matau, matuyen, huongdi, thoigiankh, tgdenthucte, trangthailichtrinh) VALUES
-    (2, 1, 1, 1, '2025-04-01 09:00:00', '2025-04-01 09:30:00', 'Chờ khởi hành'),
-    (5, 2, 1, 1, '2025-04-02 10:00:00', '2025-04-02 10:20:00', 'Đang khởi hành'),
-    (4, 3, 1, 1, '2025-04-03 11:00:00', '2025-04-03 11:25:00', 'Hoàn Thành'),
-    (2, 1, 1, 1, '2025-04-04 07:15:00', '2025-04-04 07:45:00', 'Chờ khởi hành'),
-    (7, 2, 1, 1, '2025-04-05 12:00:00', '2025-04-05 12:30:00', 'Đang khởi hành'),
-    (3, 4, 1, 1, '2025-04-06 13:00:00', '2025-04-06 13:25:00', 'Hoàn Thành'),
-    (1, 3, 1, 1, '2025-04-07 14:00:00', '2025-04-07 14:30:00', 'Chờ khởi hành'),
-    (6, 4, 1, 1, '2025-04-08 16:00:00', '2025-04-08 16:20:00', 'Đang khởi hành'),
-    (5, 1, 1, 1, '2025-04-09 06:45:00', '2025-04-09 07:10:00', 'Hoàn Thành'),
-    (4, 3, 1, 0, '2025-05-01 06:00:00', '2025-05-01 06:05:00', 'Đang khởi hành');
-
+INSERT INTO lichtrinh (
+        manv,
+        matau,
+        matuyen,
+        huongdi,
+        thoigiankh,
+        tgdenthucte,
+        trangthailichtrinh
+    )
+VALUES (
+        2,
+        1,
+        1,
+        1,
+        '2025-04-01 09:00:00',
+        '2025-04-01 09:30:00',
+        'Chờ khởi hành'
+    ),
+    (
+        5,
+        2,
+        1,
+        1,
+        '2025-04-02 10:00:00',
+        '2025-04-02 10:20:00',
+        'Đang khởi hành'
+    ),
+    (
+        4,
+        3,
+        1,
+        1,
+        '2025-04-03 11:00:00',
+        '2025-04-03 11:25:00',
+        'Hoàn Thành'
+    ),
+    (
+        2,
+        1,
+        1,
+        1,
+        '2025-04-04 07:15:00',
+        '2025-04-04 07:45:00',
+        'Chờ khởi hành'
+    ),
+    (
+        7,
+        2,
+        1,
+        1,
+        '2025-04-05 12:00:00',
+        '2025-04-05 12:30:00',
+        'Đang khởi hành'
+    ),
+    (
+        3,
+        4,
+        1,
+        1,
+        '2025-04-06 13:00:00',
+        '2025-04-06 13:25:00',
+        'Hoàn Thành'
+    ),
+    (
+        1,
+        3,
+        1,
+        1,
+        '2025-04-07 14:00:00',
+        '2025-04-07 14:30:00',
+        'Chờ khởi hành'
+    ),
+    (
+        6,
+        4,
+        1,
+        1,
+        '2025-04-08 16:00:00',
+        '2025-04-08 16:20:00',
+        'Đang khởi hành'
+    ),
+    (
+        5,
+        1,
+        1,
+        1,
+        '2025-04-09 06:45:00',
+        '2025-04-09 07:10:00',
+        'Hoàn Thành'
+    ),
+    (
+        4,
+        3,
+        1,
+        0,
+        '2025-05-01 06:00:00',
+        '2025-05-01 06:05:00',
+        'Đang khởi hành'
+    );
 -- ----------------------------------------------------------------
 -- Bảng VETAU
 CREATE TABLE vetau (
@@ -261,13 +411,27 @@ CREATE TABLE vetau (
     CONSTRAINT FK_mave_lichtrinh FOREIGN KEY (machuyen) REFERENCES lichtrinh(machuyen) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT FK_mave_khachhang FOREIGN KEY (makh) REFERENCES khachhang(makh) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-
-INSERT INTO vetau (machuyen, makh, giave) VALUES
-    (3, 1, 8500.00), (3, 2, 21000.00), (3, 3, 13750.50), (3, 4, 9000.00), (3, 5, 23000.00), (3, 6, 15000.00),
-    (6, 7, 7450.00), (6, 8, 18000.00), (6, 9, 23900.00), (6, 10, 7100.00), (6, 11, 20000.00), (6, 12, 16000.00),
-    (6, 13, 9500.00), (6, 14, 22200.00), (6, 15, 12350.00),
-    (9, 16, 14000.00), (9, 17, 23500.00), (9, 18, 10000.00), (9, 19, 18800.00), (9, 20, 7800.00);
-
+INSERT INTO vetau (machuyen, makh, giave)
+VALUES (3, 1, 8500.00),
+    (3, 2, 21000.00),
+    (3, 3, 13750.50),
+    (3, 4, 9000.00),
+    (3, 5, 23000.00),
+    (3, 6, 15000.00),
+    (6, 7, 7450.00),
+    (6, 8, 18000.00),
+    (6, 9, 23900.00),
+    (6, 10, 7100.00),
+    (6, 11, 20000.00),
+    (6, 12, 16000.00),
+    (6, 13, 9500.00),
+    (6, 14, 22200.00),
+    (6, 15, 12350.00),
+    (9, 16, 14000.00),
+    (9, 17, 23500.00),
+    (9, 18, 10000.00),
+    (9, 19, 18800.00),
+    (9, 20, 7800.00);
 -- ----------------------------------------------------------------
 -- Bảng LICHBAOTRI
 CREATE TABLE lichbaotri (
@@ -279,9 +443,63 @@ CREATE TABLE lichbaotri (
     PRIMARY KEY (mabaotri),
     CONSTRAINT FK_baotri_matau FOREIGN KEY (matau) REFERENCES tau(matau) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-
-INSERT INTO lichbaotri (matau, ngaybaotri, trangthaibaotri, ngaytao) VALUES
-    (1, '2025-03-23', 'Đang bảo trì', '2025-03-22 15:45:00'),
-    (2, '2025-03-22', 'Hoàn thành', '2025-03-21 15:45:00'),
-    (3, '2025-03-21', 'Đang bảo trì', '2025-03-22 15:45:00'),
-    (4, '2025-03-20', 'Chờ kiểm tra', '2025-03-22 15:45:00');
+INSERT INTO lichbaotri (matau, ngaybaotri, trangthaibaotri, ngaytao)
+VALUES (
+        1,
+        '2025-03-23',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        2,
+        '2025-03-22',
+        'Hoàn thành',
+        '2025-03-21 15:45:00'
+    ),
+    (
+        3,
+        '2025-03-21',
+        'Đang bảo trì',
+        '2025-03-22 15:45:00'
+    ),
+    (
+        4,
+        '2025-03-20',
+        'Chờ kiểm tra',
+        '2025-03-22 15:45:00'
+    );
+--Update bang tram
+ALTER TABLE `tram`
+ADD COLUMN `diachi` VARCHAR(255)
+AFTER `tentram`;
+-- Cập nhật địa chỉ cho các trạm
+UPDATE `tram`
+SET `diachi` = 'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM'
+WHERE `matram` = 1;
+UPDATE `tram`
+SET `diachi` = 'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM'
+WHERE `matram` = 2;
+UPDATE `tram`
+SET `diachi` = 'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM'
+WHERE `matram` = 3;
+UPDATE `tram`
+SET `diachi` = 'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM'
+WHERE `matram` = 4;
+UPDATE `tram`
+SET `diachi` = 'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM'
+WHERE `matram` = 5;
+UPDATE `tram`
+SET `diachi` = 'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM'
+WHERE `matram` = 6;
+UPDATE `tram`
+SET `diachi` = 'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM'
+WHERE `matram` = 7;
+UPDATE `tram`
+SET `diachi` = 'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM'
+WHERE `matram` = 8;
+UPDATE `tram`
+SET `diachi` = 'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM'
+WHERE `matram` = 9;
+UPDATE `tram`
+SET `diachi` = 'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM'
+WHERE `matram` = 10;
