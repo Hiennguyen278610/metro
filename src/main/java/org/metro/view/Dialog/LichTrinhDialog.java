@@ -2,19 +2,33 @@ package org.metro.view.Dialog;
 
 import org.metro.controller.LichTrinhController;
 import org.metro.model.LichTrinhModel;
+import org.metro.model.NhanVienModel;
+import org.metro.service.NhanVienService;
 import org.metro.view.Component.handleComponents;
 import org.metro.view.Panel.LichTrinh;
 
+import com.toedter.calendar.JDateChooser;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class LichTrinhDialog extends JDialog {
-    private JTextField machuyenTextField, manvTextField, matauTextField, matuyenTextField;
+    private JTextField machuyenTextField, matauTextField, matuyenTextField;
+    private JComboBox<NhanVienModel> manvComboBox;
+    private DefaultComboBoxModel<NhanVienModel> manvComboBoxModel;
     private JComboBox<String> huongdiComboBox;
-    private JTextField tgkhoihanhTextField, tgdenthucteTextField;
+    private JDateChooser tgkhJDateChooser, tgttJDateChooser;
+    private JComboBox<String> tgkhTimeComboBox, tgttTimeComboBox; // Thay thế JSpinner bằng JComboBox
     private JComboBox<String> trangthaiComboBox;
     private JButton ok, cancel;
     private String type;
@@ -24,6 +38,28 @@ public class LichTrinhDialog extends JDialog {
     private LichTrinhController controller;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    // Option thời gian fix cứng như zalo :))))
+    private String[] timeOptions = {
+            "05:00", "05:15", "05:30", "05:45",
+            "06:00", "06:15", "06:30", "06:45",
+            "07:00", "07:15", "07:30", "07:45",
+            "08:00", "08:15", "08:30", "08:45",
+            "09:00", "09:15", "09:30", "09:45",
+            "10:00", "10:15", "10:30", "10:45",
+            "11:00", "11:15", "11:30", "11:45",
+            "12:00", "12:15", "12:30", "12:45",
+            "13:00", "13:15", "13:30", "13:45",
+            "14:00", "14:15", "14:30", "14:45",
+            "15:00", "15:15", "15:30", "15:45",
+            "16:00", "16:15", "16:30", "16:45",
+            "17:00", "17:15", "17:30", "17:45",
+            "18:00", "18:15", "18:30", "18:45",
+            "19:00", "19:15", "19:30", "19:45",
+            "20:00", "20:15", "20:30", "20:45",
+            "21:00", "21:15", "21:30", "21:45",
+            "22:00", "22:15", "22:30", "22:45"
+    };
+
     public LichTrinhDialog(Frame parent, String type, LichTrinh lichTrinh, LichTrinhModel lichTrinhModel) {
         super(parent, true);
         this.lichTrinh = lichTrinh;
@@ -31,7 +67,7 @@ public class LichTrinhDialog extends JDialog {
         this.lichTrinhModel = lichTrinhModel;
         this.controller = new LichTrinhController(lichTrinh, this);
         this.setTitle(setTitleType());
-        this.setSize(600, 500);
+        this.setSize(650, 500);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.init();
@@ -49,63 +85,98 @@ public class LichTrinhDialog extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 20, 5, 20);
 
-        // Labels
-        handleComponents.addLabelGBL(contentPanel, "Mã chuyến:", 0, 0, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Mã nhân viên:", 0, 1, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Mã tàu:", 0, 2, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Mã tuyến:", 0, 3, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Hướng đi:", 0, 4, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Thời gian khởi hành (yyyy-MM-dd HH:mm:ss):", 0, 5, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Thời gian đến thực tế (yyyy-MM-dd HH:mm:ss):", 0, 6, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Trạng thái lịch trình:", 0, 7, gbc);
+        // Chỉ hiển thị Mã chuyến trong trường hợp update hoặc detail
+        if (!"create".equals(type)) {
+            handleComponents.addLabelGBL(contentPanel, "Mã chuyến:", 0, 0, gbc);
+            machuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 0, gbc);
+            machuyenTextField.setEnabled(false);
+        }
 
-        // Input fields
-        machuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 0, gbc);
-        manvTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 1, gbc);
-        matauTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 2, gbc);
-        matuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 3, gbc);
+        int startRow = ("create".equals(type)) ? 0 : 1;
+        handleComponents.addLabelGBL(contentPanel, "Nhân viên:", 0, startRow, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Mã tàu:", 0, startRow + 1, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Mã tuyến:", 0, startRow + 2, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Hướng đi:", 0, startRow + 3, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Thời gian khởi hành:", 0, startRow + 4, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Thời gian đến thực tế:", 0, startRow + 5, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Trạng thái lịch trình:", 0, startRow + 6, gbc);
+        manvComboBoxModel = new DefaultComboBoxModel<>();
+        manvComboBox = new JComboBox<>(manvComboBoxModel);
+        loadNhanVienData();
+        gbc.gridx = 1;
+        gbc.gridy = startRow;
+        contentPanel.add(manvComboBox, gbc);
+
+        matauTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, startRow + 1, gbc);
+        matuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, startRow + 2, gbc);
 
         huongdiComboBox = new JComboBox<>(new String[]{"Đi", "Về"});
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = startRow + 3;
         contentPanel.add(huongdiComboBox, gbc);
 
-        tgkhoihanhTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 5, gbc);
-        tgdenthucteTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 6, gbc);
+        // Thời gian khởi hành - DateChooser và ComboBox thời gian
+        JPanel tgkhPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        tgkhJDateChooser = new JDateChooser();
+        tgkhJDateChooser.setDate(new Date());
 
-        trangthaiComboBox = new JComboBox<>(new String[]{"Chưa khởi hành", "Đang chạy", "Đã hoàn thành", "Đã hủy"});
+        tgkhTimeComboBox = new JComboBox<>(timeOptions);
+        tgkhTimeComboBox.setSelectedItem("05:00"); // Mặc định
+
+        tgkhPanel.add(tgkhJDateChooser);
+        tgkhPanel.add(tgkhTimeComboBox);
+
         gbc.gridx = 1;
-        gbc.gridy = 7;
+        gbc.gridy = startRow + 4;
+        contentPanel.add(tgkhPanel, gbc);
+
+        // Thời gian đến thực tế - DateChooser và ComboBox thời gian
+        JPanel tgttPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        tgttJDateChooser = new JDateChooser();
+        tgttJDateChooser.setDate(new Date());
+
+        tgttTimeComboBox = new JComboBox<>(timeOptions);
+        tgttTimeComboBox.setSelectedItem("05:15"); // Mặc định
+
+        tgttPanel.add(tgttJDateChooser);
+        tgttPanel.add(tgttTimeComboBox);
+
+        gbc.gridx = 1;
+        gbc.gridy = startRow + 5;
+        contentPanel.add(tgttPanel, gbc);
+
+        trangthaiComboBox = new JComboBox<>(new String[]{"Chưa khởi hành", "sẵn sàng", "Đang chạy", "Đã hoàn thành", "Đã hủy"});
+        gbc.gridx = 1;
+        gbc.gridy = startRow + 6;
         contentPanel.add(trangthaiComboBox, gbc);
 
         // Buttons
         gbc.gridwidth = 1;
         if ("create".equals(type)) {
-            ok = handleComponents.addButtonGBL(contentPanel, "THÊM", 0, 8, gbc);
-            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 8, gbc);
+            ok = handleComponents.addButtonGBL(contentPanel, "THÊM", 0, startRow + 7, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, startRow + 7, gbc);
         } else if ("update".equals(type)) {
-            ok = handleComponents.addButtonGBL(contentPanel, "CẬP NHẬT", 0, 8, gbc);
-            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 8, gbc);
+            ok = handleComponents.addButtonGBL(contentPanel, "CẬP NHẬT", 0, startRow + 7, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, startRow + 7, gbc);
         } else {
-            ok = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, 8, gbc);
-            cancel = null;
+            cancel = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, startRow + 7, gbc);
         }
 
         // Add action listeners
-        if (ok != null) {
-            ok.addActionListener(controller);
-        }
-        if (cancel != null) {
-            cancel.addActionListener(e -> dispose());
-        }
-
+        if (ok != null) {ok.addActionListener(controller);}
+        if (cancel != null) {cancel.addActionListener(e -> dispose());}
         this.add(contentPanel);
     }
 
+    // Load danh sách nhân viên từ service
+    private void loadNhanVienData() {
+        manvComboBoxModel.removeAllElements();
+        List<NhanVienModel> nhanVienList = NhanVienService.getListnv();
+        for (NhanVienModel nv : nhanVienList) {manvComboBoxModel.addElement(nv);}
+    }
+
     private String setTitleType() {
-        if (type == null) {
-            return "Lịch Trình";
-        }
+        if (type == null) return "Lịch Trình";
         switch (type) {
             case "create":
                 return "THÊM LỊCH TRÌNH";
@@ -124,196 +195,163 @@ public class LichTrinhDialog extends JDialog {
         switch (type) {
             case "create":
                 editEnabled(true);
-                machuyenTextField.setEnabled(false); // Auto-generated ID
                 break;
             case "update":
                 editEnabled(true);
-                machuyenTextField.setEnabled(false); // Can't change ID
-                loadLichTrinhData();
+                if (machuyenTextField != null)
+                    loadLichTrinhData();
                 break;
             case "detail":
                 editEnabled(false);
                 loadLichTrinhData();
                 break;
             default:
-                System.err.println("Button clicked: " + type);
+                System.err.println("Lỗi ròi, kiểm tra checkButtonClicked() đi: " + type);
         }
     }
 
     public void editEnabled(boolean enabled) {
-        if (machuyenTextField != null) machuyenTextField.setEnabled(enabled);
-        if (manvTextField != null) manvTextField.setEnabled(enabled);
+        if (machuyenTextField != null) machuyenTextField.setEnabled(false); // Luôn disable
+        if (manvComboBox != null) manvComboBox.setEnabled(enabled);
         if (matauTextField != null) matauTextField.setEnabled(enabled);
         if (matuyenTextField != null) matuyenTextField.setEnabled(enabled);
         if (huongdiComboBox != null) huongdiComboBox.setEnabled(enabled);
-        if (tgkhoihanhTextField != null) tgkhoihanhTextField.setEnabled(enabled);
-        if (tgdenthucteTextField != null) tgdenthucteTextField.setEnabled(enabled);
+        if (tgkhJDateChooser != null) tgkhJDateChooser.setEnabled(enabled);
+        if (tgkhTimeComboBox != null) tgkhTimeComboBox.setEnabled(enabled);
+        if (tgttJDateChooser != null) tgttJDateChooser.setEnabled(enabled);
+        if (tgttTimeComboBox != null) tgttTimeComboBox.setEnabled(enabled);
         if (trangthaiComboBox != null) trangthaiComboBox.setEnabled(enabled);
     }
 
     private void loadLichTrinhData() {
         LichTrinhModel selected = (lichTrinhModel != null) ? lichTrinhModel : lichTrinh.getSelectedLichTrinh();
         if (selected != null) {
-            machuyenTextField.setText(String.valueOf(selected.getMachuyen()));
-            manvTextField.setText(String.valueOf(selected.getManv()));
+            if (machuyenTextField != null) machuyenTextField.setText(String.valueOf(selected.getMachuyen()));
+            selectNhanVienInCombobox(selected.getManv());
             matauTextField.setText(String.valueOf(selected.getMatau()));
             matuyenTextField.setText(String.valueOf(selected.getMatuyen()));
+            huongdiComboBox.setSelectedIndex(selected.isHuongdi() ? 0 : 1);
 
-            huongdiComboBox.setSelectedIndex(selected.getHuongdi() ? 0 : 1);
+            setDateTime(tgkhJDateChooser, tgkhTimeComboBox, selected.getTgkhoihanh());
+            setDateTime(tgttJDateChooser, tgttTimeComboBox, selected.getTgdenthucte());
 
-            if (selected.getThoigiankhoihanh() != null) {
-                tgkhoihanhTextField.setText(selected.getThoigiankhoihanh().format(formatter));
+            trangthaiComboBox.setSelectedItem(selected.getTrangthailichtrinh());
+        } else JOptionPane.showMessageDialog(this, "Không thể tải dữ liệu lịch trình!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Phương thức hỗ trợ để chọn nhân viên theo mã
+    private void selectNhanVienInCombobox(int manv) {
+        for (int i = 0; i < manvComboBoxModel.getSize(); i++) {
+            NhanVienModel nv = manvComboBoxModel.getElementAt(i);
+            if (nv.getManv() == manv) {
+                manvComboBox.setSelectedIndex(i);
+                break;
             }
-
-            if (selected.getThoigianthucte() != null) {
-                tgdenthucteTextField.setText(selected.getThoigianthucte().format(formatter));
-            }
-
-            String trangthai = selected.getTrangthai();
-            for (int i = 0; i < trangthaiComboBox.getItemCount(); i++) {
-                if (trangthaiComboBox.getItemAt(i).equals(trangthai)) {
-                    trangthaiComboBox.setSelectedIndex(i);
-                    break;
-                }
-            }
-        } else {
-            System.err.println("Không có dữ liệu lịch trình để hiển thị");
         }
+    }
+
+    // Phương thức đặt ngày và giờ cho JDateChooser và JComboBox
+    private void setDateTime(JDateChooser dateChooser, JComboBox<String> timeComboBox, LocalDateTime dateTime) {
+        if (dateTime == null) {
+            dateChooser.setDate(new Date());
+            timeComboBox.setSelectedItem("08:00");
+            return;
+        }
+
+        // Đặt ngày cho JDateChooser
+        Date date = Date.from(dateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        dateChooser.setDate(date);
+
+        // Định dạng giờ:phút và tìm phần tử phù hợp nhất trong combo box
+        String timeStr = String.format("%02d:%02d", dateTime.getHour(), dateTime.getMinute());
+
+        // Tìm thời gian gần nhất trong danh sách
+        boolean found = false;
+        for (String option : timeOptions) {
+            if (option.equals(timeStr)) {
+                timeComboBox.setSelectedItem(option);
+                found = true;
+                break;
+            }
+        }
+
+        // Nếu dell có giờ chính xác, chọn giá trị đầu tiên
+        if (!found) timeComboBox.setSelectedIndex(0);
     }
 
     public LichTrinhModel getLichTrinhFromForm() {
         try {
-            // Validate required fields
-            if (manvTextField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã nhân viên không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (matauTextField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã tàu không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (matuyenTextField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã tuyến không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-            if (tgkhoihanhTextField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Thời gian khởi hành không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
+            String machuyenStr = (machuyenTextField != null) ? machuyenTextField.getText().trim() : "0";
+            int machuyen = "".equals(machuyenStr) ? 0 : Integer.parseInt(machuyenStr);
 
-            // Parse numeric fields
-            int machuyen = 0;
-            if (!"create".equals(type)) {
-                try {
-                    machuyen = Integer.parseInt(machuyenTextField.getText().trim());
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Mã chuyến phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return null;
-                }
-            }
+            NhanVienModel selectedNV = (NhanVienModel) manvComboBox.getSelectedItem();
+            int manv = selectedNV.getManv();
 
-            int manv, matau, matuyen;
-            try {
-                manv = Integer.parseInt(manvTextField.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã nhân viên phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-
-            try {
-                matau = Integer.parseInt(matauTextField.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã tàu phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-
-            try {
-                matuyen = Integer.parseInt(matuyenTextField.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã tuyến phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
-
-            // Parse boolean value
+            int matau = Integer.parseInt(matauTextField.getText().trim());
+            int matuyen = Integer.parseInt(matuyenTextField.getText().trim());
             boolean huongdi = huongdiComboBox.getSelectedIndex() == 0;
 
-            // Parse date-time fields
-            LocalDateTime tgkhoihanh = null;
-            try {
-                tgkhoihanh = LocalDateTime.parse(tgkhoihanhTextField.getText().trim(), formatter);
-            } catch (DateTimeParseException e) {
-                JOptionPane.showMessageDialog(this,
-                        "Định dạng thời gian khởi hành không hợp lệ! Yêu cầu: yyyy-MM-dd HH:mm:ss",
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return null;
-            }
+            LocalDateTime tgkh = getDateTimeFromComponents(tgkhJDateChooser, tgkhTimeComboBox);
+            LocalDateTime tgtt = getDateTimeFromComponents(tgttJDateChooser, tgttTimeComboBox);
+            String trangthai = (String) trangthaiComboBox.getSelectedItem();
 
-            LocalDateTime tgdenthucte = null;
-            if (!tgdenthucteTextField.getText().trim().isEmpty()) {
-                try {
-                    tgdenthucte = LocalDateTime.parse(tgdenthucteTextField.getText().trim(), formatter);
-                } catch (DateTimeParseException e) {
-                    JOptionPane.showMessageDialog(this,
-                            "Định dạng thời gian đến thực tế không hợp lệ! Yêu cầu: yyyy-MM-dd HH:mm:ss",
-                            "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return null;
-                }
-            }
-
-            // Get selected status
-            String trangthailichtrinh = (String) trangthaiComboBox.getSelectedItem();
-
-            // Create and return the model object
-            return new LichTrinhModel(machuyen, manv, matau, matuyen, huongdi, tgkhoihanh, tgdenthucte, trangthailichtrinh);
+            return new LichTrinhModel(machuyen, manv, matau, matuyen, huongdi, tgkh, tgtt, trangthai);
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi nhập liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
 
-    // Getters
-    public JTextField getMachuyenTextField() {
-        return machuyenTextField;
+    // Phương thức để lấy LocalDateTime từ JDateChooser và JComboBox
+    private LocalDateTime getDateTimeFromComponents(JDateChooser dateChooser, JComboBox<String> timeComboBox) {
+        try {
+            Date selectedDate = dateChooser.getDate();
+            if (selectedDate == null) {
+                throw new IllegalArgumentException("Vui lòng chọn ngày");
+            }
+
+            // Lấy ngày
+            LocalDate date = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            // Lấy giờ từ combo box
+            String timeString = (String) timeComboBox.getSelectedItem();
+            String[] timeParts = timeString.split(":");
+            int hour = Integer.parseInt(timeParts[0]);
+            int minute = Integer.parseInt(timeParts[1]);
+
+            // Kết hợp ngày và giờ thành LocalDateTime
+            return LocalDateTime.of(date, LocalTime.of(hour, minute, 0));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Không thể chuyển đổi thời gian", e);
+        }
     }
 
-    public JTextField getManvTextField() {
-        return manvTextField;
-    }
+    // Getters để cho có :)))))
+    public JTextField getMachuyenTextField() {return machuyenTextField;}
 
-    public JTextField getMatauTextField() {
-        return matauTextField;
-    }
+    public JComboBox<NhanVienModel> getManvComboBox() {return manvComboBox;}
 
-    public JTextField getMatuyenTextField() {
-        return matuyenTextField;
-    }
+    public JTextField getMatauTextField() {return matauTextField;}
 
-    public JComboBox<String> getHuongdiComboBox() {
-        return huongdiComboBox;
-    }
+    public JTextField getMatuyenTextField() {return matuyenTextField;}
 
-    public JTextField getTgkhoihanhTextField() {
-        return tgkhoihanhTextField;
-    }
+    public JComboBox<String> getHuongdiComboBox() {return huongdiComboBox;}
 
-    public JTextField getTgdenthucteTextField() {
-        return tgdenthucteTextField;
-    }
+    public JDateChooser getTgkhJDateChooser() {return tgkhJDateChooser;}
 
-    public JComboBox<String> getTrangthaiComboBox() {
-        return trangthaiComboBox;
-    }
+    public JComboBox<String> getTgkhTimeComboBox() {return tgkhTimeComboBox;}
 
-    public JButton getOk() {
-        return ok;
-    }
+    public JDateChooser getTgttJDateChooser() {return tgttJDateChooser;}
 
-    public LichTrinh getLichTrinh() {
-        return lichTrinh;
-    }
+    public JComboBox<String> getTgttTimeComboBox() {return tgttTimeComboBox;}
 
-    public LichTrinhModel getLichTrinhModel() {
-        return lichTrinhModel;
-    }
+    public JComboBox<String> getTrangthaiComboBox() {return trangthaiComboBox;}
+
+    public JButton getOk() {return ok;}
+
+    public LichTrinh getLichTrinh() {return lichTrinh;}
+
+    public LichTrinhModel getLichTrinhModel() {return lichTrinhModel;}
 }

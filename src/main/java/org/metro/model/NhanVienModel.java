@@ -48,4 +48,9 @@ public class NhanVienModel {
     public void setChucvu(String chucvu) {
         this.chucvu = chucvu;
     }
+
+    @Override
+    public String toString() {
+        return this.tennv; // Hiển thị tên nhân viên trong combobox
+    }
 }

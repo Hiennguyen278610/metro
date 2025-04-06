@@ -22,7 +22,7 @@ public class LichTrinhDAO implements IBaseDAO<LichTrinhModel> {
                         rs.getInt("matau"),
                         rs.getInt("matuyen"),
                         rs.getBoolean("huongdi"),
-                        rs.getTimestamp("tgkhoihanh").toLocalDateTime(),
+                        rs.getTimestamp("thoigiankh").toLocalDateTime(),
                         rs.getTimestamp("tgdenthucte").toLocalDateTime(),
                         rs.getString("trangthailichtrinh")
                 );
@@ -36,26 +36,36 @@ public class LichTrinhDAO implements IBaseDAO<LichTrinhModel> {
 
     @Override
     public int insert(LichTrinhModel t) {
-        String sql = "INSERT INTO lichtrinh (manv, matau, matuyen, huongdi, tgkhoihanh, tgdenthucte, trangthailichtrinh) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO lichtrinh (manv, matau, matuyen, huongdi, thoigiankh, tgdenthucte, trangthailichtrinh) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, t.getManv());
             pstmt.setInt(2, t.getMatau());
             pstmt.setInt(3, t.getMatuyen());
             pstmt.setBoolean(4, t.isHuongdi());
-            pstmt.setTimestamp(5, Timestamp.valueOf(t.getTgkhoihanh()));
-            pstmt.setTimestamp(6, Timestamp.valueOf(t.getTgdenthucte()));
+
+            if (t.getTgkhoihanh() != null) {pstmt.setTimestamp(5, Timestamp.valueOf(t.getTgkhoihanh()));
+            } else {pstmt.setNull(5, java.sql.Types.TIMESTAMP);}
+
+            if (t.getTgdenthucte() != null) {pstmt.setTimestamp(6, Timestamp.valueOf(t.getTgdenthucte()));
+            } else {pstmt.setNull(6, java.sql.Types.TIMESTAMP);}
+
             pstmt.setString(7, t.getTrangthailichtrinh());
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
+            System.err.println("SQL Error: " + ex.getMessage());
             ex.printStackTrace();
+            return 0;
+        } catch (Exception e) {
+            System.err.println("General Error: " + e.getMessage());
+            e.printStackTrace();
             return 0;
         }
     }
 
     @Override
     public int update(LichTrinhModel t) {
-        String sql = "UPDATE lichtrinh SET manv = ?, matau = ?, matuyen = ?, huongdi = ?, tgkhoihanh = ?, tgdenthucte = ?, trangthailichtrinh = ? WHERE machuyen = ?";
+        String sql = "UPDATE lichtrinh SET manv = ?, matau = ?, matuyen = ?, huongdi = ?, thoigiankh = ?, tgdenthucte = ?, trangthailichtrinh = ? WHERE machuyen = ?";
         try (Connection conn = DatabaseUtils.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, t.getManv());
@@ -67,10 +77,7 @@ public class LichTrinhDAO implements IBaseDAO<LichTrinhModel> {
             pstmt.setString(7, t.getTrangthailichtrinh());
             pstmt.setInt(8, t.getMachuyen());
             return pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return 0;
-        }
+        } catch (SQLException ex) {ex.printStackTrace();return 0;}
     }
 
     @Override
@@ -80,16 +87,11 @@ public class LichTrinhDAO implements IBaseDAO<LichTrinhModel> {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, machuyen);
             return pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return 0;
-        }
+        } catch (SQLException ex) {ex.printStackTrace();return 0;}
     }
 
     @Override
-    public List<LichTrinhModel> selectAll() {
-        return getAll();
-    }
+    public List<LichTrinhModel> selectAll() {return getAll();}
 
     @Override
     public LichTrinhModel selectById(int machuyen) {
@@ -105,15 +107,13 @@ public class LichTrinhDAO implements IBaseDAO<LichTrinhModel> {
                             rs.getInt("matau"),
                             rs.getInt("matuyen"),
                             rs.getBoolean("huongdi"),
-                            rs.getTimestamp("tgkhoihanh").toLocalDateTime(),
+                            rs.getTimestamp("thoigiankh").toLocalDateTime(),
                             rs.getTimestamp("tgdenthucte").toLocalDateTime(),
                             rs.getString("trangthailichtrinh")
                     );
                 }
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        } catch (SQLException ex) {ex.printStackTrace();}
         return null;
     }
 }

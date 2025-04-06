@@ -8,6 +8,7 @@ import org.metro.view.Component.MainFunction;
 
 import java.awt.*;
 import javax.swing.*;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Timer;
 import javax.swing.table.DefaultTableModel;
@@ -24,6 +25,7 @@ public class LichTrinh extends JPanel {
     List<LichTrinhModel> listLichTrinh;
     Timer searchTimer;
     private LichTrinhController controller;
+    private DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yyyy");
 
     public LichTrinh() {
         initComponent();
@@ -43,7 +45,8 @@ public class LichTrinh extends JPanel {
                 return false;
             }
         };
-        String[] columnNames = { "Mã chuyến", "Mã nhân viên", "Mã tàu", "Mã tuyến", "Hướng đi", "Thời gian khởi hành", "Thời gian đến thực tế", "Trạng thái lịch trình" };
+        // Loại bỏ cột thời gian đến thực tế
+        String[] columnNames = { "Mã chuyến", "Mã nhân viên", "Mã tàu", "Mã tuyến", "Hướng đi", "Thời gian khởi hành", "Trạng thái" };
         dTable.setColumnIdentifiers(columnNames);
         lichTrinhTable.setModel(dTable);
         lichTrinhTable.setFocusable(false);
@@ -67,7 +70,7 @@ public class LichTrinh extends JPanel {
         functionBar.setLayout(new BoxLayout(functionBar, BoxLayout.X_AXIS));
         functionBar.setPreferredSize(new Dimension(0, 50));
 
-        search = new IntegratedSearch(new String[] { "Tất cả", "Mã chuyến", "Mã nhân viên", "Mã tàu", "Mã tuyến", "Hướng đi", "Thời gian khởi hành", "Thời gian đến thực tế", "Trạng thái lịch trình" });
+        search = new IntegratedSearch(new String[] { "Tất cả", "Mã chuyến", "Mã nhân viên", "Mã tàu", "Mã tuyến", "Hướng đi", "Thời gian khởi hành", "Trạng thái lịch trình" });
 
         String[] actions = { "create", "update", "delete", "detail" };
         mainFunction = new MainFunction(actions);
@@ -86,15 +89,17 @@ public class LichTrinh extends JPanel {
     public void populateTable(List<LichTrinhModel> listLichTrinh) {
         dTable.setRowCount(0);
         for (LichTrinhModel lichTrinh : listLichTrinh) {
+            // Định dạng thời gian theo yêu cầu
+            String formattedTime = lichTrinh.getThoigiankhoihanh().format(displayFormatter);
+
             Object[] rowData = {
-                lichTrinh.getMachuyen(),
-                lichTrinh.getManv(),
-                lichTrinh.getMatau(),
-                lichTrinh.getMatuyen(),
-                lichTrinh.getHuongdi(),
-                lichTrinh.getThoigiankhoihanh(),
-                lichTrinh.getThoigianthucte(),
-                lichTrinh.getTrangthai()
+                    lichTrinh.getMachuyen(),
+                    lichTrinh.getManv(),
+                    lichTrinh.getMatau(),
+                    lichTrinh.getMatuyen(),
+                    lichTrinh.getHuongdi() ? "Đi" : "Về", // Hiển thị hướng đi dễ đọc hơn
+                    formattedTime, // Thời gian khởi hành đã định dạng
+                    lichTrinh.getTrangthai()
             };
             dTable.addRow(rowData);
         }
@@ -125,7 +130,8 @@ public class LichTrinh extends JPanel {
     public LichTrinhModel getSelectedLichTrinh() {
         int selectedRow = lichTrinhTable.getSelectedRow();
         if (selectedRow != -1) {
-            return listLichTrinh.get(selectedRow);
+            int modelRow = lichTrinhTable.convertRowIndexToModel(selectedRow);
+            return listLichTrinh.get(modelRow);
         }
         return null;
     }
@@ -142,11 +148,11 @@ public class LichTrinh extends JPanel {
         return search;
     }
 
-    public Timer getSearchTimer () {
+    public Timer getSearchTimer() {
         return searchTimer;
     }
 
-    public void setSearchTimer (Timer searchTimer) {
+    public void setSearchTimer(Timer searchTimer) {
         this.searchTimer = searchTimer;
     }
 }
