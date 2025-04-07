@@ -130,7 +130,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
        }
        if(c.equals(nv.getSearchfunc().getBtnReset())) {
            nv.getSearchfunc().getTxtSearchForm().setText("");
-           nv.getSearchfunc().getCbxChoose().setSelectedItem(0);
+           nv.getSearchfunc().getCbxChoose().setSelectedItem("----");
            nv.reloadData();
        }
     }

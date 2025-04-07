@@ -1,9 +1,8 @@
 show databases;
 use quanlymetro;
 create database quanlymetro;
-# phan quyen
 
-# nhom quyen()
+# nhom quyen
 create table nhomquyen(
     manhomquyen int primary key,
     tennhomquyen varchar(100)
