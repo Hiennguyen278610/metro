@@ -30,13 +30,11 @@ public class NhanVien extends JPanel {
     private MainFunction mainfunc;
     private IntegratedSearch searchfunc;
     private List<NhanVienModel> listNhanVien;
-    private Timer timeSearch;
     private NhanVienController action = new NhanVienController(this,null);
     private NhanVienService nvs = new NhanVienService(this);
     public NhanVien() {
         initComponent();
         listNhanVien = new ArrayList<>();
-        timeSearch = new Timer();
         reloadData(); // cap nhap table moi khi run 
     }
 
@@ -49,14 +47,14 @@ public class NhanVien extends JPanel {
         JPanel headerPanel = new JPanel(new BorderLayout());
         
         searchfunc = new IntegratedSearch(new String[]{"----","mã","tên","số điện thoại","giới tính","chức vụ"});
-        headerPanel.add(searchfunc,BorderLayout.WEST);
+        headerPanel.add(searchfunc,BorderLayout.NORTH);
         
         mainfunc = new MainFunction(new String[]{"create","delete","update","detail"});
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));
         functionBarPanel.setPreferredSize(new Dimension(50,50));
         functionBarPanel.add(mainfunc);
-        headerPanel.add(functionBarPanel,BorderLayout.SOUTH);
+        headerPanel.add(functionBarPanel,BorderLayout.CENTER);
 
         this.add(headerPanel,BorderLayout.NORTH);
 
@@ -79,7 +77,6 @@ public class NhanVien extends JPanel {
         nhanVienTabel = new JTable();
         nhanVienTabel.setRowSelectionAllowed(true); // cho phep chon hang
         nhanVienTabel.setBackground(Color.decode("#ecf0f1"));
-        nhanVienTabel.setShowGrid(true);
         nhanVienTabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
         nhanVienTabel.setForeground(Color.decode("#22a6b3"));
         nhanVienTabel.setRowHeight(40);
@@ -134,21 +131,6 @@ public class NhanVien extends JPanel {
         } else {
             reloadData();
         }
-    }
-    
-    //load thoi gian tim kiem moi 0.2s
-    public void loadTimeSearch() {
-        timeSearch.cancel();
-        timeSearch = new Timer();
-        timeSearch.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                System.out.println("Tìm kiếm với từ khóa...");
-                searchByKeyWord();
-            }
-            
-        }, 200);
     }
 
     public NhanVienModel getSelectedNhanvien() {
@@ -232,13 +214,6 @@ public class NhanVien extends JPanel {
         this.listNhanVien = listNhanVien;
     }
 
-    public Timer getTimeSearch() {
-        return timeSearch;
-    }
-
-    public void setTimeSearch(Timer timeSearch) {
-        this.timeSearch = timeSearch;
-    }
     public void setMf(MainFrame mf) {
         this.mf = mf;
     }

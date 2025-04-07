@@ -30,7 +30,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     public void itemStateChanged(ItemEvent e) {
         String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
         String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
-        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
+        nv.reloadList(NhanVienService.searchByKeyWord(key,word));
     }
 
     @Override
@@ -158,7 +158,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     public void keyReleased(KeyEvent e) {
         String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
         String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
-        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
+        nv.reloadList(NhanVienService.searchByKeyWord(key,word));
     }
 
 }

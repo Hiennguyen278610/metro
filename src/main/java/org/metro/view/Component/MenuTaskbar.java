@@ -2,6 +2,7 @@ package org.metro.view.Component;
 
 import org.metro.view.MainFrame;
 import org.metro.view.Panel.*;
+import org.metro.view.Panel.PhanQuyenPackage.PhanQuyen;
 
 import javax.swing.*;
 import java.awt.*;

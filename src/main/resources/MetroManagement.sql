@@ -1,6 +1,26 @@
 show databases;
 use quanlymetro;
 create database quanlymetro;
+# phan quyen
+
+# nhom quyen()
+create table nhomquyen(
+    manhomquyen int primary key,
+    tennhomquyen varchar(100)
+);
+# chi tiet quyen
+create table chitietquyen(
+    manhomquyen int,
+    machucnang int,
+    hanhdong varchar(100),
+    primary key (manhomquyen,machucnang)
+);
+
+# nhom chuc nang
+create table nhomchucnang(
+    machucnang int primary key,
+    tenchucnang varchar(100)
+);
 create table users (
     username varchar(50),
     password varchar(50),
@@ -44,12 +64,6 @@ CREATE TABLE `taikhoan` (
     `manhomquyen` int(11) NOT NULL,
     `trangthai` int(11) NOT NULL
 );
-INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai)
-VALUES (1001, '0000', 1, 1),
-    -- Admin
-    (1002, '0000', 2, 1),
-    -- Nhân viên
-    (1003, '0000', 3, 1);
 -- Quản lí
 INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai)
 VALUES (1001, '0000', 1, 1),
