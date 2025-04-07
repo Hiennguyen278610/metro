@@ -1,7 +1,5 @@
 package org.metro.view.Component;
 
-import com.formdev.flatlaf.extras.FlatSVGIcon;
-
 import javax.swing.*;
 import java.awt.*;
 

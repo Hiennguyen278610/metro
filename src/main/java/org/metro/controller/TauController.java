@@ -46,7 +46,7 @@ public class TauController implements ActionListener, ItemListener, KeyListener 
                         return;
                 }
                 Collections.sort(tau.getListTau(), comparator);
-                tau.getDanhSachTauPanel().updateData(tau.getListTau());
+                tau.updateData(tau.getListTau());
             }
         }
     }

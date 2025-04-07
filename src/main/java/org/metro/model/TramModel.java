@@ -3,8 +3,17 @@ package org.metro.model;
 public class TramModel {
     private int matram; // Mã trạm
     private String tentram; // Tên trạm
-    private int x; // Tọa độ x
-    private int y; // Tọa độ y
+    private String diachi; // Địa chỉ trạm
+    private int x;
+    private int y;
+
+    public TramModel(int matram, String tentram, String diachi, int x, int y) {
+        this.matram = matram;
+        this.tentram = tentram;
+        this.diachi = diachi;
+        this.x = x;
+        this.y = y;
+    }
 
     public TramModel(String tentram, int x, int y) {
         this.tentram = tentram;
@@ -49,6 +58,14 @@ public class TramModel {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public String getDiachi() {
+        return diachi;
+    }
+
+    public void setDiachi(String diachi) {
+        this.diachi = diachi;
     }
 
 }

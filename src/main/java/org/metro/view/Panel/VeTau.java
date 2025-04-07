@@ -6,12 +6,12 @@ import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.controller.VeTauController;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import javax.swing.*;
 import java.util.List;
 import java.util.Timer;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 public class VeTau extends JPanel {
     Color BackgroundColor = new Color(0, 2, 2);

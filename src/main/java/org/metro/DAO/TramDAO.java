@@ -14,40 +14,98 @@ public class TramDAO implements IBaseDAO<TramModel> {
 
     @Override
     public int insert(TramModel t) {
-        return 0;
+        String query = "INSERT INTO tram(tentram,diachi,x,y ) VALUES (?,?,?,?)";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setString(1, t.getTentram());
+            prs.setString(2, t.getDiachi());
+            prs.setInt(3, t.getX());
+            prs.setInt(4, t.getY());
+            return prs.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public int update(TramModel t) {
-        return 0;
+        String query = "UPDATE tram SET tentram = ?, diachi = ?,x = ?, y = ? WHERE matram = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setString(1, t.getTentram());
+            prs.setString(2, t.getDiachi());
+            prs.setInt(3, t.getX());
+            prs.setInt(4, t.getY());
+            prs.setInt(5, t.getMatram());
+            System.out.println(prs.executeUpdate());
+            return prs.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public int delete(int id) {
-        return 0;
+        String query = "DELETE FROM tram WHERE matram = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setInt(1, id);
+            return prs.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public List<TramModel> selectAll() {
-        List<TramModel> list = new ArrayList<>();
+
         String query = "SELECT * FROM tram";
+        List<TramModel> dsTram = new ArrayList<>();
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement prs = conn.prepareStatement(query);
+                ResultSet rs = prs.executeQuery()) {
             while (rs.next()) {
-                TramModel tram = new TramModel(rs.getInt("matram"), rs.getString("tentram"), rs.getInt("x"),
-                        rs.getInt("y"));
-                list.add(tram);
+                int ma = rs.getInt("matram");
+                String tentram = rs.getString("tentram");
+                String diachi = rs.getString("diachi");
+                int x = rs.getInt("x");
+                int y = rs.getInt("y");
+                dsTram.add(new TramModel(ma, tentram, diachi, x, y));
             }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+        return dsTram;
     }
 
     @Override
     public TramModel selectById(int id) {
         return null;
+    }
+
+    public int getAutoIncrement() {
+        String query = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setString(1, "quanlymetro");
+            prs.setString(2, "tram");
+
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("AUTO_INCREMENT");
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 }
