@@ -1,7 +1,11 @@
 package org.metro.controller;
 
 import org.metro.model.LichTrinhModel;
+import org.metro.model.NhanVienModel;
+import org.metro.model.TauModel;
 import org.metro.service.LichTrinhService;
+import org.metro.service.NhanVienService;
+import org.metro.service.TauService;
 import org.metro.view.Dialog.LichTrinhDialog;
 import org.metro.view.Panel.LichTrinh;
 import org.metro.view.Component.ToolBar;
@@ -9,6 +13,7 @@ import org.metro.view.Component.ToolBar;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,43 +37,19 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
         Object source = e.getSource();
         JComponent c = (JComponent) source;
 
-        // Handle dialog button clicks
         if (dialog != null) {
             String buttonText = e.getActionCommand();
             if (c instanceof JButton) {
                 if (buttonText.equals("THÊM")) {
-                    LichTrinhModel newLichTrinh = dialog.getLichTrinhFromForm();
-                    if (newLichTrinh != null) {
-                        if (LichTrinhService.insert(newLichTrinh)) {
-                            JOptionPane.showMessageDialog(dialog, "THÊM LỊCH TRÌNH THÀNH CÔNG", "THÔNG BÁO",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            dialog.dispose();
-                            if (lichTrinh != null) lichTrinh.loadDataTable();
-                        } else {
-                            JOptionPane.showMessageDialog(dialog, "THÊM LỊCH TRÌNH THẤT BẠI", "THÔNG BÁO",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
+                    processLichTrinhAction("insert", "THÊM LỊCH TRÌNH THÀNH CÔNG", "THÊM LỊCH TRÌNH THẤT BẠI");
                 } else if (buttonText.equals("CẬP NHẬT")) {
-                    LichTrinhModel updatedLichTrinh = dialog.getLichTrinhFromForm();
-                    if (updatedLichTrinh != null) {
-                        if (LichTrinhService.update(updatedLichTrinh)) {
-                            JOptionPane.showMessageDialog(dialog, "CẬP NHẬT LỊCH TRÌNH THÀNH CÔNG", "THÔNG BÁO",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            dialog.dispose();
-                            if (lichTrinh != null) lichTrinh.loadDataTable();
-                        } else {
-                            JOptionPane.showMessageDialog(dialog, "CẬP NHẬT LỊCH TRÌNH THẤT BẠI", "THÔNG BÁO",
-                                    JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
+                    processLichTrinhAction("update", "CẬP NHẬT LỊCH TRÌNH THÀNH CÔNG", "CẬP NHẬT LỊCH TRÌNH THẤT BẠI");
                 } else if (buttonText.equals("HỦY")) {
                     dialog.dispose();
                 }
             }
         }
 
-        // Handle panel buttons
         if (lichTrinh != null) {
             for (String buttonName : lichTrinh.getMainFunction().getBtn().keySet()) {
                 ToolBar tb = lichTrinh.getMainFunction().getBtn().get(buttonName);
@@ -79,11 +60,27 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
             }
         }
 
-        // Handle search reset button
         if (source == lichTrinh.getSearch().getBtnReset()) {
             lichTrinh.getSearch().getTxtSearchForm().setText("");
             lichTrinh.getSearch().getCbxChoose().setSelectedIndex(0);
             lichTrinh.loadDataTable();
+        }
+    }
+
+    private void processLichTrinhAction(String action, String successMessage, String failureMessage) {
+        LichTrinhModel lichTrinhModel = dialog.getLichTrinhFromForm();
+        if (lichTrinhModel != null) {
+            boolean success = false;
+            if ("insert".equals(action)) {success = LichTrinhService.insert(lichTrinhModel);}
+            else if ("update".equals(action)) {success = LichTrinhService.update(lichTrinhModel);}
+
+            if (success) {
+                JOptionPane.showMessageDialog(dialog, successMessage, "THÔNG BÁO", JOptionPane.INFORMATION_MESSAGE);
+                dialog.dispose();
+                if (lichTrinh != null) lichTrinh.loadDataTable();
+            } else {
+                JOptionPane.showMessageDialog(dialog, failureMessage, "THÔNG BÁO", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -93,7 +90,6 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
             return;
         }
 
-        // Create operation
         if ("create".equals(actionName)) {
             Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(lichTrinh);
             dialog = new LichTrinhDialog(parentFrame, "create", lichTrinh, null);
@@ -101,7 +97,6 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
             return;
         }
 
-        // For other operations, we need a selected item
         int selectedRow = lichTrinh.getLichTrinhTable().getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(lichTrinh, "Vui lòng chọn một lịch trình", "Thông báo",
@@ -109,11 +104,9 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
             return;
         }
 
-        // Get the selected item
         lichTrinhModel = lichTrinh.getSelectedLichTrinh();
         if (lichTrinhModel == null) {
-            JOptionPane.showMessageDialog(lichTrinh, "Không tìm thấy thông tin lịch trình", "Lỗi",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(lichTrinh, "Không tìm thấy thông tin lịch trình", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -148,8 +141,49 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
                     JOptionPane.INFORMATION_MESSAGE);
             lichTrinh.loadDataTable();
         } else {
-            JOptionPane.showMessageDialog(lichTrinh, "Xóa lịch trình thất bại", "Thông báo",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(lichTrinh, "Xóa lịch trình thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Phương thức hỗ trợ để chọn nhân viên theo mã
+    public static void selectNhanVienInCombobox(int manv, JComboBox<NhanVienModel> manvComboBox, DefaultComboBoxModel<NhanVienModel> manvComboBoxModel) {
+        for (int i = 0; i < manvComboBoxModel.getSize(); i++) {
+            NhanVienModel nv = manvComboBoxModel.getElementAt(i);
+            if (nv.getManv() == manv) {
+                manvComboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+
+    // Load danh sách nhân viên từ service
+    public static void loadNhanVienData(DefaultComboBoxModel<NhanVienModel> manvComboBoxModel) {
+        manvComboBoxModel.removeAllElements();
+        List<NhanVienModel> nhanVienList = NhanVienService.getListnv();
+        for (NhanVienModel nv : nhanVienList) {manvComboBoxModel.addElement(nv);}
+    }
+
+    // Phương thức hỗ trợ để chọn tàu theo mã
+    public static void selectTauInCombobox(String matauToSelect, JComboBox<TauModel> matauComboBox, DefaultComboBoxModel<TauModel> matauComboBoxModel) {
+        try {
+            int matau = Integer.parseInt(matauToSelect);
+            for (int i = 0; i < matauComboBoxModel.getSize(); i++) {
+                TauModel tau = matauComboBoxModel.getElementAt(i);
+                if (tau.getMatau().equals(String.valueOf(matau))) {
+                    matauComboBox.setSelectedIndex(i);
+                    break;
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid matau format: " + matauToSelect);
+        }
+    }
+
+    public static void loadTauData(DefaultComboBoxModel<TauModel> tauComboBoxModel) {
+        tauComboBoxModel.removeAllElements();
+        List<TauModel> tauList = TauService.getAll();
+        for (TauModel tau : tauList) {
+            tauComboBoxModel.addElement(tau);
         }
     }
 

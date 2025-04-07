@@ -305,25 +305,27 @@ VALUES (1, '0000', 1, 1),
     (2, '0000', 2, 1),
     (3, '0000', 3, 1);
 -- ----------------------------------------------------------------
--- Bảng TRAM
+-- Tạo tram
 CREATE TABLE tram (
     matram INT NOT NULL AUTO_INCREMENT,
     tentram VARCHAR(255) NOT NULL,
     x INT NOT NULL,
     y INT NOT NULL,
+    diachi VARCHAR(255) NOT NULL,
     PRIMARY KEY (matram)
 );
-INSERT INTO tram (tentram, x, y)
-VALUES ('Tram Ben Thanh', 100, 100),
-    ('Tram Sai Gon', 300, 100),
-    ('Tram Hoa Hung', 500, 100),
-    ('Tram Tan Binh', 700, 100),
-    ('Tram Phu Nhuan', 900, 100),
-    ('Tram Go Vap', 100, 300),
-    ('Tram Binh Thanh', 300, 300),
-    ('Tram Thu Duc', 500, 300),
-    ('Tram Quan 7', 700, 300),
-    ('Tram Nha Be', 900, 300);
+INSERT INTO tram (tentram, x, y, diachi)
+VALUES ('Tram Ben Thanh', 100, 100, 'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM'),
+    ('Tram Sai Gon', 100, 200, 'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM'),
+    ('Tram Hoa Hung', 100, 300, 'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM'),
+    ('Tram Tan Binh', 100, 400, 'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM'),
+    ('Tram Phu Nhuan', 200, 400, 'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM'),
+    ('Tram Go Vap', 200, 500, 'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM'),
+    ('Tram Binh Thanh', 200, 600, 'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM'),
+    ('Tram Thu Duc', 200, 700, 'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM'),
+    ('Tram Quan 7', 200, 800, 'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM'),
+    ('Tram Nha Be', 200, 900, 'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM');
+
 -- ----------------------------------------------------------------
 -- Bảng TUYEN
 CREATE TABLE tuyen (

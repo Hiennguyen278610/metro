@@ -54,4 +54,9 @@ public class TauModel {
     public void setTrangthaitau(String trangthaitau) {
         this.trangthaitau = trangthaitau;
     }
+
+    @Override
+    public String toString() {
+        return "Tàu " + matau + ": " + trangthaitau;
+    }
 }
