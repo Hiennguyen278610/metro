@@ -6,8 +6,8 @@ DROP TABLE IF EXISTS tuyen_tram;
 DROP TABLE IF EXISTS tuyen;
 DROP TABLE IF EXISTS tram;
 DROP TABLE IF EXISTS tau;
-DROP TABLE IF EXISTS nhanvien;
 DROP TABLE IF EXISTS taikhoan;
+DROP TABLE IF EXISTS nhanvien;
 DROP TABLE IF EXISTS chitietquyen;
 DROP TABLE IF EXISTS nhomchucnang;
 DROP TABLE IF EXISTS nhomquyen;
@@ -51,12 +51,12 @@ CREATE TABLE nhomquyen (
     tennhomquyen VARCHAR(100) NOT NULL,
     PRIMARY KEY (manhomquyen)
 );
-INSERT INTO nhomquyen (tennhomquyen)
-VALUES ('Quản lí hệ thống'),
-    ('Nhân viên soát vé'),
-    ('Nhân viên thống kê'),
-    ('Nhân viên điều hành'),
-    ('Kế toán');
+INSERT INTO nhomquyen (manhomquyen,tennhomquyen)
+VALUES (1,'Admin'),
+       (2,'Ticket sales staff'),
+        (3,'TrainsRoute management'),
+        (4,'Schedule management'),
+        (5,'Station management');
 -- ----------------------------------------------------------------
 -- Bảng NHOMCHUCNANG
 CREATE TABLE nhomchucnang (
@@ -64,12 +64,18 @@ CREATE TABLE nhomchucnang (
     tenchucnang VARCHAR(100) NOT NULL,
     PRIMARY KEY (machucnang)
 );
-INSERT INTO nhomchucnang (tenchucnang)
-VALUES ('Quản lý khách hàng'),
-    ('Quản lý nhân viên'),
-    ('Quản lý nhóm quyền'),
-    ('Quản lý tài khoản'),
-    ('Thống kê báo cáo');
+INSERT INTO nhomchucnang (machucnang,tenchucnang)
+VALUES (1,'Tàu'),
+       (2,'Trạm'),
+       (3,'Tuyến Đường'),
+       (4,'Lịch Trình'),
+       (5,'Vé Tàu'),
+       (6,'Bảo Trì'),
+       (7,'Khách Hàng'),
+       (8,'Nhân Viên'),
+       (9,'Tài Khoản'),
+       (10,'Phân Quyền'),
+       (11,'Thống kê');
 -- ----------------------------------------------------------------
 -- Bảng CHITIETQUYEN
 CREATE TABLE chitietquyen (
@@ -81,26 +87,112 @@ CREATE TABLE chitietquyen (
     CONSTRAINT fk_chitietquyen_nhomchucnang FOREIGN KEY (machucnang) REFERENCES nhomchucnang(machucnang) ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO chitietquyen (manhomquyen, machucnang, hanhdong)
-VALUES (1, 1, 'create'),
-    (1, 1, 'delete'),
-    (1, 1, 'update'),
-    (1, 1, 'view'),
-    (1, 2, 'create'),
-    (1, 2, 'delete'),
-    (1, 2, 'update'),
-    (1, 2, 'view'),
-    (1, 3, 'create'),
-    (1, 3, 'delete'),
-    (1, 3, 'update'),
-    (1, 3, 'view'),
-    (1, 4, 'create'),
-    (1, 4, 'delete'),
-    (1, 4, 'update'),
-    (1, 4, 'view'),
-    (1, 5, 'create'),
-    (1, 5, 'delete'),
-    (1, 5, 'update'),
-    (1, 5, 'view');
+        # quyen admin
+VALUES (1,1,'create'),
+       (1,1,'detail'),
+       (1,1,'delete'),
+       (1,1,'update'),
+
+       (1,2,'create'),
+       (1,2,'detail'),
+       (1,2,'delete'),
+       (1,2,'update'),
+
+       (1,3,'create'),
+       (1,3,'detail'),
+       (1,3,'delete'),
+       (1,3,'update'),
+
+       (1,4,'create'),
+       (1,4,'detail'),
+       (1,4,'delete'),
+       (1,4,'update'),
+
+       (1,5,'create'),
+       (1,5,'detail'),
+       (1,5,'delete'),
+       (1,5,'update'),
+
+       (1,6,'create'),
+       (1,6,'detail'),
+       (1,6,'delete'),
+       (1,6,'update'),
+
+       (1,7,'create'),
+       (1,7,'detail'),
+       (1,7,'delete'),
+       (1,7,'update'),
+
+       (1,8,'create'),
+       (1,8,'detail'),
+       (1,8,'delete'),
+       (1,8,'update'),
+
+       (1,9,'create'),
+       (1,9,'detail'),
+       (1,9,'delete'),
+       (1,9,'update'),
+
+       (1,10,'create'),
+       (1,10,'detail'),
+       (1,10,'delete'),
+       (1,10,'update'),
+
+       (1,11,'create'),
+       (1,11,'detail'),
+       (1,11,'delete'),
+       (1,11,'update'),
+        #quyen nhan vien ban ve
+       (2,5,'create'),
+       (2,5,'detail'),
+
+       (2,7,'detail'),
+       (2,7,'update'),
+
+       (2,3,'detail'),
+       #quyen quan li tau
+        (3,1,'detail'),
+        (3,1,'update'),
+
+        (3,4,'detail'),
+
+        (3,3,'detail'),
+       #quan li lich trinh
+        (4,1,'detail'),
+
+       (4,8,'create'),
+       (4,8,'detail'),
+       (4,8,'delete'),
+       (4,8,'update'),
+
+       (4,4,'create'),
+       (4,4,'detail'),
+       (4,4,'delete'),
+       (4,4,'update'),
+
+       (4,3,'detail'),
+        #quan li tram
+       (5,5,'detail'),
+
+       (5,1,'detail'),
+
+       (5,7,'detail'),
+
+       (5,8,'create'),
+       (5,8,'detail'),
+       (5,8,'delete'),
+       (5,8,'update'),
+
+       (5,4,'detail'),
+
+       (5,3,'detail'),
+
+       (5,9,'create'),
+       (5,9,'detail'),
+       (5,9,'delete'),
+       (5,9,'update');
+
+select * from chitietquyen;
 -- ----------------------------------------------------------------
 -- Bảng NHANVIEN
 CREATE TABLE nhanvien (
@@ -468,7 +560,7 @@ VALUES (
         'Chờ kiểm tra',
         '2025-03-22 15:45:00'
     );
---Update bang tram
+# Update bang tram
 ALTER TABLE `tram`
 ADD COLUMN `diachi` VARCHAR(255)
 AFTER `tentram`;
