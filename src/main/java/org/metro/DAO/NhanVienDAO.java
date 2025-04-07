@@ -10,8 +10,6 @@ import java.util.List;
 import org.metro.model.NhanVienModel;
 import org.metro.util.DatabaseUtils;
 
-import javax.xml.crypto.Data;
-
 public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override

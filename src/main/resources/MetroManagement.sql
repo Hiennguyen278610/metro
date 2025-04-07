@@ -468,7 +468,7 @@ VALUES (
         'Chờ kiểm tra',
         '2025-03-22 15:45:00'
     );
---Update bang tram
+# Update bang tram
 ALTER TABLE `tram`
 ADD COLUMN `diachi` VARCHAR(255)
 AFTER `tentram`;
