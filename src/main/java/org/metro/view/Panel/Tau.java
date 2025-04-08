@@ -6,25 +6,37 @@ import javax.swing.border.MatteBorder;
 import org.metro.DAO.TauDAO;
 import org.metro.controller.TauController;
 import org.metro.model.TauModel;
+import org.metro.util.ExcelExporter;
+import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.RoundedPanel;
+import org.metro.view.Dialog.TauDialog;
+
 import java.awt.event.MouseEvent;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.Timer;
 
 public class Tau extends JPanel {
     Color BackgroundColor = new Color(0, 2, 2);
     List<TauModel> listTau;
     JComboBox<String> SortComboBox;
+    JLabel TongSoTauLabel;
     JPanel DanhSachTauPanel;
     JTextField MaTauTextField, SoGheTextField, NgayNhapTauTextField;
     JComboBox<String> TrangThaiTauCBx;
     JLabel HinhAnhTau;
+    IntegratedSearch search;
+    Timer searchTimer;
     private TauController action = new TauController(this);
 
     public void initComponent() {
@@ -40,9 +52,8 @@ public class Tau extends JPanel {
 
         HinhAnhTau = new JLabel();
         HinhAnhTau.setPreferredSize(new Dimension(300, 200));
-        HinhAnhTau.setBackground(Color.white);
+        // HinhAnhTau.setBackground(Color.white);
         HinhAnhTau.setOpaque(true);
-        // HinhAnhTau.setIcon(new ImageIcon(getClass().getResource("/svg/logo.png")));
         ThongTinTauPanel.add(HinhAnhTau);
 
         JPanel ThongTinChiTietTauPanel = new JPanel();
@@ -59,7 +70,7 @@ public class Tau extends JPanel {
 
         JLabel TrangThaiTauLabel = new JLabel("Trạng thái tàu: ");
         TrangThaiTauCBx = new JComboBox<String>(
-                new String[] { "Đang hoạt động", "Đang bảo trì", "Ngừng hoạt động" });
+                new String[] { "", "Đang hoạt động", "Đang bảo trì", "Ngừng hoạt động" });
         TrangThaiTauCBx.setPreferredSize(new Dimension(200, 30));
 
         JLabel NgayNhapTauLabel = new JLabel("Ngày nhập tàu: ");
@@ -67,16 +78,27 @@ public class Tau extends JPanel {
         NgayNhapTauTextField.setPreferredSize(new Dimension(200, 30));
 
         JButton ThemTauButton = new JButton("THÊM");
+        ThemTauButton.addActionListener(_ -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            TauDialog dialog = new TauDialog(window);
+            dialog.setVisible(true);
+
+            if (dialog.isSaved())
+                updateData();
+
+        });
         JButton SuaTauButton = new JButton("SỬA");
-        SuaTauButton.addActionListener(e -> {
+        SuaTauButton.addActionListener(_ -> {
             setTextfieldEnable();
-            ValidateDuLieu();
         });
         JButton XoaTauButton = new JButton("XÓA");
+        XoaTauButton.addActionListener(_ -> {
+            XoaTau();
+        });
         JButton LuuTauButton = new JButton("LƯU");
-        LuuTauButton.addActionListener(e -> {
-            setTextfieldDisable();
-            SaveToDB();
+        LuuTauButton.addActionListener(_ -> {
+            if (ValidateDuLieu() == true)
+                setTextfieldDisable();
         });
 
         ThongTinChiTietTauPanel.add(MaTauLabel);
@@ -97,28 +119,70 @@ public class Tau extends JPanel {
 
         ThongTinTauPanel.add(ThongTinChiTietTauPanel);
         this.add(ThongTinTauPanel);
-
         JPanel TongSoTauPanel = new JPanel();
-        TongSoTauPanel.setPreferredSize(new Dimension(900, 40));
+        TongSoTauPanel.setPreferredSize(new Dimension(900, 100));
         TongSoTauPanel.setBorder(new MatteBorder(0, 0, 2, 0, Color.black));
         TongSoTauPanel.setBackground(Color.white);
         TongSoTauPanel.setLayout(null);
-        JLabel TongSoTauLabel = new JLabel("Tổng số tàu (" + list.size() + ")");
+        TongSoTauLabel = new JLabel("Tổng số tàu (" + list.size() + ")");
         TongSoTauLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        TongSoTauLabel.setBounds(30, 5, 200, 40);
+        TongSoTauLabel.setBounds(30, 55, 200, 40);
         TongSoTauPanel.add(TongSoTauLabel);
-        this.add(TongSoTauPanel);
         JLabel SortLabel = new JLabel("Sắp xếp theo: ");
         SortLabel.setFont(new Font("Arial", Font.BOLD, 16));
         SortLabel.setBounds(650, 5, 200, 40);
         TongSoTauPanel.add(SortLabel);
+        search = new IntegratedSearch(new String[] { "Tất cả", "Mã tàu", "Sức chứa", "Ngày nhập tàu" });
+        TongSoTauPanel.add(search);
+        search.setBounds(30, 5, 400, 36);
+        search.getCbxChoose().addItemListener(action);
+        search.txtSearchForm.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (searchTimer != null) {
+                    searchTimer.cancel();
+                }
+                searchTimer = new Timer();
+                searchTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        SwingUtilities.invokeLater(() -> performSearch());
+                    }
+                }, 300);
+            }
+        });
+        search.btnReset.addActionListener(_ -> {
+            search.txtSearchForm.setText("");
+            updateData();
+        });
+
+        JButton XuatExcelButton = new JButton("Xuất Excel");
+        XuatExcelButton.setBounds(760, 55, 100, 30);
+        XuatExcelButton.setFont(new Font("Arial", Font.BOLD, 16));
+        XuatExcelButton.setBackground(Color.white);
+        XuatExcelButton.setBorder(new MatteBorder(0, 0, 2, 0, Color.black));
+        XuatExcelButton.setFocusable(false);
+        XuatExcelButton.addActionListener(_ -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showSaveDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                String path = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!path.endsWith(".xlsx")) {
+                    path += ".xlsx";
+                }
+                ExcelExporter.exportToExcel(listTau, path); // thay myJTable bằng JTable của bạn
+            }
+        });
+        TongSoTauPanel.add(XuatExcelButton);
+
+        this.add(TongSoTauPanel);
 
         SortComboBox = new JComboBox<>();
         SortComboBox.addItem("Mã tàu");
         SortComboBox.addItem("Sức chứa");
         SortComboBox.addItem("Ngày nhập tàu");
         SortComboBox.addItem("Trạng thái tàu");
-        SortComboBox.setBounds(760, 14, 100, 20);
+        SortComboBox.setBounds(760, 14, 100, 22);
         TongSoTauPanel.add(SortComboBox);
 
         SortComboBox.addItemListener(action);
@@ -135,12 +199,13 @@ public class Tau extends JPanel {
 
         JScrollPane DanhSachTauScrollPane = new JScrollPane(DanhSachTauPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        DanhSachTauScrollPane.setPreferredSize(new Dimension(900, 600));
+        DanhSachTauScrollPane.setPreferredSize(new Dimension(900, 500));
         // DanhSachTauScrollPane.setBorder(BorderFactory.createEmptyBorder());
         this.add(DanhSachTauScrollPane);
     }
 
     public void updateData(List<TauModel> list) {
+        this.TongSoTauLabel.setText("Tổng số tàu (" + list.size() + ")");
         this.DanhSachTauPanel.removeAll();
         for (int i = 0; i < list.size(); i++) {
             RoundedPanel panel = createTauPanel(list.get(i));
@@ -150,27 +215,84 @@ public class Tau extends JPanel {
         this.DanhSachTauPanel.repaint();
     }
 
-    private void SaveToDB() {
-        // Luoi qa mai lam nha ae
-
-        // String ma = this.MaTauTextField.getText();
-        // String soghe = this.SoGheTextField.getText();
-        // String ngayNhap = this.NgayNhapTauTextField.getText();
-        // String trangThai = (String) this.TrangThaiTauCBx.getSelectedItem();
-        // TauModel hihi = new TauModel(ma, ABORT, trangThai);
-
-        // int update = new TauDAO().update(hihi);
-        // if (update > 0)
-        // JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-        // else
-        // JOptionPane.showMessageDialog(this, "Có lỗi xảy ra", "Lỗi",
-        // JOptionPane.ERROR_MESSAGE);
-
-        JOptionPane.showMessageDialog(this, "Đã lưu lại thông tin (thật ra là chưa)");
+    public void XoaTau() {
+        String matau = this.MaTauTextField.getText();
+        int delete = new TauDAO().delete(matau);
+        if (delete > 0) {
+            JOptionPane.showMessageDialog(this, "Xóa thành công!");
+            updateData();
+        } else
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra", "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
     }
 
-    private void ValidateDuLieu() {
+    public void updateData() {
+        System.err.println("hihihihi");
+        this.DanhSachTauPanel.removeAll();
+        listTau = new TauDAO().selectAll();
+        this.TongSoTauLabel.setText("Tổng số tàu (" + listTau.size() + ")");
+        for (int i = 0; i < listTau.size(); i++) {
+            RoundedPanel panel = createTauPanel(listTau.get(i));
+            DanhSachTauPanel.add(panel);
+        }
+        this.DanhSachTauPanel.revalidate();
+        this.DanhSachTauPanel.repaint();
+    }
 
+    private void performSearch() {
+        String type = (String) search.cbxChoose.getSelectedItem();
+        String txt = search.txtSearchForm.getText().trim();
+        System.out.println("Đang tìm kiếm: " + txt + " - Loại: " + type);
+        List<TauModel> result = new TauDAO().search(txt, type);
+        updateData(result);
+    }
+
+    private boolean SaveToDB() {
+        System.out.println("hihihi");
+        // Luoi qa mai lam nha ae
+        String ma = this.MaTauTextField.getText();
+        int soghe = Integer.parseInt(this.SoGheTextField.getText());
+        String ngayNhap = this.NgayNhapTauTextField.getText().trim(); // Ví dụ: "07-04-2025"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate localDate = LocalDate.parse(ngayNhap, formatter);
+
+        String trangThai = (String) this.TrangThaiTauCBx.getSelectedItem();
+        TauModel hihi = new TauModel(ma, soghe, trangThai, localDate);
+
+        int update = new TauDAO().update(hihi);
+        if (update > 0) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+            updateData();
+        } else
+            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra", "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+        return update > 0;
+    }
+
+    private boolean ValidateDuLieu() {
+        int sucChua;
+        try {
+            sucChua = Integer.parseInt(this.SoGheTextField.getText());
+            if (sucChua <= 0) {
+                JOptionPane.showMessageDialog(this, "Sức chứa phải lớn hơn 0", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Sức chứa phải là số nguyên", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        String ngayNhapStr = this.NgayNhapTauTextField.getText().trim();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        try {
+            LocalDate.parse(ngayNhapStr, formatter);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(null, "Ngày nhập không đúng định dạng dd-MM-yyyy", "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return SaveToDB();
     }
 
     private RoundedPanel createTauPanel(TauModel tau) {
@@ -201,11 +323,6 @@ public class Tau extends JPanel {
                 tau.getNgaynhap());
         NgayNhapTau.setBounds(10, 160, 200, 30);
         NgayNhapTau.setFont(new Font("Arial", Font.BOLD, 14));
-
-        // JButton SuaTau = new JButton("SỬA");
-        // SuaTau.setPreferredSize(new Dimension(100, 30));
-        // JButton XoaTau = new JButton("XÓA");
-        // XoaTau.setPreferredSize(new Dimension(100, 30));
 
         panel.add(MaTau);
         panel.add(SoGhe);
@@ -250,7 +367,7 @@ public class Tau extends JPanel {
     }
 
     private void setTextfieldEnable() {
-        this.MaTauTextField.setEnabled(true);
+        // this.MaTauTextField.setEnabled(true);
         this.NgayNhapTauTextField.setEnabled(true);
         this.SoGheTextField.setEnabled(true);
         this.TrangThaiTauCBx.setEnabled(true);
@@ -259,6 +376,7 @@ public class Tau extends JPanel {
     public Tau() {
         listTau = new TauDAO().selectAll();
         initComponent();
+        setTextfieldDisable();
     }
 
     public JComboBox<String> getSortComboBox() {

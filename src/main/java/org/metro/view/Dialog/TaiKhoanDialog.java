@@ -8,7 +8,8 @@ import java.awt.*;
 
 public class TaiKhoanDialog {
 
-    // Dialog thêm tài khoản mới, tích hợp tìm kiếm nhân viên (giả lập qua input dialog)
+    // Dialog thêm tài khoản mới, tích hợp tìm kiếm nhân viên (giả lập qua input
+    // dialog)
     public void showAddTaiKhoanDialog(Component parent, Runnable updateCallback) {
         String input = JOptionPane.showInputDialog(parent, "Nhập mã nhân viên cần chọn:");
         int selectedManv;
@@ -18,7 +19,8 @@ public class TaiKhoanDialog {
             JOptionPane.showMessageDialog(parent, "Mã nhân viên không hợp lệ!");
             return;
         }
-        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Thêm tài khoản mới", Dialog.ModalityType.APPLICATION_MODAL);
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Thêm tài khoản mới",
+                Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(400, 350);
         dialog.setLocationRelativeTo(parent);
         dialog.setLayout(new BorderLayout());
@@ -34,11 +36,11 @@ public class TaiKhoanDialog {
         JPasswordField txtMatKhau = new JPasswordField();
 
         JLabel lblNhomQuyen = new JLabel("Nhóm quyền:");
-        String[] roleOptions = {"Admin", "User", "Nhân viên"};
+        String[] roleOptions = { "Admin", "User", "Nhân viên" };
         JComboBox<String> cbxNhomQuyen = new JComboBox<>(roleOptions);
 
         JLabel lblTrangThai = new JLabel("Trạng thái:");
-        String[] statusOptions = {"Hoạt động", "Ngừng hoạt động"};
+        String[] statusOptions = { "Hoạt động", "Ngừng hoạt động" };
         JComboBox<String> cbxTrangThai = new JComboBox<>(statusOptions);
         cbxTrangThai.setSelectedIndex(0);
 
@@ -53,9 +55,9 @@ public class TaiKhoanDialog {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnCancel = new JButton("Hủy");
-        btnCancel.addActionListener(e -> dialog.dispose());
+        btnCancel.addActionListener(_ -> dialog.dispose());
         JButton btnAdd = new JButton("Thêm");
-        btnAdd.addActionListener(e -> {
+        btnAdd.addActionListener(_ -> {
             String matKhau = new String(txtMatKhau.getPassword()).trim();
             if (matKhau.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập mật khẩu!");
@@ -77,7 +79,8 @@ public class TaiKhoanDialog {
             if (TaiKhoanService.insert(tk)) {
                 JOptionPane.showMessageDialog(dialog, "Thêm tài khoản thành công!");
                 dialog.dispose();
-                if (updateCallback != null) updateCallback.run();
+                if (updateCallback != null)
+                    updateCallback.run();
             } else {
                 JOptionPane.showMessageDialog(dialog, "Thêm tài khoản thất bại!");
             }
@@ -90,14 +93,16 @@ public class TaiKhoanDialog {
         dialog.setVisible(true);
     }
 
-    // Dialog cập nhật tài khoản (các trường dùng JComboBox để chọn nhóm quyền và trạng thái)
+    // Dialog cập nhật tài khoản (các trường dùng JComboBox để chọn nhóm quyền và
+    // trạng thái)
     public void showUpdateTaiKhoanDialog(Component parent, int manv, Runnable updateCallback) {
         TaiKhoanModel tk = TaiKhoanService.getByID(manv);
         if (tk == null) {
             JOptionPane.showMessageDialog(parent, "Không tìm thấy thông tin tài khoản!");
             return;
         }
-        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Cập nhật tài khoản", Dialog.ModalityType.APPLICATION_MODAL);
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Cập nhật tài khoản",
+                Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(400, 350);
         dialog.setLocationRelativeTo(parent);
         dialog.setLayout(new BorderLayout());
@@ -113,7 +118,7 @@ public class TaiKhoanDialog {
         JPasswordField txtMatKhau = new JPasswordField(tk.getMatkhau());
 
         JLabel lblNhomQuyen = new JLabel("Nhóm quyền:");
-        String[] roleOptions = {"Admin", "User", "Nhân viên"};
+        String[] roleOptions = { "Admin", "User", "Nhân viên" };
         JComboBox<String> cbxNhomQuyen = new JComboBox<>(roleOptions);
         switch (tk.getManhomquyen()) {
             case 1:
@@ -130,7 +135,7 @@ public class TaiKhoanDialog {
         }
 
         JLabel lblTrangThai = new JLabel("Trạng thái:");
-        String[] statusOptions = {"Hoạt động", "Ngừng hoạt động"};
+        String[] statusOptions = { "Hoạt động", "Ngừng hoạt động" };
         JComboBox<String> cbxTrangThai = new JComboBox<>(statusOptions);
         cbxTrangThai.setSelectedItem(tk.getTrangthai() == 1 ? "Hoạt động" : "Ngừng hoạt động");
 
@@ -145,9 +150,9 @@ public class TaiKhoanDialog {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnCancel = new JButton("Hủy");
-        btnCancel.addActionListener(e -> dialog.dispose());
+        btnCancel.addActionListener(_ -> dialog.dispose());
         JButton btnUpdate = new JButton("Cập nhật");
-        btnUpdate.addActionListener(e -> {
+        btnUpdate.addActionListener(_ -> {
             String matKhau = new String(txtMatKhau.getPassword()).trim();
             if (matKhau.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập mật khẩu!");
@@ -169,7 +174,8 @@ public class TaiKhoanDialog {
             if (TaiKhoanService.update(updatedTk)) {
                 JOptionPane.showMessageDialog(dialog, "Cập nhật tài khoản thành công!");
                 dialog.dispose();
-                if (updateCallback != null) updateCallback.run();
+                if (updateCallback != null)
+                    updateCallback.run();
             } else {
                 JOptionPane.showMessageDialog(dialog, "Cập nhật tài khoản thất bại!");
             }
@@ -184,7 +190,8 @@ public class TaiKhoanDialog {
 
     // Dialog hiển thị chi tiết tài khoản
     public void showTaiKhoanDetailDialog(Component parent, TaiKhoanModel tk) {
-        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Chi tiết tài khoản", Dialog.ModalityType.APPLICATION_MODAL);
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Chi tiết tài khoản",
+                Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(400, 250);
         dialog.setLocationRelativeTo(parent);
         dialog.setLayout(new BorderLayout());
@@ -195,10 +202,17 @@ public class TaiKhoanDialog {
         JLabel lblMaNV = new JLabel("Mã nhân viên: " + tk.getManv());
         String nhomQuyenStr;
         switch (tk.getManhomquyen()) {
-            case 1: nhomQuyenStr = "Admin"; break;
-            case 2: nhomQuyenStr = "User"; break;
-            case 3: nhomQuyenStr = "Nhân viên"; break;
-            default: nhomQuyenStr = "Unknown";
+            case 1:
+                nhomQuyenStr = "Admin";
+                break;
+            case 2:
+                nhomQuyenStr = "User";
+                break;
+            case 3:
+                nhomQuyenStr = "Nhân viên";
+                break;
+            default:
+                nhomQuyenStr = "Unknown";
         }
         JLabel lblNhomQuyen = new JLabel("Nhóm quyền: " + nhomQuyenStr);
         String trangThaiStr = tk.getTrangthai() == 1 ? "Hoạt động" : "Ngừng hoạt động";
@@ -210,7 +224,7 @@ public class TaiKhoanDialog {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnClose = new JButton("Đóng");
-        btnClose.addActionListener(e -> dialog.dispose());
+        btnClose.addActionListener(_ -> dialog.dispose());
         buttonPanel.add(btnClose);
 
         dialog.add(detailPanel, BorderLayout.CENTER);

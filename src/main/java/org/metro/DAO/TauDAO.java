@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.metro.model.TauModel;
 import org.metro.util.DatabaseUtils;
@@ -25,7 +26,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
     public int delete(String matau) {
         String sql = "DELETE FROM tau WHERE matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, matau);
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
@@ -40,15 +41,14 @@ public class TauDAO implements IBaseDAO<TauModel> {
         List<TauModel> list = new ArrayList<>();
         String query = "SELECT * FROM tau";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 TauModel tau = new TauModel(
                         rs.getString("matau"),
                         rs.getInt("soghe"),
                         rs.getString("trangthaitau"),
-                        rs.getDate("ngaynhap").toLocalDate()
-                );
+                        rs.getDate("ngaynhap").toLocalDate());
                 list.add(tau);
             }
         } catch (SQLException e) {
@@ -66,7 +66,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
     public TauModel selectById(String matau) {
         String sql = "SELECT * FROM tau WHERE matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, matau);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -74,8 +74,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
                             rs.getString("matau"),
                             rs.getInt("soghe"),
                             rs.getString("trangthaitau"),
-                            rs.getDate("ngaynhap").toLocalDate()
-                    );
+                            rs.getDate("ngaynhap").toLocalDate());
                 }
             }
         } catch (SQLException ex) {
@@ -89,7 +88,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
     public int insert(TauModel t) {
         String sql = "INSERT INTO tau (soghe, trangthaitau, ngaynhap) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, t.getSoghe());
             pstmt.setString(2, t.getTrangthaitau());
 
@@ -126,7 +125,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
     public int update(TauModel t) {
         String sql = "UPDATE tau SET soghe=?, trangthaitau=?, ngaynhap=? WHERE matau=?";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, t.getSoghe());
             pstmt.setString(2, t.getTrangthaitau());
 
@@ -146,5 +145,33 @@ public class TauDAO implements IBaseDAO<TauModel> {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public List<TauModel> search(String txt, String type) {
+        List<TauModel> allTau = this.selectAll();
+        if (txt == null || txt.trim().isEmpty()) {
+            return allTau;
+        }
+        String lowerTxt = txt.toLowerCase();
+        return allTau.stream().filter(kh -> {
+            switch (type) {
+                case "Tất cả":
+                    return String.valueOf(kh.getMatau()).contains(lowerTxt)
+                            || String.valueOf(kh.getSoghe()).contains(lowerTxt)
+                            || kh.getTrangthaitau().toLowerCase().contains(lowerTxt)
+                            || kh.getNgaynhap().toLowerCase().contains(lowerTxt);
+                case "Mã tàu":
+                    return String.valueOf(kh.getMatau()).contains(lowerTxt);
+                case "Sức chứa":
+                    return String.valueOf(kh.getSoghe()).contains(lowerTxt);
+                case "Trạng thái":
+                    return kh.getTrangthaitau().toLowerCase().contains(lowerTxt);
+                case "Ngày nhập":
+
+                    return kh.getNgaynhap().toLowerCase().contains(lowerTxt);
+                default:
+                    return false;
+            }
+        }).collect(Collectors.toCollection(ArrayList::new));
     }
 }
