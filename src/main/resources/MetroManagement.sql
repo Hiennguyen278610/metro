@@ -53,10 +53,10 @@ CREATE TABLE nhomquyen (
 );
 INSERT INTO nhomquyen (manhomquyen,tennhomquyen)
 VALUES (1,'Admin'),
-       (2,'Ticket sales staff'),
-        (3,'TrainsRoute management'),
-        (4,'Schedule management'),
-        (5,'Station management');
+       (2,'Nhân viên bán vé'),
+        (3,'Quản lí tàu tuyến'),
+        (4,'Quản lí lịch trình'),
+        (5,'Quản lí trạm');
 -- ----------------------------------------------------------------
 -- Bảng NHOMCHUCNANG
 CREATE TABLE nhomchucnang (

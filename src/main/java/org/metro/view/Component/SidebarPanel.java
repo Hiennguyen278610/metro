@@ -1,5 +1,6 @@
 package org.metro.view.Component;
 
+import org.metro.util.SessionManager;
 import org.metro.view.MainFrame;
 
 import javax.swing.*;
@@ -40,7 +41,7 @@ public class SidebarPanel extends JPanel {
         JPanel menuPanel = new JPanel(new BorderLayout());
         menuPanel.setBounds(0, 100, 300, 660);
         menuPanel.setBackground(Color.decode("#BDCDD6"));
-        menuTaskbar = new MenuTaskbar(new MainFrame());
+        menuTaskbar = new MenuTaskbar(new MainFrame(), SessionManager.getCurrentUser().getManv());
         menuTaskbar.setBorder(BorderFactory.createLineBorder(Color.black, 2));
         menuPanel.add(menuTaskbar, BorderLayout.CENTER);
         add(menuPanel);

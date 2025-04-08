@@ -156,7 +156,7 @@ public class MainFrame extends JFrame {
         leftPanel.add(ChucNangPanel);
 
         // Thêm MenuTaskbar vào CENTER
-        menuTaskbar = new MenuTaskbar(this);
+        menuTaskbar = new MenuTaskbar(this, SessionManager.getCurrentUser().getManv());
         menuTaskbar.setBorder(new LineBorder(Color.black, 2));
         ChucNangPanel.add(menuTaskbar, BorderLayout.CENTER);
 

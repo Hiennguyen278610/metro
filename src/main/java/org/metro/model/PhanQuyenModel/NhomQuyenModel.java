@@ -1,4 +1,4 @@
-package org.metro.model;
+package org.metro.model.PhanQuyenModel;
 
 public class NhomQuyenModel {
     private int manhomquyen;

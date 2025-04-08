@@ -97,4 +97,22 @@ public class TaiKhoanDAO {
         }
         return null;
     }
+
+    public TaiKhoanModel loginTaiKhoan(String manv,String matkhau) {
+        String query = "Select * from taikhoan where manv = ? and matkhau = ? and trangthai = 1";
+        try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement prs = c.prepareStatement(query);) {
+            prs.setString(1,manv);
+            prs.setString(2,matkhau);
+            ResultSet rs = prs.executeQuery();
+            if (rs.next()) {
+                return new TaiKhoanModel(rs.getInt("manv"),rs.getString("matkhau"),rs.getInt("manhomquyen"),rs.getInt("trangthai"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+
+

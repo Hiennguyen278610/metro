@@ -18,7 +18,6 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     private NhanVien nv;
     private NhanVienDialog nvdl;
     private NhanVienModel nvm;
-    private JFrame parent;
 
     public NhanVienController(NhanVien nv,NhanVienDialog nvdl) {
         this.nvdl = nvdl;

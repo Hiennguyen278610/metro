@@ -114,10 +114,10 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
                     roleStr = "Admin";
                     break;
                 case 2:
-                    roleStr = "User";
+                    roleStr = "Nhân viên";
                     break;
                 case 3:
-                    roleStr = "Nhân viên";
+                    roleStr = "Quản lí";
                     break;
                 default:
                     roleStr = "Unknown";

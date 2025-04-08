@@ -1,5 +1,7 @@
 package org.metro.view.Component;
 
+import org.metro.service.PhanQuyenService;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -7,6 +9,7 @@ import java.util.HashMap;
 
 public class  MainFunction extends JToolBar {
     public HashMap<String, ToolBar> btn = new HashMap<>();
+    private PhanQuyenService pqs = new PhanQuyenService();
 
     public MainFunction() {
         initData();
@@ -14,6 +17,7 @@ public class  MainFunction extends JToolBar {
     }
 
     public MainFunction(String[] actions) {
+        pqs = new PhanQuyenService();
         this.setBackground(Color.WHITE);
         this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
         for (String action : actions) {
