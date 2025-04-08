@@ -9,6 +9,8 @@ import org.metro.model.TauModel;
 import org.metro.util.ExcelExporter;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.RoundedPanel;
+import org.metro.view.Dialog.TauDialog;
+
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -76,6 +78,15 @@ public class Tau extends JPanel {
         NgayNhapTauTextField.setPreferredSize(new Dimension(200, 30));
 
         JButton ThemTauButton = new JButton("THÊM");
+        ThemTauButton.addActionListener(_ -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            TauDialog dialog = new TauDialog(window);
+            dialog.setVisible(true);
+
+            if (dialog.isSaved())
+                updateData();
+
+        });
         JButton SuaTauButton = new JButton("SỬA");
         SuaTauButton.addActionListener(_ -> {
             setTextfieldEnable();
@@ -216,6 +227,7 @@ public class Tau extends JPanel {
     }
 
     public void updateData() {
+        System.err.println("hihihihi");
         this.DanhSachTauPanel.removeAll();
         listTau = new TauDAO().selectAll();
         this.TongSoTauLabel.setText("Tổng số tàu (" + listTau.size() + ")");

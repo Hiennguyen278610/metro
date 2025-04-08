@@ -15,6 +15,12 @@ public class TauModel {
         this.trangthaitau = trangthaitau;
     }
 
+    public TauModel(int soghe, String trangthaitau, LocalDate ngaynhap) {
+        this.soghe = soghe;
+        this.trangthaitau = trangthaitau;
+        this.ngaynhap = ngaynhap;
+    }
+
     public TauModel(String matau, int soghe, String trangthaitau, LocalDate ngaynhap) {
         this.matau = matau;
         this.soghe = soghe;

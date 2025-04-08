@@ -10,8 +10,11 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.metro.model.TauModel;
+import org.metro.view.Dialog.TauDialog;
 import org.metro.view.Panel.Tau;
 
 public class TauController implements ActionListener, ItemListener, KeyListener {
