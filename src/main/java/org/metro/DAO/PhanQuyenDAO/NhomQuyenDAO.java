@@ -7,6 +7,7 @@ import org.metro.util.DatabaseUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,22 @@ public class NhomQuyenDAO implements IBaseDAO<NhomQuyenModel> {
 
     @Override
     public int insert(NhomQuyenModel nhomQuyenModel) {
-        return 0;
+       String query = "insert into nhomquyen(tennhomquyen) values(?)";
+       try(Connection c = DatabaseUtils.getConnection();
+       PreparedStatement ps = c.prepareStatement(query,Statement.RETURN_GENERATED_KEYS)) {
+           ps.setString(1, nhomQuyenModel.getTennhomquyen());
+           int row = ps.executeUpdate();
+           if(row > 0) {
+               ResultSet rs = ps.getGeneratedKeys();
+               if(rs.next()) {
+                   return rs.getInt(1); // tra ve ma nhom quyen moi tao tu auto increasement
+               }
+           }
+           return 0;
+       } catch (Exception e) {
+           e.printStackTrace();
+           return 0;
+       }
     }
 
     @Override

@@ -36,10 +36,12 @@ public class PhanQuyenDialog extends JDialog {
     private JPanel bottom;
     private JButton them;
     private JButton thoat;
+    private PhanQuyenController pqcontroller;
     public PhanQuyenDialog(String title,PhanQuyen pq,String tennhomquyen) {
         this.title = title;
         this.pq = pq;
         this.tennhomquyen = tennhomquyen;
+        pqcontroller = new PhanQuyenController(pq,this);
         this.setTitle(getTitle());
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
@@ -57,7 +59,7 @@ public class PhanQuyenDialog extends JDialog {
         textfieldQuyen.setFont(new Font("Tahoma", Font.PLAIN, 13));
         textfieldQuyen.setPreferredSize(new Dimension(150, 40));
         textfieldQuyen.setText(getTennhomquyen());
-        textfieldQuyen.setEditable("update".equals(title));
+        textfieldQuyen.setEditable("update".equals(title) || "create".equals(title));
         header.add(tenQuyen);
         header.add(textfieldQuyen);
         this.add(header, BorderLayout.NORTH);
@@ -72,11 +74,17 @@ public class PhanQuyenDialog extends JDialog {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column > 0 && "update".equals(title);
+                return column > 0 && ("update".equals(title) || "create".equals(title));
             }
         };
-        NhomQuyenModel nqm = pq.getSelectedPhanquyen(); // lay ra cai row dc click
-        dataTable(dtmodel, nqm.getManhomquyen()); // load ra du lieu bang
+        //neu an vao them thi load du lieu cho nut them
+        if("create".equals(title)) {
+            dataTableForCreate(dtmodel);
+        } else {
+            //neu la sua,chi tiet,xoa thi chon 1 row
+            NhomQuyenModel nqm = pq.getSelectedPhanquyen(); // lay ra cai row dc click
+            dataTable(dtmodel, nqm.getManhomquyen()); // load ra du lieu bang
+        }
         table = new JTable(dtmodel);
         table.setRowHeight(30);
         table.setRowSelectionAllowed(false);
@@ -100,16 +108,32 @@ public class PhanQuyenDialog extends JDialog {
         thoat = new JButton("thoat");
         thoat.setPreferredSize(new Dimension(150, 40));
         thoat.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        thoat.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
         if("create".equals(title) || "update".equals(title)) {
             bottom.add(them);
         }
         bottom.add(thoat);
         this.add(bottom, BorderLayout.SOUTH);
+
+        //them su kien
+        them.addActionListener(pqcontroller);
+        thoat.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+    }
+
+    //checkbox cho nút thêm
+    public void dataTableForCreate(DefaultTableModel dtmodal) {
+        for(NhomChucNangModel ncnm: listncnm) {
+            dtmodal.addRow(new Object[]{
+                    ncnm.getTenchucnang(),
+                    Boolean.FALSE,
+                    Boolean.FALSE,
+                    Boolean.FALSE,
+                    Boolean.FALSE
+            });
+        }
     }
 
     public void dataTable(DefaultTableModel dtmodal,int manv) {
@@ -170,7 +194,7 @@ public class PhanQuyenDialog extends JDialog {
         String namebtn = "";
         switch (title) {
             case "Thêm quyền":
-                namebtn = "Thêm";
+                namebtn = "Thêm nhóm quyền";
                 break;
             case "Chỉnh sửa quyền":
                 namebtn = "Cập nhật";
@@ -182,4 +206,7 @@ public class PhanQuyenDialog extends JDialog {
     }
 
     public String getTennhomquyen() {return tennhomquyen;}
+    public JTextField getTextfieldQuyen() {return textfieldQuyen;}
+    public JTable getTable() {return table;}
+
 }

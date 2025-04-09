@@ -24,7 +24,7 @@ public class PhanQuyen extends JPanel {
     private JPanel headerPanel;
     private JPanel centerPanel;
     private JPanel headerMainFuncPanel;
-    private PhanQuyenController pqAction = new PhanQuyenController(this);
+    private PhanQuyenController pqAction = new PhanQuyenController(this,null);
     public PhanQuyen() {
         this.setLayout(new BorderLayout());
         mainfunc = new MainFunction(new String[]{"create","delete","update","detail"});
@@ -94,6 +94,7 @@ public class PhanQuyen extends JPanel {
         String tennhomquyen = (String) phanquyenTable.getValueAt(row, 1);
         return new NhomQuyenModel(manhomquyen,tennhomquyen);
     }
+
 
     public MainFrame getMf() {
         return mf;
