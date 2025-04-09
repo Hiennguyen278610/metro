@@ -1,11 +1,7 @@
 package org.metro.controller;
 
 import org.metro.model.LichTrinhModel;
-import org.metro.model.NhanVienModel;
-import org.metro.model.TauModel;
 import org.metro.service.LichTrinhService;
-import org.metro.service.NhanVienService;
-import org.metro.service.TauService;
 import org.metro.view.Dialog.LichTrinhDialog;
 import org.metro.view.Panel.LichTrinh;
 import org.metro.view.Component.ToolBar;
@@ -16,6 +12,7 @@ import java.awt.event.*;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Supplier;
 
 public class LichTrinhController implements ActionListener, ItemListener, KeyListener {
     private LichTrinh lichTrinh;
@@ -112,7 +109,6 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
 
         Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(lichTrinh);
 
-        // Handle other operations
         switch (actionName) {
             case "detail":
                 dialog = new LichTrinhDialog(parentFrame, "detail", lichTrinh, lichTrinhModel);
@@ -145,48 +141,6 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
         }
     }
 
-    // Phương thức hỗ trợ để chọn nhân viên theo mã
-    public static void selectNhanVienInCombobox(int manv, JComboBox<NhanVienModel> manvComboBox, DefaultComboBoxModel<NhanVienModel> manvComboBoxModel) {
-        for (int i = 0; i < manvComboBoxModel.getSize(); i++) {
-            NhanVienModel nv = manvComboBoxModel.getElementAt(i);
-            if (nv.getManv() == manv) {
-                manvComboBox.setSelectedIndex(i);
-                break;
-            }
-        }
-    }
-
-    // Load danh sách nhân viên từ service
-    public static void loadNhanVienData(DefaultComboBoxModel<NhanVienModel> manvComboBoxModel) {
-        manvComboBoxModel.removeAllElements();
-        List<NhanVienModel> nhanVienList = NhanVienService.getListnv();
-        for (NhanVienModel nv : nhanVienList) {manvComboBoxModel.addElement(nv);}
-    }
-
-    // Phương thức hỗ trợ để chọn tàu theo mã
-    public static void selectTauInCombobox(String matauToSelect, JComboBox<TauModel> matauComboBox, DefaultComboBoxModel<TauModel> matauComboBoxModel) {
-        try {
-            int matau = Integer.parseInt(matauToSelect);
-            for (int i = 0; i < matauComboBoxModel.getSize(); i++) {
-                TauModel tau = matauComboBoxModel.getElementAt(i);
-                if (tau.getMatau().equals(String.valueOf(matau))) {
-                    matauComboBox.setSelectedIndex(i);
-                    break;
-                }
-            }
-        } catch (NumberFormatException e) {
-            System.err.println("Invalid matau format: " + matauToSelect);
-        }
-    }
-
-    public static void loadTauData(DefaultComboBoxModel<TauModel> tauComboBoxModel) {
-        tauComboBoxModel.removeAllElements();
-        List<TauModel> tauList = TauService.getAll();
-        for (TauModel tau : tauList) {
-            tauComboBoxModel.addElement(tau);
-        }
-    }
-
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -199,22 +153,16 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // Not used
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        // Not used
-    }
+    public void keyPressed(KeyEvent e) {}
 
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getSource() == lichTrinh.getSearch().getTxtSearchForm()) {
             Timer searchTimer = lichTrinh.getSearchTimer();
-            if (searchTimer != null) {
-                searchTimer.cancel();
-            }
+            if (searchTimer != null) {searchTimer.cancel();}
             searchTimer = new Timer();
             lichTrinh.setSearchTimer(searchTimer);
 
@@ -222,11 +170,8 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
                 @Override
                 public void run() {
                     SwingUtilities.invokeLater(() -> {
-                        lichTrinh.performSearch(
-                                lichTrinh.getSearch().getTxtSearchForm().getText(),
-                                (String) lichTrinh.getSearch().getCbxChoose().getSelectedItem()
-                        );
-                    });
+                        lichTrinh.performSearch(lichTrinh.getSearch().getTxtSearchForm().getText(),
+                                (String) lichTrinh.getSearch().getCbxChoose().getSelectedItem());});
                 }
             }, 300);
         }
