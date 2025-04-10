@@ -54,4 +54,9 @@ public class TuyenDuongModel {
     public void setTrangthaituyen(String trangthaituyen) {
         this.trangthaituyen = trangthaituyen;
     }
+
+    @Override
+    public String toString() {
+        return "Tuyến số " + this.matuyen + ": " + this.trangthaituyen;
+    }
 }

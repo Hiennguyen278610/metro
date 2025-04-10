@@ -110,20 +110,18 @@ public class VeTauController implements ActionListener, ItemListener, KeyListene
                             return;
                         }
 
-                        // Lấy parent frame
                         Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(vetau);
 
-                        // Xử lý nút chi tiết
                         if ("detail".equals(namebtn)) {
                             dialog = new VeTauDialog(parentFrame, "detail", vetau, vetauModel);
                             dialog.setVisible(true);
                         }
-                        // Xử lý nút cập nhật
+
                         else if ("update".equals(namebtn)) {
                             dialog = new VeTauDialog(parentFrame, "update", vetau, vetauModel);
                             dialog.setVisible(true);
                         }
-                        // Xử lý nút xóa
+
                         else if ("delete".equals(namebtn)) {
                             int confirm = JOptionPane.showConfirmDialog(vetau, "Bạn có chắc muốn xóa vé tàu này?", "Xác nhận",
                                     JOptionPane.YES_NO_OPTION);
@@ -137,7 +135,6 @@ public class VeTauController implements ActionListener, ItemListener, KeyListene
             }
         }
 
-        // Xử lý nút reset trong thanh tìm kiếm
         if (c == vetau.getSearch().getBtnReset()) {
             vetau.getSearch().getTxtSearchForm().setText("");
             vetau.getSearch().getCbxChoose().setSelectedIndex(0);

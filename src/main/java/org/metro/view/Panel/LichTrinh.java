@@ -8,9 +8,9 @@ import org.metro.view.Component.MainFunction;
 
 import java.awt.*;
 import javax.swing.*;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Timer;
+import java.time.format.DateTimeFormatter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -19,6 +19,7 @@ public class LichTrinh extends JPanel {
     JPanel contentCenter, functionBar;
     JTable lichTrinhTable;
     JScrollPane lichTrinhScrollTable;
+
     DefaultTableModel dTable;
     MainFunction mainFunction;
     IntegratedSearch search;
@@ -46,7 +47,7 @@ public class LichTrinh extends JPanel {
             }
         };
         // Loại bỏ cột thời gian đến thực tế
-        String[] columnNames = { "Mã chuyến", "Mã nhân viên", "Mã tàu", "Mã tuyến", "Hướng đi", "Thời gian khởi hành", "Trạng thái" };
+        String[] columnNames = { "Mã chuyến", "Mã nhân viên", "Hướng đi", "Thời gian khởi hành", "Trạng thái" };
         dTable.setColumnIdentifiers(columnNames);
         lichTrinhTable.setModel(dTable);
         lichTrinhTable.setFocusable(false);
@@ -58,7 +59,6 @@ public class LichTrinh extends JPanel {
         for (int i = 0; i < columnNames.length; i++) {
             lichTrinhTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-        lichTrinhTable.setAutoCreateRowSorter(true);
 
         contentCenter = new JPanel();
         contentCenter.setBackground(new Color(130, 190, 223));
@@ -95,8 +95,6 @@ public class LichTrinh extends JPanel {
             Object[] rowData = {
                     lichTrinh.getMachuyen(),
                     lichTrinh.getManv(),
-                    lichTrinh.getMatau(),
-                    lichTrinh.getMatuyen(),
                     lichTrinh.getHuongdi() ? "Đi" : "Về", // Hiển thị hướng đi dễ đọc hơn
                     formattedTime, // Thời gian khởi hành đã định dạng
                     lichTrinh.getTrangthai()
