@@ -107,7 +107,22 @@ public class TuyenDuongController implements ItemListener, MouseListener, Action
                             return;
                         }
                         new TuyenDuongDialog(frame, TuyenDuongDialog.Mode.VIEW, route).setVisible(true);
-                    } else {
+                    } else if (namebtn == "delete") {
+                        TuyenDuongModel route = tuyenDuong.getSelectedTuyenDuong();
+                        if (route == null) {
+                            JOptionPane.showMessageDialog(tuyenDuong, "Vui lòng chọn một tuyến đường", "Thông báo",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        int confirm = JOptionPane.showConfirmDialog(tuyenDuong,
+                                "Bạn có chắc chắn muốn xóa tuyến đường này không?", "Xác nhận",
+                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            // Xóa tuyến đường
+                            tuyenDuong.deleteTuyenDuong(route.getMatuyen());
+                            // Cập nhật lại dữ liệu trong bảng
+                            tuyenDuong.loadData();
+                        }
 
                     }
                 }

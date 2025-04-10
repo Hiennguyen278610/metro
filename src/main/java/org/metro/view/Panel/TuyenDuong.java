@@ -205,4 +205,9 @@ public class TuyenDuong extends JPanel {
         return tdm;
     }
 
+    public void deleteTuyenDuong(int matuyenduong) {
+        TuyenDAO tdao = new TuyenDAO();
+        tdao.delete(matuyenduong);
+        loadData();
+    }
 }

@@ -49,7 +49,15 @@ public class TuyenDAO implements IBaseDAO<TuyenDuongModel> {
 
     @Override
     public int delete(int id) {
-        return 0;
+        String query = "DELETE FROM tuyen WHERE matuyen = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setInt(1, id);
+            return prs.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
