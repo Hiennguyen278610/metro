@@ -36,14 +36,14 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
 
         taiKhoanTable = new JTable();
         taiKhoanScrollTable = new JScrollPane();
-        dTable = new DefaultTableModel(){
+        dTable = new DefaultTableModel() {
             @Override
-             // tao model voi so cot va hang co dinh khong cho sua chua
+            // tao model voi so cot va hang co dinh khong cho sua chua
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        String[] columnNames = {"Mã TK", "Nhóm quyền", "Trạng thái"};
+        String[] columnNames = { "Mã TK", "Nhóm quyền", "Trạng thái" };
         dTable.setColumnIdentifiers(columnNames);
         taiKhoanTable.setModel(dTable);
         taiKhoanTable.setFocusable(false);
@@ -67,7 +67,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
         functionBar.setLayout(new BoxLayout(functionBar, BoxLayout.X_AXIS));
         functionBar.setPreferredSize(new Dimension(0, 50));
 
-        search = new IntegratedSearch(new String[]{"ID"});
+        search = new IntegratedSearch(new String[] { "ID" });
         search.cbxChoose.addItemListener(this);
         search.txtSearchForm.addKeyListener(new KeyAdapter() {
             @Override
@@ -84,12 +84,12 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
                 }, 300);
             }
         });
-        search.btnReset.addActionListener(e -> {
+        search.btnReset.addActionListener(_ -> {
             search.txtSearchForm.setText("");
             loadDataTable();
         });
 
-        String[] actions = {"create", "update", "delete", "detail"};
+        String[] actions = { "create", "update", "delete", "detail" };
         mainFunction = new MainFunction(actions);
         for (String action : actions) {
             mainFunction.btn.get(action).addActionListener(this);
@@ -123,7 +123,7 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
                     roleStr = "Unknown";
             }
             String statusStr = tk.getTrangthai() == 1 ? "Hoạt động" : "Ngừng hoạt động";
-            dTable.addRow(new Object[]{
+            dTable.addRow(new Object[] {
                     tk.getManv(),
                     roleStr,
                     statusStr
@@ -144,7 +144,6 @@ public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
         ArrayList<TaiKhoanModel> all = TaiKhoanService.search("", "Tất cả");
         populateTable(all);
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {

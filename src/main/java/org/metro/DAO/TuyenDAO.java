@@ -15,12 +15,36 @@ public class TuyenDAO implements IBaseDAO<TuyenDuongModel> {
 
     @Override
     public int insert(TuyenDuongModel t) {
-        return 0;
+        String query = "INSERT INTO tuyen(matuyen,trambatdau,tramketthuc,thoigian,trangthai) VALUES (?,?,?,?,?)";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setInt(1, t.getMatuyen());
+            prs.setInt(2, t.getTramdau());
+            prs.setInt(3, t.getTramdich());
+            prs.setInt(4, t.getThoigiandichuyen());
+            prs.setString(5, t.getTrangthaituyen());
+            return prs.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public int update(TuyenDuongModel t) {
-        return 0;
+        String query = "UPDATE tuyen SET trambatdau = ?, tramketthuc = ?, thoigian = ?, trangthai = ? WHERE matuyen = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setInt(1, t.getTramdau());
+            prs.setInt(2, t.getTramdich());
+            prs.setInt(3, t.getThoigiandichuyen());
+            prs.setString(4, t.getTrangthaituyen());
+            prs.setInt(5, t.getMatuyen());
+            return prs.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
