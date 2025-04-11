@@ -114,4 +114,24 @@ public class TuyenDAO implements IBaseDAO<TuyenDuongModel> {
 
     }
 
+    public int getAutoIncrement() {
+        String query = "SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setString(1, "quanlymetro");
+            prs.setString(2, "tuyen");
+
+            try (ResultSet rs = prs.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("AUTO_INCREMENT");
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 }

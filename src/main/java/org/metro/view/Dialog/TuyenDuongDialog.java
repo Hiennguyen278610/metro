@@ -2,6 +2,7 @@ package org.metro.view.Dialog;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -9,14 +10,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.List;
 
+import org.metro.DAO.TramDAO;
 import org.metro.DAO.TuyenDAO;
 import org.metro.model.TuyenDuongModel;
+import org.metro.model.TramModel; // Ensure TramModel is imported
 
 import java.awt.Frame;
 
 public class TuyenDuongDialog extends JDialog {
-    private JTextField txtMaTuyen, txtTramDau, txtTramDich, txtThoiGianDiChuyen;
+    private JTextField txtMaTuyen, txtThoiGianDiChuyen;
+    private JComboBox<String> cbxTramDau, cbxTramDich;
     private JButton btnLuu, btnDong;
     private boolean saved = false;
 
@@ -27,7 +32,7 @@ public class TuyenDuongDialog extends JDialog {
     public TuyenDuongDialog(Frame owner, Mode mode, TuyenDuongModel route) {
         super(owner, true);
         setTitle(getTitleByMode(mode));
-        setSize(400, 300);
+        setSize(500, 300);
         setLocationRelativeTo(owner);
         setLayout(new BorderLayout());
 
@@ -36,17 +41,25 @@ public class TuyenDuongDialog extends JDialog {
 
         pnlForm.add(new JLabel("Mã tuyến:"));
         txtMaTuyen = new JTextField();
+        txtMaTuyen.setEditable(false);
         pnlForm.add(txtMaTuyen);
 
-        pnlForm.add(new JLabel("Tên tuyến:"));
-        txtTramDau = new JTextField();
-        pnlForm.add(txtTramDau);
+        pnlForm.add(new JLabel("Trạm bắt đầu:"));
+        cbxTramDau = new JComboBox<String>();
+        List<TramModel> tramList = new TramDAO().selectAll(); // Lay ds tat ca cac tram
+        pnlForm.add(cbxTramDau);
 
-        pnlForm.add(new JLabel("Độ dài (km):"));
-        txtTramDich = new JTextField();
-        pnlForm.add(txtTramDich);
+        pnlForm.add(new JLabel("Trạm kết thúc:"));
+        cbxTramDich = new JComboBox<String>();
+        cbxTramDau.addItem("Chọn trạm đầu");
+        cbxTramDich.addItem("Chọn trạm đích");
+        for (TramModel tram : tramList) {
+            cbxTramDau.addItem(tram.toString());
+            cbxTramDich.addItem(tram.toString());
+        }
+        pnlForm.add(cbxTramDich);
 
-        pnlForm.add(new JLabel("Số ga:"));
+        pnlForm.add(new JLabel("Thời gian di chuyển:"));
         txtThoiGianDiChuyen = new JTextField();
         pnlForm.add(txtThoiGianDiChuyen);
 
@@ -61,22 +74,23 @@ public class TuyenDuongDialog extends JDialog {
         add(pnlButtons, BorderLayout.SOUTH);
 
         // Nếu là sửa hoặc xem, thì load dữ liệu lên form
-        if (route != null) {
-            txtMaTuyen.setText(route.getMatuyen() + "");
-            txtTramDau.setText(route.getTramdau() + "");
-            txtTramDich.setText(String.valueOf(route.getTramdich()));
-            txtThoiGianDiChuyen.setText(String.valueOf(route.getThoigiandichuyen()));
-        }
 
-        if (mode == Mode.ADD || mode == Mode.EDIT) {
-            txtMaTuyen.setEditable(false); // Không cho sửa mã tuyến khi thêm mới
+        if (mode == Mode.ADD) {
+            int maTuyen = new TuyenDAO().getAutoIncrement();
+            System.out.println(maTuyen + "");
+            txtMaTuyen.setText(maTuyen + "");
+        }
+        if (mode == Mode.EDIT || mode == Mode.VIEW) {
+            txtMaTuyen.setText(String.valueOf(route.getMatuyen()));
+            cbxTramDau.setSelectedIndex(route.getTramdau());
+            cbxTramDich.setSelectedIndex(route.getTramdich());
+            txtThoiGianDiChuyen.setText(String.valueOf(route.getThoigiandichuyen()));
         }
 
         // Nếu là chế độ xem, disable tất cả input và ẩn nút lưu
         if (mode == Mode.VIEW) {
-            txtMaTuyen.setEditable(false);
-            txtTramDau.setEditable(false);
-            txtTramDich.setEditable(false);
+            cbxTramDau.setEditable(false);
+            cbxTramDich.setEditable(false);
             txtThoiGianDiChuyen.setEditable(false);
             btnLuu.setVisible(false);
         }
@@ -88,8 +102,8 @@ public class TuyenDuongDialog extends JDialog {
 
             // Nếu hợp lệ thì xử lý lưu
             int ma = Integer.parseInt(txtMaTuyen.getText());
-            int tramBD = Integer.parseInt(txtTramDau.getText());
-            int tramKT = Integer.parseInt(txtTramDich.getText());
+            int tramBD = cbxTramDau.getSelectedIndex();
+            int tramKT = cbxTramDich.getSelectedIndex();
             int tg = Integer.parseInt(txtThoiGianDiChuyen.getText());
 
             if (mode == Mode.ADD) {
@@ -136,15 +150,15 @@ public class TuyenDuongDialog extends JDialog {
 
     private boolean validateInput() {
         try {
-            int tramBD = Integer.parseInt(txtTramDau.getText().trim());
-            int tramKT = Integer.parseInt(txtTramDich.getText().trim());
+            int tramBD = cbxTramDau.getSelectedIndex();
+            int tramKT = cbxTramDich.getSelectedIndex();
             int thoiGian = Integer.parseInt(txtThoiGianDiChuyen.getText().trim());
 
-            if (tramBD <= 0 || tramKT <= 0 || thoiGian <= 0) {
+            if (tramBD == 0 || tramKT == 0 || thoiGian <= 0 || tramBD == tramKT) {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập các giá trị là số nguyên dương!", "Lỗi dữ liệu",
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập các giá trị hợp lệ", "Lỗi dữ liệu",
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }

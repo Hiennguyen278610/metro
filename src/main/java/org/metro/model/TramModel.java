@@ -68,4 +68,8 @@ public class TramModel {
         this.diachi = diachi;
     }
 
+    @Override
+    public String toString() {
+        return "Trạm " + this.getMatram() + " - " + this.getTentram();
+    }
 }
