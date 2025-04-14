@@ -68,7 +68,7 @@ public class DoThiTuyenDuong extends JPanel {
 
         try {
             for (TramModel tram : tramList) {
-                Object hihi = graph.insertVertex(parent, null, tram.getTentram(), tram.getX(), tram.getY(), 100, 100,
+                Object hihi = graph.insertVertex(parent, null, tram.getTentram(), tram.getX(), tram.getY(), 80, 80,
                         "shape=ellipse");
                 luuTram.put(tram.getMatram(), hihi);
             }

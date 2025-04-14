@@ -45,4 +45,9 @@ public class LichTrinhModel {
     public LocalDateTime getThoigiankhoihanh() {return tgkhoihanh;}
     public LocalDateTime getThoigianthucte() {return tgdenthucte;}
     public String getTrangthai() {return trangthailichtrinh;}
+
+    @Override
+    public String toString() {
+        return "Chuyến số " + machuyen + ": " + trangthailichtrinh;
+    }
 }

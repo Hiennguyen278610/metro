@@ -36,9 +36,9 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
 
         khachHangTable = new JTable();
         khachHangScrollTable = new JScrollPane();
-        dTable = new DefaultTableModel(){
+        dTable = new DefaultTableModel() {
             @Override
-             // tao model voi so cot va hang co dinh khong cho sua chua
+            // tao model voi so cot va hang co dinh khong cho sua chua
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -84,7 +84,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
                 }, 300);
             }
         });
-        search.btnReset.addActionListener(e -> {
+        search.btnReset.addActionListener(_ -> {
             search.txtSearchForm.setText("");
             loadDataTable();
         });

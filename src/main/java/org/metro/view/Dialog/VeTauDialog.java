@@ -2,9 +2,12 @@ package org.metro.view.Dialog;
 
 import org.metro.controller.VeTauController;
 import org.metro.model.KhachHangModel;
+import org.metro.model.LichTrinhModel;
+import org.metro.model.NhanVienModel;
 import org.metro.model.VeTauModel;
 import org.metro.service.KhachHangService;
 import org.metro.service.VeTauService;
+import org.metro.util.ComboBoxUtil;
 import org.metro.view.Component.handleComponents;
 import org.metro.view.Panel.VeTau;
 
@@ -12,7 +15,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class VeTauDialog extends JDialog {
-    private JTextField machuyenTextField, sdtKhachTextField, giaveTextField;
+    private JTextField sdtKhachTextField, giaveTextField;
+    private JComboBox<LichTrinhModel> machuyenComboBox;
+    private DefaultComboBoxModel<LichTrinhModel> machuyenComboBoxModel;
     private JButton ok, cancel;
     private String type;
     private JPanel contentPanel;
@@ -37,17 +42,6 @@ public class VeTauDialog extends JDialog {
         checkButtonClicked();
     }
 
-    public VeTauDialog() {
-        super();
-        this.type = "default";
-        this.contentPanel = new JPanel(new GridBagLayout());
-        this.machuyenTextField = new JTextField(20);
-        this.sdtKhachTextField = new JTextField(20);
-        this.giaveTextField = new JTextField(20);
-        this.ok = new JButton("OK");
-        this.khachHangDialog = new KhachHangDialog();
-    }
-
     private void init() {
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
@@ -60,8 +54,13 @@ public class VeTauDialog extends JDialog {
         handleComponents.addLabelGBL(contentPanel, "Số điện thoại khách:", 0, 1, gbc);
         handleComponents.addLabelGBL(contentPanel, "Giá vé:", 0, 2, gbc);
 
-        // TextFields
-        machuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 0, gbc);
+        machuyenComboBoxModel = new DefaultComboBoxModel<>();
+        machuyenComboBox = new JComboBox<>(machuyenComboBoxModel);
+        ComboBoxUtil.loadComboBoxData(machuyenComboBoxModel, ComboBoxUtil.getDataSupplier(LichTrinhModel.class));
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        contentPanel.add(machuyenComboBox, gbc);
+
         sdtKhachTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 1, gbc);
         giaveTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 2, gbc);
 
@@ -139,7 +138,7 @@ public class VeTauDialog extends JDialog {
 
     // Hàm thiết lập khả năng chỉnh sửa của các trường
     public void editEnabled(boolean enabled) {
-        if (machuyenTextField != null) machuyenTextField.setEnabled(enabled);
+        if (machuyenComboBox != null) machuyenComboBox.setEnabled(enabled);
         if (sdtKhachTextField != null) sdtKhachTextField.setEnabled(enabled);
         if (giaveTextField != null) giaveTextField.setEnabled(enabled);
     }
@@ -151,7 +150,8 @@ public class VeTauDialog extends JDialog {
             // Lấy thông tin khách hàng theo mã khách hàng để hiển thị số điện thoại
             KhachHangModel kh = KhachHangService.getById(veTauSelected.getMakh());
 
-            machuyenTextField.setText(String.valueOf(veTauSelected.getMachuyen()));
+            ComboBoxUtil.selectItemInComboBox(machuyenComboBox, machuyenComboBoxModel,
+                    nv -> ((LichTrinhModel)nv).getManv() == veTauSelected.getMachuyen());
             sdtKhachTextField.setText(kh != null ? kh.getSdt() : "Không tìm thấy");
             giaveTextField.setText(String.valueOf(veTauSelected.getGiave()));
         } else {
@@ -163,19 +163,13 @@ public class VeTauDialog extends JDialog {
     public VeTauModel getVeTauFromForm() {
         try {
             // Kiểm tra null trước khi truy cập các thành phần
-            if (machuyenTextField == null || sdtKhachTextField == null || giaveTextField == null) {
+            if (machuyenComboBox == null || sdtKhachTextField == null || giaveTextField == null) {
                 JOptionPane.showMessageDialog(this,
                         "Lỗi: Các trường dữ liệu chưa được khởi tạo!",
                         "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
 
-            // Kiểm tra các trường bắt buộc không được để trống
-            if (machuyenTextField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã chuyến!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                machuyenTextField.requestFocus();
-                return null;
-            }
             if (sdtKhachTextField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập số điện thoại khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 sdtKhachTextField.requestFocus();
@@ -187,14 +181,8 @@ public class VeTauDialog extends JDialog {
                 return null;
             }
 
-            int machuyen;
-            try {
-                machuyen = Integer.parseInt(machuyenTextField.getText().trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã chuyến phải là số nguyên!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                machuyenTextField.requestFocus();
-                return null;
-            }
+            // Lấy mã chuyến từ ComboBox
+            int machuyen = ((LichTrinhModel) machuyenComboBox.getSelectedItem()).getMachuyen();
 
             // Kiểm tra SĐT khách hàng có tồn tại trong DB không
             String sdtKhach = sdtKhachTextField.getText().trim();
@@ -256,30 +244,5 @@ public class VeTauDialog extends JDialog {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Giá vé phải là số thực!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    // Getters và Setters
-    public JTextField getMachuyenTextField() {
-        return machuyenTextField;
-    }
-
-    public JTextField getSdtKhachTextField() {
-        return sdtKhachTextField;
-    }
-
-    public JTextField getGiaveTextField() {
-        return giaveTextField;
-    }
-
-    public JButton getOk() {
-        return ok;
-    }
-
-    public VeTau getVeTau() {
-        return veTau;
-    }
-
-    public VeTauModel getVetauModel() {
-        return vetauModel;
     }
 }

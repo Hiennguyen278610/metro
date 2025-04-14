@@ -24,6 +24,7 @@ public class TauController implements ActionListener, ItemListener, KeyListener 
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) { // ktra khi combobox dc tich chon
+            @SuppressWarnings("unchecked")
             JComboBox<String> cbb = (JComboBox<String>) e.getSource();
             String str = (String) cbb.getSelectedItem();
             if (str != null) {

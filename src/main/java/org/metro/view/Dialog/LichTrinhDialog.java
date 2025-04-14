@@ -4,7 +4,8 @@ import org.metro.model.LichTrinhModel;
 import org.metro.model.NhanVienModel;
 import org.metro.model.TauModel;
 import org.metro.controller.LichTrinhController;
-import org.metro.service.TauService;
+import org.metro.model.TuyenDuongModel;
+import org.metro.util.ComboBoxUtil;
 import org.metro.view.Component.handleComponents;
 import org.metro.view.Panel.LichTrinh;
 import org.metro.util.DateTimeUtil;
@@ -13,11 +14,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 import com.toedter.calendar.JDateChooser;
 
 public class LichTrinhDialog extends JDialog {
-    private JTextField machuyenTextField, matuyenTextField;
+    private JTextField machuyenTextField;
+    private JComboBox<TuyenDuongModel> matuyenComboBox;
+    private DefaultComboBoxModel<TuyenDuongModel> matuyenComboBoxModel;
     private JComboBox<NhanVienModel> manvComboBox;
     private DefaultComboBoxModel<NhanVienModel> manvComboBoxModel;
     private JComboBox<TauModel> matauComboBox;
@@ -61,30 +63,34 @@ public class LichTrinhDialog extends JDialog {
 
         int startRow = ("create".equals(type)) ? 0 : 1;
         handleComponents.addLabelGBL(contentPanel, "Nhân viên:", 0, startRow, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Mã tàu:", 0, startRow + 1, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Mã tuyến:", 0, startRow + 2, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Mã tuyến:", 0, startRow + 1, gbc);
+        handleComponents.addLabelGBL(contentPanel, "Mã tàu:", 0, startRow + 2, gbc);
         handleComponents.addLabelGBL(contentPanel, "Hướng đi:", 0, startRow + 3, gbc);
         handleComponents.addLabelGBL(contentPanel, "Thời gian khởi hành:", 0, startRow + 4, gbc);
         handleComponents.addLabelGBL(contentPanel, "Thời gian đến thực tế:", 0, startRow + 5, gbc);
         handleComponents.addLabelGBL(contentPanel, "Trạng thái lịch trình:", 0, startRow + 6, gbc);
 
-        // Setup NhanVien ComboBox
         manvComboBoxModel = new DefaultComboBoxModel<>();
         manvComboBox = new JComboBox<>(manvComboBoxModel);
-        controller.loadNhanVienData(manvComboBoxModel);
+        ComboBoxUtil.loadComboBoxData(manvComboBoxModel, ComboBoxUtil.getDataSupplier(NhanVienModel.class));
         gbc.gridx = 1;
         gbc.gridy = startRow;
         contentPanel.add(manvComboBox, gbc);
 
-        // Setup Tau ComboBox
-        matauComboBoxModel = new DefaultComboBoxModel<>();
-        matauComboBox = new JComboBox<>(matauComboBoxModel);
-        controller.loadTauData(matauComboBoxModel);
+        matuyenComboBoxModel = new DefaultComboBoxModel<>();
+        matuyenComboBox = new JComboBox<>(matuyenComboBoxModel);
+        ComboBoxUtil.loadComboBoxData(matuyenComboBoxModel, ComboBoxUtil.getDataSupplier(TuyenDuongModel.class));
         gbc.gridx = 1;
         gbc.gridy = startRow + 1;
+        contentPanel.add(matuyenComboBox, gbc);
+
+        matauComboBoxModel = new DefaultComboBoxModel<>();
+        matauComboBox = new JComboBox<>(matauComboBoxModel);
+        ComboBoxUtil.loadComboBoxData(matauComboBoxModel, ComboBoxUtil.getDataSupplier(TauModel.class));
+        gbc.gridx = 1;
+        gbc.gridy = startRow + 2;
         contentPanel.add(matauComboBox, gbc);
 
-        matuyenTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, startRow + 2, gbc);
 
         huongdiComboBox = new JComboBox<>(new String[]{"Đi", "Về"});
         gbc.gridx = 1;
@@ -119,7 +125,7 @@ public class LichTrinhDialog extends JDialog {
         gbc.gridy = startRow + 5;
         contentPanel.add(tgttPanel, gbc);
 
-        trangthaiComboBox = new JComboBox<>(new String[]{"Chưa khởi hành", "sẵn sàng", "Đang chạy", "Đã hoàn thành", "Đã hủy"});
+        trangthaiComboBox = new JComboBox<>(new String[]{"Chưa khởi hành", "Đang khởi hành", "Hoàn Thành", "Đã hủy"});
         gbc.gridx = 1;
         gbc.gridy = startRow + 6;
         contentPanel.add(trangthaiComboBox, gbc);
@@ -136,7 +142,7 @@ public class LichTrinhDialog extends JDialog {
         }
 
         if (ok != null) {ok.addActionListener(controller);}
-        if (cancel != null) {cancel.addActionListener(e -> dispose());}
+        if (cancel != null) {cancel.addActionListener(_ -> dispose());}
         this.add(contentPanel);
     }
 
@@ -179,7 +185,7 @@ public class LichTrinhDialog extends JDialog {
         if (machuyenTextField != null) machuyenTextField.setEnabled(false); // Luôn disable mã chuyến
         if (manvComboBox != null) manvComboBox.setEnabled(enabled);
         if (matauComboBox != null) matauComboBox.setEnabled(enabled);
-        if (matuyenTextField != null) matuyenTextField.setEnabled(enabled);
+        if (matuyenComboBox != null) matuyenComboBox.setEnabled(enabled);
         if (huongdiComboBox != null) huongdiComboBox.setEnabled(enabled);
         if (tgkhJDateChooser != null) tgkhJDateChooser.setEnabled(enabled);
         if (tgkhTimeComboBox != null) tgkhTimeComboBox.setEnabled(enabled);
@@ -192,9 +198,12 @@ public class LichTrinhDialog extends JDialog {
         LichTrinhModel selected = (lichTrinhModel != null) ? lichTrinhModel : lichTrinh.getSelectedLichTrinh();
         if (selected != null) {
             if (machuyenTextField != null) machuyenTextField.setText(String.valueOf(selected.getMachuyen()));
-            controller.selectNhanVienInCombobox(selected.getManv(), manvComboBox, manvComboBoxModel);
-            controller.selectTauInCombobox(String.valueOf(selected.getMatau()), matauComboBox, matauComboBoxModel);
-            matuyenTextField.setText(String.valueOf(selected.getMatuyen()));
+            ComboBoxUtil.selectItemInComboBox(manvComboBox, manvComboBoxModel,
+                    nv -> ((NhanVienModel)nv).getManv() == selected.getManv());
+            ComboBoxUtil.selectItemInComboBox(matauComboBox, matauComboBoxModel,
+                    tau -> Integer.parseInt(((TauModel)tau).getMatau()) == selected.getMatau());
+            ComboBoxUtil.selectItemInComboBox(matuyenComboBox, matuyenComboBoxModel,
+                    tuyen -> ((TuyenDuongModel)tuyen).getMatuyen() == selected.getMatuyen());
             huongdiComboBox.setSelectedIndex(selected.isHuongdi() ? 0 : 1);
 
             DateTimeUtil.setDateTime(tgkhJDateChooser, tgkhTimeComboBox, selected.getTgkhoihanh());
@@ -211,9 +220,8 @@ public class LichTrinhDialog extends JDialog {
             int machuyen = "".equals(machuyenStr) ? 0 : Integer.parseInt(machuyenStr);
 
             int manv = ((NhanVienModel) manvComboBox.getSelectedItem()).getManv();
+            int matuyen = ((TuyenDuongModel) matuyenComboBox.getSelectedItem()).getMatuyen();
             int matau = Integer.parseInt(((TauModel) matauComboBox.getSelectedItem()).getMatau());
-
-            int matuyen = Integer.parseInt(matuyenTextField.getText().trim());
             boolean huongdi = huongdiComboBox.getSelectedIndex() == 0;
 
             LocalDateTime tgkh = DateTimeUtil.getTimeComponents(tgkhJDateChooser, tgkhTimeComboBox);

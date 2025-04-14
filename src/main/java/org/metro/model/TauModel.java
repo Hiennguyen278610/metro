@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class TauModel {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private String matau; // Mã tàu
     private int soghe; // Số ghế trên tàu
     private String trangthaitau; // Trạng thái (Đang vận hành, bảo trì)
@@ -16,6 +15,12 @@ public class TauModel {
         this.trangthaitau = trangthaitau;
     }
 
+    public TauModel(int soghe, String trangthaitau, LocalDate ngaynhap) {
+        this.soghe = soghe;
+        this.trangthaitau = trangthaitau;
+        this.ngaynhap = ngaynhap;
+    }
+
     public TauModel(String matau, int soghe, String trangthaitau, LocalDate ngaynhap) {
         this.matau = matau;
         this.soghe = soghe;
@@ -24,6 +29,7 @@ public class TauModel {
     }
 
     public String getNgaynhap() {
+        DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return ngaynhap.format(FORMATTER);
     }
 
