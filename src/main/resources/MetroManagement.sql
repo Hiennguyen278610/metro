@@ -6,8 +6,8 @@ DROP TABLE IF EXISTS tuyen_tram;
 DROP TABLE IF EXISTS tuyen;
 DROP TABLE IF EXISTS tram;
 DROP TABLE IF EXISTS tau;
-DROP TABLE IF EXISTS nhanvien;
 DROP TABLE IF EXISTS taikhoan;
+DROP TABLE IF EXISTS nhanvien;
 DROP TABLE IF EXISTS chitietquyen;
 DROP TABLE IF EXISTS nhomchucnang;
 DROP TABLE IF EXISTS nhomquyen;
@@ -220,19 +220,20 @@ CREATE TABLE tram (
     x INT NOT NULL,
     y INT NOT NULL,
     diachi VARCHAR(255) NOT NULL,
+    chiphitram DOUBLE NOT NULL,
     PRIMARY KEY (matram)
 );
-INSERT INTO tram (tentram, x, y, diachi)
-VALUES ('Tram Ben Thanh', 100, 100, 'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM'),
-    ('Tram Sai Gon', 100, 200, 'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM'),
-    ('Tram Hoa Hung', 100, 300, 'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM'),
-    ('Tram Tan Binh', 100, 400, 'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM'),
-    ('Tram Phu Nhuan', 200, 400, 'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM'),
-    ('Tram Go Vap', 200, 500, 'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM'),
-    ('Tram Binh Thanh', 200, 600, 'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM'),
-    ('Tram Thu Duc', 200, 700, 'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM'),
-    ('Tram Quan 7', 200, 800, 'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM'),
-    ('Tram Nha Be', 200, 900, 'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM');
+INSERT INTO tram (tentram, x, y, diachi, chiphitram)
+VALUES ('Tram Ben Thanh', 100, 100, 'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM', 10000.00),
+    ('Tram Sai Gon', 100, 200, 'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM', 10000.00),
+    ('Tram Hoa Hung', 100, 300, 'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM', 10000.00),
+    ('Tram Tan Binh', 100, 400, 'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM', 10000.00),
+    ('Tram Phu Nhuan', 200, 400, 'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM', 10000.00),
+    ('Tram Go Vap', 200, 500, 'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM', 10000.00),
+    ('Tram Binh Thanh', 200, 600, 'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM', 10000.00),
+    ('Tram Thu Duc', 200, 700, 'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM', 10000.00),
+    ('Tram Quan 7', 200, 800, 'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM', 10000.00),
+    ('Tram Nha Be', 200, 900, 'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM', 10000.00);
 
 -- ----------------------------------------------------------------
 -- Bảng TUYEN
@@ -259,13 +260,19 @@ CREATE TABLE tau (
     soghe INT NOT NULL,
     trangthaitau VARCHAR(100) NOT NULL,
     ngaynhap DATE NOT NULL,
+    chiphitau DOUBLE NOT NULL,
     PRIMARY KEY (matau)
 );
-INSERT INTO tau (soghe, trangthaitau, ngaynhap)
-VALUES (50, 'Đang hoạt động', '2025-01-01'),
-    (20, 'Đang bảo trì', '2025-01-02'),
-    (100, 'Ngừng hoạt động', '2025-01-02'),
-    (25, 'Đang hoạt động', '2025-01-03');
+INSERT INTO tau (soghe, trangthaitau, ngaynhap, chiphitau)
+VALUES (50, 'Đang hoạt động', '2025-01-01', 10000.00),
+    (20, 'Đang bảo trì', '2025-01-02', 10000.00),
+    (100, 'Ngừng hoạt động', '2025-01-02', 10000.00),
+    (25, 'Đang hoạt động', '2025-01-03', 10000.00),
+    (40, 'Đang hoạt động', '2025-01-04', 10000.00),
+    (60, 'Đang hoạt động', '2025-02-10', 10000.00),
+    (80, 'Đang bảo trì', '2025-02-15', 10000.00),
+    (55, 'Ngừng hoạt động', '2025-03-01', 10000.00),
+    (30, 'Đang hoạt động', '2025-03-10', 10000.00);
 -- ----------------------------------------------------------------
 -- Bảng TUYEN_TRAM
 CREATE TABLE tuyen_tram (
@@ -317,8 +324,8 @@ VALUES (
         1,
         1,
         1,
-        '2025-04-01 09:00:00',
-        '2025-04-01 09:30:00',
+        '2019-04-01 09:00:00',
+        '2019-04-01 09:00:00',
         'Chờ khởi hành'
     ),
     (
@@ -326,8 +333,8 @@ VALUES (
         2,
         1,
         1,
-        '2025-04-02 10:00:00',
-        '2025-04-02 10:20:00',
+        '2018-04-02 10:00:00',
+        '2018-04-02 10:10:00',
         'Đang khởi hành'
     ),
     (
@@ -353,8 +360,8 @@ VALUES (
         2,
         1,
         1,
-        '2025-04-05 12:00:00',
-        '2025-04-05 12:30:00',
+        '2025-08-05 12:00:00',
+        '2025-08-05 12:00:00',
         'Đang khởi hành'
     ),
     (
@@ -362,8 +369,8 @@ VALUES (
         4,
         1,
         1,
-        '2025-04-06 13:00:00',
-        '2025-04-06 13:25:00',
+        '2018-08-06 13:00:00',
+        '2018-08-06 13:25:00',
         'Hoàn Thành'
     ),
     (
@@ -371,8 +378,8 @@ VALUES (
         3,
         1,
         1,
-        '2025-04-07 14:00:00',
-        '2025-04-07 14:30:00',
+        '2020-04-07 14:00:00',
+        '2020-04-07 14:30:00',
         'Chờ khởi hành'
     ),
     (
@@ -389,8 +396,8 @@ VALUES (
         1,
         1,
         1,
-        '2025-04-09 06:45:00',
-        '2025-04-09 07:10:00',
+        '2025-11-09 06:45:00',
+        '2025-11-09 07:10:00',
         'Hoàn Thành'
     ),
     (
@@ -398,10 +405,15 @@ VALUES (
         3,
         1,
         0,
-        '2025-05-01 06:00:00',
-        '2025-05-01 06:05:00',
+        '2022-12-01 06:00:00',
+        '2022-12-01 06:05:00',
         'Đang khởi hành'
-    );
+    ),
+    (2, 5, 2, 1, '2016-04-10 08:00:00', '2016-04-10 08:45:00', 'Hoàn thành'),
+    (3, 5, 2, 1, '2017-09-11 08:00:00', '2017-09-11 08:50:00', 'Đang khởi hành'),
+    (4, 6, 3, 0, '2025-04-12 09:00:00', '2025-04-12 09:40:00', 'Hoàn thành'),
+    (5, 6, 4, 0, '2024-04-13 10:00:00', '2024-04-13 10:35:00', 'Hoàn thành'),
+    (1, 7, 5, 1, '2024-02-14 07:30:00', '2024-02-14 08:00:00', 'Hoàn thành');
 -- ----------------------------------------------------------------
 -- Bảng VETAU
 CREATE TABLE vetau (
@@ -414,9 +426,9 @@ CREATE TABLE vetau (
     CONSTRAINT FK_mave_khachhang FOREIGN KEY (makh) REFERENCES khachhang(makh) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 INSERT INTO vetau (machuyen, makh, giave)
-VALUES (3, 1, 8500.00),
+VALUES (3, 1, 85000.00),
     (3, 2, 21000.00),
-    (3, 3, 13750.50),
+    (3, 3, 137500.50),
     (3, 4, 9000.00),
     (3, 5, 23000.00),
     (3, 6, 15000.00),
@@ -428,12 +440,22 @@ VALUES (3, 1, 8500.00),
     (6, 12, 16000.00),
     (6, 13, 9500.00),
     (6, 14, 22200.00),
-    (6, 15, 12350.00),
+    (6, 15, 123500.00),
     (9, 16, 14000.00),
     (9, 17, 23500.00),
     (9, 18, 10000.00),
     (9, 19, 18800.00),
-    (9, 20, 7800.00);
+    (9, 20, 7800.00),
+    (10, 1, 9500.00),
+    (10, 2, 15000.00),
+    (10, 3, 13500.00),
+    (10, 4, 14500.00),
+    (11, 5, 13000.00),
+    (11, 6, 9000.00),
+    (11, 7, 8700.00),
+    (11, 8, 9200.00),
+    (12, 9, 16000.00),
+    (12, 10, 200000.00);
 -- ----------------------------------------------------------------
 -- Bảng LICHBAOTRI
 CREATE TABLE lichbaotri (
@@ -442,31 +464,35 @@ CREATE TABLE lichbaotri (
     ngaybaotri DATE NOT NULL,
     trangthaibaotri VARCHAR(100) NOT NULL,
     ngaytao DATETIME NOT NULL,
+    chiphibaotri DOUBLE NOT NULL,
     PRIMARY KEY (mabaotri),
     CONSTRAINT FK_baotri_matau FOREIGN KEY (matau) REFERENCES tau(matau) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-INSERT INTO lichbaotri (matau, ngaybaotri, trangthaibaotri, ngaytao)
+INSERT INTO lichbaotri (matau, ngaybaotri, trangthaibaotri, ngaytao, chiphibaotri)
 VALUES (
         1,
         '2025-03-23',
         'Đang bảo trì',
-        '2025-03-22 15:45:00'
-    ),
+        '2025-03-22 15:45:00',
+        20000.00),
     (
         2,
         '2025-03-22',
         'Hoàn thành',
-        '2025-03-21 15:45:00'
-    ),
+        '2025-03-21 15:45:00',
+        20000.00),
     (
         3,
         '2025-03-21',
         'Đang bảo trì',
-        '2025-03-22 15:45:00'
-    ),
+        '2025-03-22 15:45:00',
+        20000.00),
     (
         4,
         '2025-03-20',
         'Chờ kiểm tra',
-        '2025-03-22 15:45:00'
-    );
+        '2025-03-22 15:45:00',
+        20000.00),
+
+   (6, '2025-03-27', 'Chờ kiểm tra', '2025-03-26 19:00:00', 20000.00),
+   (7, '2025-03-28', 'Đang bảo trì', '2025-03-27 20:00:00', 20000.00);
