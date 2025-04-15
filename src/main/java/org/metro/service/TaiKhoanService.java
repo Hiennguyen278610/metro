@@ -3,6 +3,7 @@ package org.metro.service;
 import org.metro.DAO.TaiKhoanDAO;
 import org.metro.model.TaiKhoanModel;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaiKhoanService {
@@ -10,8 +11,8 @@ public class TaiKhoanService {
     private static final TaiKhoanDAO taikhoanDAO = new TaiKhoanDAO();
 
     // Load dữ liệu từ DB
-    public static void loadData() {
-        allAccounts = new ArrayList<>(taikhoanDAO.getAll());
+    public static List<TaiKhoanModel> loadData() {
+        return taikhoanDAO.selectAll();
     }
 
     // Tìm kiếm tài khoản theo mã nhân viên (ID)

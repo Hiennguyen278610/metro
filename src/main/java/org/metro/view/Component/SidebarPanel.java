@@ -1,5 +1,6 @@
 package org.metro.view.Component;
 
+import org.metro.util.SessionManager;
 import org.metro.view.MainFrame;
 
 import javax.swing.*;

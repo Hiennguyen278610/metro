@@ -1,14 +1,19 @@
 package org.metro.view.Component;
 
+import org.metro.model.PhanQuyenModel.NhomQuyenModel;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputField extends JPanel {
     private JLabel lbContent, lbData;
     private JTextField txtInput;
-
+    private JComboBox<NhomQuyenModel> comboboxnhomquyen;
+    private JComboBox<String> comboboxtrangthai;
     public InputField(String label, int width, int height) {
         this.setLayout(new GridLayout(2, 1));
         this.init(width, height);
@@ -30,7 +35,33 @@ public class InputField extends JPanel {
         lbData.setPreferredSize(new Dimension(150, 30));
         this.add(lbContent);
         this.add(lbData);
+    }
 
+    public InputField(String label, ArrayList<NhomQuyenModel> itemCbx, int w, int h) {
+        this.setLayout(new GridLayout(2, 1));
+        this.init(w, h);
+        lbContent = new JLabel(label);
+        lbContent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        comboboxnhomquyen = new JComboBox<>();
+        for(NhomQuyenModel NQM : itemCbx) {
+            comboboxnhomquyen.addItem(NQM);
+        }
+        comboboxnhomquyen.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        comboboxnhomquyen.setPreferredSize(new Dimension(150, 30));
+        this.add(lbContent);
+        this.add(comboboxnhomquyen);
+    }
+
+    public InputField(String label,String[] trangthai,int w,int h) {
+        this.setLayout(new GridLayout(2, 1));
+        this.init(w, h);
+        lbContent = new JLabel(label);
+        lbContent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        comboboxtrangthai = new JComboBox<>(trangthai);
+        comboboxtrangthai.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        comboboxtrangthai.setPreferredSize(new Dimension(150, 30));
+        this.add(lbContent);
+        this.add(comboboxtrangthai);
     }
 
     public void init(int width, int height) {
@@ -53,6 +84,30 @@ public class InputField extends JPanel {
 
     public void setLbContent(JLabel lbContent) {
         this.lbContent = lbContent;
+    }
+
+    public JLabel getLbData() {
+        return lbData;
+    }
+
+    public void setLbData(JLabel lbData) {
+        this.lbData = lbData;
+    }
+
+    public JComboBox<NhomQuyenModel> getComboboxnhomquyen() {
+        return comboboxnhomquyen;
+    }
+
+    public void setComboboxnhomquyen(JComboBox<NhomQuyenModel> comboboxnhomquyen) {
+        this.comboboxnhomquyen = comboboxnhomquyen;
+    }
+
+    public JComboBox<String> getComboboxtrangthai() {
+        return comboboxtrangthai;
+    }
+
+    public void setComboboxtrangthai(JComboBox<String> comboboxtrangthai) {
+        this.comboboxtrangthai = comboboxtrangthai;
     }
 
     public void setDisable() {
