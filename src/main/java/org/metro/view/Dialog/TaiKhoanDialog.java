@@ -55,9 +55,9 @@ public class TaiKhoanDialog {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnCancel = new JButton("Hủy");
-        btnCancel.addActionListener(_ -> dialog.dispose());
+        btnCancel.addActionListener(e -> dialog.dispose());
         JButton btnAdd = new JButton("Thêm");
-        btnAdd.addActionListener(_ -> {
+        btnAdd.addActionListener(e -> {
             String matKhau = new String(txtMatKhau.getPassword()).trim();
             if (matKhau.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập mật khẩu!");
@@ -150,9 +150,9 @@ public class TaiKhoanDialog {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnCancel = new JButton("Hủy");
-        btnCancel.addActionListener(_ -> dialog.dispose());
+        btnCancel.addActionListener(e -> dialog.dispose());
         JButton btnUpdate = new JButton("Cập nhật");
-        btnUpdate.addActionListener(_ -> {
+        btnUpdate.addActionListener(e -> {
             String matKhau = new String(txtMatKhau.getPassword()).trim();
             if (matKhau.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập mật khẩu!");
@@ -224,7 +224,7 @@ public class TaiKhoanDialog {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnClose = new JButton("Đóng");
-        btnClose.addActionListener(_ -> dialog.dispose());
+        btnClose.addActionListener(e -> dialog.dispose());
         buttonPanel.add(btnClose);
 
         dialog.add(detailPanel, BorderLayout.CENTER);
