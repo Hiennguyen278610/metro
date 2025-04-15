@@ -131,7 +131,7 @@ public class MainFrame extends JFrame {
         // Lấy thông tin user từ SessionManager
         TaiKhoanModel currentUser = SessionManager.getCurrentUser();
         String usernameDisplay = currentUser != null ? String.valueOf(currentUser.getManv()) : "Chưa đăng nhập";
-        String roleDisplay = currentUser != null ? getRoleName(currentUser.getManhomquyen()) : "Unknown";
+        String roleDisplay = currentUser != null ? getRoleName(currentUser.getNqm().getManhomquyen()) : "Unknown";
 
         JLabel TenNguoiDungLabel = new JLabel(usernameDisplay, JLabel.LEADING);
         TenNguoiDungLabel.setForeground(Color.black);
@@ -156,9 +156,11 @@ public class MainFrame extends JFrame {
         leftPanel.add(ChucNangPanel);
 
         // Thêm MenuTaskbar vào CENTER
-        menuTaskbar = new MenuTaskbar(this, SessionManager.getCurrentUser().getManv());
-        menuTaskbar.setBorder(new LineBorder(Color.black, 2));
-        ChucNangPanel.add(menuTaskbar, BorderLayout.CENTER);
+        if(SessionManager.getCurrentUser() != null) {
+            menuTaskbar = new MenuTaskbar(this);
+            menuTaskbar.setBorder(new LineBorder(Color.black, 2));
+            ChucNangPanel.add(menuTaskbar, BorderLayout.CENTER);
+        }
 
         // DangXuatPanel
         DangXuatPanel = new JPanel();

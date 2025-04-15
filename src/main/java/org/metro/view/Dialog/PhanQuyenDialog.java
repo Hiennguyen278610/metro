@@ -199,6 +199,8 @@ public class PhanQuyenDialog extends JDialog {
             case "Chỉnh sửa quyền":
                 namebtn = "Cập nhật";
                 break;
+            case "Xem chi tiết quyền":
+                namebtn = "chi tiết quyền";
             default:
                 break;
         }

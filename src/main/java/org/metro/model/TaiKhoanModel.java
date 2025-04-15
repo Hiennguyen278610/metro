@@ -1,18 +1,26 @@
 package org.metro.model;
 
+import org.metro.model.PhanQuyenModel.NhomQuyenModel;
+
 public class TaiKhoanModel {
     private int manv;
     private String matkhau;
-    private int manhomquyen;
     private int trangthai; // 1: Hoạt động, 0: Ngừng hoạt động
+    private NhomQuyenModel nqm;
 
     public TaiKhoanModel() {}
 
-    public TaiKhoanModel(int manv, String matkhau, int manhomquyen, int trangthai) {
+    public TaiKhoanModel(int manv, String matkhau, int trangthai,NhomQuyenModel nqm) {
         this.manv = manv;
         this.matkhau = matkhau;
-        this.manhomquyen = manhomquyen;
         this.trangthai = trangthai;
+        this.nqm = nqm;
+    }
+
+    public TaiKhoanModel(int manv,int trangthai,NhomQuyenModel nqm) {
+        this.manv = manv;
+        this.trangthai = trangthai;
+        this.nqm = nqm;
     }
 
     public int getManv() {
@@ -31,14 +39,6 @@ public class TaiKhoanModel {
         this.matkhau = matkhau;
     }
 
-    public int getManhomquyen() {
-        return manhomquyen;
-    }
-
-    public void setManhomquyen(int manhomquyen) {
-        this.manhomquyen = manhomquyen;
-    }
-
     public int getTrangthai() {
         return trangthai;
     }
@@ -47,14 +47,15 @@ public class TaiKhoanModel {
         this.trangthai = trangthai;
     }
 
-    @Override
-    public String toString() {
-        return "TaiKhoanDTO{" +
-                "manv=" + manv +
-                ", matkhau='" + matkhau + '\'' +
-                ", manhomquyen=" + manhomquyen +
-                ", trangthai=" + trangthai +
-                '}';
+    public NhomQuyenModel getNqm() {
+        return nqm;
     }
 
+    public void setNqm(NhomQuyenModel nqm) {
+        this.nqm = nqm;
+    }
+
+    public boolean isTrangThai() {
+        return trangthai == 1;
+    }
 }

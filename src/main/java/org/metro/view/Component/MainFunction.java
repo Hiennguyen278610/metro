@@ -1,6 +1,7 @@
 package org.metro.view.Component;
 
 import org.metro.service.PhanQuyenService;
+import org.metro.util.SessionManager;
 
 import javax.swing.*;
 
@@ -9,37 +10,47 @@ import java.util.HashMap;
 
 public class  MainFunction extends JToolBar {
     public HashMap<String, ToolBar> btn = new HashMap<>();
-    private PhanQuyenService pqs = new PhanQuyenService();
+//    private PhanQuyenService pqs = new PhanQuyenService();
+    private int machucnang;
 
-    public MainFunction() {
-        initData();
-        initComponent();
-    }
+//    public MainFunction() {
+//        initData();
+//        initComponent();
+//    }
 
-    public MainFunction(String[] actions) {
-        pqs = new PhanQuyenService();
+    public MainFunction(int machucnang,String[] actions) {
+        this.machucnang = machucnang;
         this.setBackground(Color.WHITE);
-        this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+        this.setRollover(true);
+        this.setFloatable(false);
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        // Thêm đường viền nhỏ
+        this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         for (String action : actions) {
-            switch (action) {
-                case "create":
-                    btn.put("create", new ToolBar("THÊM", "add.svg", "create"));
-                    break;
-                case "delete":
-                    btn.put("delete", new ToolBar("XÓA", "delete.svg", "delete"));
-                    break;
-                case "update":
-                    btn.put("update", new ToolBar("SỬA", "update.svg", "update"));
-                    break;
-                case "detail":
-                    btn.put("detail", new ToolBar("CHI TIẾT", "detail.svg", "view"));
-                    break;
+            if(SessionManager.checkQuyenCurrentUser(machucnang,action)) {
+                switch (action) {
+                    case "create":
+                        btn.put("create", new ToolBar("THÊM", "add.svg", "create"));
+                        break;
+                    case "delete":
+                        btn.put("delete", new ToolBar("XÓA", "delete.svg", "delete"));
+                        break;
+                    case "update":
+                        btn.put("update", new ToolBar("SỬA", "update.svg", "update"));
+                        break;
+                    case "detail":
+                        btn.put("detail", new ToolBar("CHI TIẾT", "detail.svg", "view"));
+                        break;
+                }
             }
         }
         this.add(Box.createHorizontalStrut(10));
         for (ToolBar toolBar : btn.values()) {
             this.add(toolBar);
             this.add(Box.createHorizontalStrut(10));
+        }
+        if (getComponentCount() > 0) {
+            remove(getComponentCount() - 1);
         }
     }
 
@@ -50,21 +61,17 @@ public class  MainFunction extends JToolBar {
         btn.put("detail", new ToolBar("CHI TIẾT", "detail.svg", "view"));
     }
 
+    public void refreshQuyen() {
+        btn.forEach((action, toolBar) -> {
+            toolBar.setVisible(SessionManager.checkQuyenCurrentUser(machucnang,action));
+        });
+    }
+
     private void initComponent() {
         this.setBackground(Color.WHITE);
         this.setRollover(true);
         this.setFloatable(false);
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        for (ToolBar button : btn.values()) {
-            button.setAlignmentY(CENTER_ALIGNMENT);
-            this.add(button);
-            this.add(Box.createHorizontalStrut(10));
-        }
-        if (getComponentCount() > 0) {
-            remove(getComponentCount() - 1);
-        }
-        // Thêm đường viền nhỏ
-        this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+
     }
 
     // getter setter

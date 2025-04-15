@@ -12,6 +12,7 @@ import java.util.List;
 import java.awt.*;
 
 public class LichBaoTri extends JPanel {
+    private static final int machucnang_lichbaotri = 6;
     private JPanel functionPanel, contentPanel, functionBarPanel;
     private IntegratedSearch search;
 
@@ -42,9 +43,11 @@ public class LichBaoTri extends JPanel {
         search.getBtnReset().addMouseListener(action);
 
         String[] optMainFunc = { "create", "delete", "update", "detail" };
-        mainFunction = new MainFunction(optMainFunc);
+        mainFunction = new MainFunction(machucnang_lichbaotri,optMainFunc);
         for (String opt : optMainFunc) {
-            mainFunction.btn.get(opt).addMouseListener(action);
+            if(mainFunction.btn.get(opt) != null) {
+                mainFunction.btn.get(opt).addMouseListener(action);
+            }
         }
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));

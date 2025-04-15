@@ -65,6 +65,8 @@ public class PhanQuyenController implements ActionListener {
                     themnhomquyen();
                 } else if("Cập nhật".equals(namebutton)) {
                     capnhatnhomquyen();
+                } else if("chi tiết quyền".equals(namebutton)) {
+                    chitietnhomquyen();
                 }
             }
         }
@@ -74,7 +76,6 @@ public class PhanQuyenController implements ActionListener {
     private void themnhomquyen() {
         NhomQuyenModel nqm = new NhomQuyenModel();
         String tnq = pqDialog.getTextfieldQuyen().getText();
-        System.out.println("quan li duong ray " + tnq);
         nqm.setTennhomquyen(tnq);
         if(tnq == null || tnq.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null,"Vui lòng nhập tên nhóm quyền","thông báo",JOptionPane.ERROR_MESSAGE);
@@ -129,6 +130,65 @@ public class PhanQuyenController implements ActionListener {
         }
     }
     //ham xu ly cap nhat nhom quyen
-    private void capnhatnhomquyen() {}
+    private void capnhatnhomquyen() {
+        //lay ra cai row duoc click
+        NhomQuyenModel nqm = pq.getSelectedPhanquyen();
+        int mnq= nqm.getManhomquyen();
+        String tennhomquyen = pqDialog.getTextfieldQuyen().getText().toString();
+        if(tennhomquyen.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,"vui lòng cập nhật tên nhóm quyền","thông báo",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        nqm.setTennhomquyen(tennhomquyen);
+        if(!PhanQuyenService.updateNhomQuyen(nqm)) {
+            JOptionPane.showMessageDialog(null, "cập nhật tên nhóm quyền thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        List<NhomChucNangModel> listncnm = PhanQuyenService.getNhomChucNang();
+        List<ChiTietPhanQuyenModel> listctpqm = new ArrayList<>();
+        DefaultTableModel dtm = (DefaultTableModel) pqDialog.getTable().getModel();
+        for(int i = 0 ; i < dtm.getRowCount(); i++) {
+            String tenchunang = (String)dtm.getValueAt(i, 0);
+            System.out.println("ten chuc nang" + tenchunang);
+            boolean them = (boolean) dtm.getValueAt(i, 1);
+            boolean sua = (boolean) dtm.getValueAt(i, 2);
+            boolean chitiet = (boolean) dtm.getValueAt(i, 3);
+            boolean xoa = (boolean) dtm.getValueAt(i,4);
+
+            NhomChucNangModel ncnm = listncnm.get(i);
+            if(them) {
+                System.out.println("co them");
+                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"create"));
+            }
+            if(sua) {
+                System.out.println("co sua");
+                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"update"));
+            }
+            if(chitiet) {
+                System.out.println("co chitiet");
+                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"detail"));
+            }
+            if(xoa) {
+                System.out.println("co xoa");
+                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"xoa"));
+            }
+        }
+        if(PhanQuyenService.deleteChiTietPhanQuyen(mnq)) {
+            for(ChiTietPhanQuyenModel ctpqm : listctpqm) {
+                if(!PhanQuyenService.updateChiTietNhomQuyen(ctpqm)) {
+                    JOptionPane.showMessageDialog(null,"cập nhật nhóm quyền thất bại","thông báo",JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            JOptionPane.showMessageDialog(null,"cập nhật nhóm quyền thành công","thông báo",JOptionPane.INFORMATION_MESSAGE);
+            pq.reloadData();
+            pqDialog.dispose();
+        }
+    }
+
+    //ham xu li xem chi tiet nhom quyen
+    private void chitietnhomquyen() {
+
+    }
 }
 

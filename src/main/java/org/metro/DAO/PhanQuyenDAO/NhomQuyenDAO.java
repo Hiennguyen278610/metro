@@ -35,7 +35,16 @@ public class NhomQuyenDAO implements IBaseDAO<NhomQuyenModel> {
 
     @Override
     public int update(NhomQuyenModel nhomQuyenModel) {
-        return 0;
+        String query = "update nhomquyen set tennhomquyen = ? where manhomquyen = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement ps = c.prepareStatement(query)) {
+            ps.setString(1, nhomQuyenModel.getTennhomquyen());
+            ps.setInt(2,nhomQuyenModel.getManhomquyen());
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

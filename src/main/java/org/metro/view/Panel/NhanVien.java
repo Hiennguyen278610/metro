@@ -22,6 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class NhanVien extends JPanel {
+    private static final int machucnang_nhanvien = 8;
     private MainFrame mf;
     private JPanel contentDataPanel,functionBarPanel;
     private JTable nhanVienTabel;
@@ -49,7 +50,7 @@ public class NhanVien extends JPanel {
         searchfunc = new IntegratedSearch(new String[]{"----","mã","tên","số điện thoại","giới tính","chức vụ"});
         headerPanel.add(searchfunc,BorderLayout.NORTH);
         
-        mainfunc = new MainFunction(new String[]{"create","delete","update","detail"});
+        mainfunc = new MainFunction(8,new String[]{"create","delete","update","detail"});
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));
         functionBarPanel.setPreferredSize(new Dimension(50,50));
@@ -96,7 +97,9 @@ public class NhanVien extends JPanel {
         searchfunc.getBtnReset().addActionListener(action);
 
         for(String tb : mainfunc.getBtn().keySet()) {
-           mainfunc.getBtn().get(tb).addActionListener(action);
+            if(mainfunc.getBtn().get(tb) != null) {
+                mainfunc.getBtn().get(tb).addActionListener(action);
+            }
         }
         this.add(contentDataPanel, BorderLayout.CENTER);
     }

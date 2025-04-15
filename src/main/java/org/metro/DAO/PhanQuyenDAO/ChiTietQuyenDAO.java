@@ -30,12 +30,30 @@ public class ChiTietQuyenDAO implements IBaseDAO<ChiTietPhanQuyenModel> {
 
     @Override
     public int update(ChiTietPhanQuyenModel chiTietPhanQuyenModel) {
-        return 0;
+        String query1 = "insert into chitietquyen(manhomquyen,machucnang,hanhdong) values(?,?,?)";
+        try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement ps = c.prepareStatement(query1);) {
+            ps.setInt(1, chiTietPhanQuyenModel.getManhomquyen());
+            ps.setInt(2, chiTietPhanQuyenModel.getMachucnang());
+            ps.setString(3,chiTietPhanQuyenModel.getTenquyen());
+            return ps.executeUpdate();
+           } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public int delete(int id) {
-        return 0;
+        String query = "delete from chitietquyen where manhomquyen = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+        PreparedStatement ps = c.prepareStatement(query);)  {
+            ps.setInt(1, id);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

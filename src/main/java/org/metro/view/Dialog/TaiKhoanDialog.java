@@ -1,234 +1,235 @@
 package org.metro.view.Dialog;
 
+import org.metro.controller.TaiKhoanController;
+import org.metro.model.PhanQuyenModel.NhomQuyenModel;
 import org.metro.model.TaiKhoanModel;
+import org.metro.service.PhanQuyenService;
 import org.metro.service.TaiKhoanService;
+import org.metro.view.Component.ButtonEdit;
+import org.metro.view.Component.InputField;
+import org.metro.view.Panel.TaiKhoan;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TaiKhoanDialog {
+public class TaiKhoanDialog extends  JDialog{
+    private InputField manvTextfield,matkhauTextfield,nhomquyenTextfield,trangThaiTextfield;
+    private JButton okButton,cancelButton;
+    private String typeDialog;
+    private JPanel centerPanel;
+    private JPanel bottomPanel;
+    private TaiKhoan tk;
+    private TaiKhoanService tks;
+    private PhanQuyenService pqs;
+    private TaiKhoanController tkController;
 
-    // Dialog thêm tài khoản mới, tích hợp tìm kiếm nhân viên (giả lập qua input
-    // dialog)
-    public void showAddTaiKhoanDialog(Component parent, Runnable updateCallback) {
-        String input = JOptionPane.showInputDialog(parent, "Nhập mã nhân viên cần chọn:");
-        int selectedManv;
-        try {
-            selectedManv = Integer.parseInt(input.trim());
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(parent, "Mã nhân viên không hợp lệ!");
-            return;
-        }
-        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Thêm tài khoản mới",
-                Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(400, 350);
-        dialog.setLocationRelativeTo(parent);
-        dialog.setLayout(new BorderLayout());
-
-        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        JLabel lblMaNV = new JLabel("Mã nhân viên:");
-        JTextField txtMaNV = new JTextField(String.valueOf(selectedManv));
-        txtMaNV.setEditable(false);
-
-        JLabel lblMatKhau = new JLabel("Mật khẩu:");
-        JPasswordField txtMatKhau = new JPasswordField();
-
-        JLabel lblNhomQuyen = new JLabel("Nhóm quyền:");
-        String[] roleOptions = { "Admin", "User", "Nhân viên" };
-        JComboBox<String> cbxNhomQuyen = new JComboBox<>(roleOptions);
-
-        JLabel lblTrangThai = new JLabel("Trạng thái:");
-        String[] statusOptions = { "Hoạt động", "Ngừng hoạt động" };
-        JComboBox<String> cbxTrangThai = new JComboBox<>(statusOptions);
-        cbxTrangThai.setSelectedIndex(0);
-
-        formPanel.add(lblMaNV);
-        formPanel.add(txtMaNV);
-        formPanel.add(lblMatKhau);
-        formPanel.add(txtMatKhau);
-        formPanel.add(lblNhomQuyen);
-        formPanel.add(cbxNhomQuyen);
-        formPanel.add(lblTrangThai);
-        formPanel.add(cbxTrangThai);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnCancel = new JButton("Hủy");
-        btnCancel.addActionListener(_ -> dialog.dispose());
-        JButton btnAdd = new JButton("Thêm");
-        btnAdd.addActionListener(_ -> {
-            String matKhau = new String(txtMatKhau.getPassword()).trim();
-            if (matKhau.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập mật khẩu!");
-                return;
-            }
-            int nhomQuyen;
-            String role = (String) cbxNhomQuyen.getSelectedItem();
-            if ("Admin".equals(role)) {
-                nhomQuyen = 1;
-            } else if ("User".equals(role)) {
-                nhomQuyen = 2;
-            } else if ("Nhân viên".equals(role)) {
-                nhomQuyen = 3;
-            } else {
-                nhomQuyen = 0;
-            }
-            int trangThai = "Hoạt động".equals((String) cbxTrangThai.getSelectedItem()) ? 1 : 0;
-            TaiKhoanModel tk = new TaiKhoanModel(selectedManv, matKhau, nhomQuyen, trangThai);
-            if (TaiKhoanService.insert(tk)) {
-                JOptionPane.showMessageDialog(dialog, "Thêm tài khoản thành công!");
-                dialog.dispose();
-                if (updateCallback != null)
-                    updateCallback.run();
-            } else {
-                JOptionPane.showMessageDialog(dialog, "Thêm tài khoản thất bại!");
-            }
-        });
-        buttonPanel.add(btnCancel);
-        buttonPanel.add(btnAdd);
-
-        dialog.add(formPanel, BorderLayout.CENTER);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
-        dialog.setVisible(true);
+    public TaiKhoanDialog(String typeDialog, TaiKhoan tk) {
+        this.tk = tk;
+        this.typeDialog = typeDialog;
+        tks = new TaiKhoanService();
+        pqs = new PhanQuyenService();
+        tkController = new TaiKhoanController(tk,this);
+        this.setTitle(titleDialog());
+        this.setSize(700,400);
+        this.setLocationRelativeTo(null);
+        this.setLayout(new BorderLayout());
+        centerPanel = new JPanel(new GridLayout(4,2,10,10));
+        bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,5,5));
+        this.init();
+//        setEdit();
     }
 
-    // Dialog cập nhật tài khoản (các trường dùng JComboBox để chọn nhóm quyền và
-    // trạng thái)
-    public void showUpdateTaiKhoanDialog(Component parent, int manv, Runnable updateCallback) {
-        TaiKhoanModel tk = TaiKhoanService.getByID(manv);
-        if (tk == null) {
-            JOptionPane.showMessageDialog(parent, "Không tìm thấy thông tin tài khoản!");
-            return;
+    public String titleDialog() {
+        switch (typeDialog) {
+            case "create":
+                return "THEM TAI KHOAN";
+            case "update":
+                return "CAP NHAT TAI KHOAN";
+            case "detail":
+                return "CHI TIET TAI KHOAN";
+            default:
+                return "";
         }
-        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Cập nhật tài khoản",
-                Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(400, 350);
-        dialog.setLocationRelativeTo(parent);
-        dialog.setLayout(new BorderLayout());
-
-        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        JLabel lblMaNV = new JLabel("Mã nhân viên:");
-        JTextField txtMaNV = new JTextField(String.valueOf(tk.getManv()));
-        txtMaNV.setEditable(false);
-
-        JLabel lblMatKhau = new JLabel("Mật khẩu:");
-        JPasswordField txtMatKhau = new JPasswordField(tk.getMatkhau());
-
-        JLabel lblNhomQuyen = new JLabel("Nhóm quyền:");
-        String[] roleOptions = { "Admin", "User", "Nhân viên" };
-        JComboBox<String> cbxNhomQuyen = new JComboBox<>(roleOptions);
-        switch (tk.getManhomquyen()) {
-            case 1:
-                cbxNhomQuyen.setSelectedItem("Admin");
+    }
+    public String setNameButton(String title) {
+        String namebtn = "";
+        switch (typeDialog) {
+            case "create":
+                namebtn = "Thêm";
                 break;
-            case 2:
-                cbxNhomQuyen.setSelectedItem("User");
+            case "update":
+                namebtn = "Cập nhật";
                 break;
-            case 3:
-                cbxNhomQuyen.setSelectedItem("Nhân viên");
+            case "detail":
+                namebtn = "xem";
                 break;
             default:
-                cbxNhomQuyen.setSelectedIndex(0);
+                break;
         }
-
-        JLabel lblTrangThai = new JLabel("Trạng thái:");
-        String[] statusOptions = { "Hoạt động", "Ngừng hoạt động" };
-        JComboBox<String> cbxTrangThai = new JComboBox<>(statusOptions);
-        cbxTrangThai.setSelectedItem(tk.getTrangthai() == 1 ? "Hoạt động" : "Ngừng hoạt động");
-
-        formPanel.add(lblMaNV);
-        formPanel.add(txtMaNV);
-        formPanel.add(lblMatKhau);
-        formPanel.add(txtMatKhau);
-        formPanel.add(lblNhomQuyen);
-        formPanel.add(cbxNhomQuyen);
-        formPanel.add(lblTrangThai);
-        formPanel.add(cbxTrangThai);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnCancel = new JButton("Hủy");
-        btnCancel.addActionListener(_ -> dialog.dispose());
-        JButton btnUpdate = new JButton("Cập nhật");
-        btnUpdate.addActionListener(_ -> {
-            String matKhau = new String(txtMatKhau.getPassword()).trim();
-            if (matKhau.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập mật khẩu!");
-                return;
-            }
-            int nhomQuyen;
-            String role = (String) cbxNhomQuyen.getSelectedItem();
-            if ("Admin".equals(role)) {
-                nhomQuyen = 1;
-            } else if ("User".equals(role)) {
-                nhomQuyen = 2;
-            } else if ("Nhân viên".equals(role)) {
-                nhomQuyen = 3;
-            } else {
-                nhomQuyen = 0;
-            }
-            int trangThai = "Hoạt động".equals((String) cbxTrangThai.getSelectedItem()) ? 1 : 0;
-            TaiKhoanModel updatedTk = new TaiKhoanModel(tk.getManv(), matKhau, nhomQuyen, trangThai);
-            if (TaiKhoanService.update(updatedTk)) {
-                JOptionPane.showMessageDialog(dialog, "Cập nhật tài khoản thành công!");
-                dialog.dispose();
-                if (updateCallback != null)
-                    updateCallback.run();
-            } else {
-                JOptionPane.showMessageDialog(dialog, "Cập nhật tài khoản thất bại!");
-            }
-        });
-        buttonPanel.add(btnCancel);
-        buttonPanel.add(btnUpdate);
-
-        dialog.add(formPanel, BorderLayout.CENTER);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
-        dialog.setVisible(true);
+        return namebtn;
     }
 
-    // Dialog hiển thị chi tiết tài khoản
-    public void showTaiKhoanDetailDialog(Component parent, TaiKhoanModel tk) {
-        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Chi tiết tài khoản",
-                Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setSize(400, 250);
-        dialog.setLocationRelativeTo(parent);
-        dialog.setLayout(new BorderLayout());
+    private void setEdit() {
+        TaiKhoanModel tkm = tk.getSelectedTaiKhoan();
+        if(tkm != null) {
+            this.manvTextfield.getTxtInput().setText(String.valueOf(tkm.getManv()));
+            this.matkhauTextfield.getTxtInput().setText(String.valueOf(tkm.getMatkhau()));
+            NhomQuyenModel nqm = tkm.getNqm();
+            this.nhomquyenTextfield.getComboboxnhomquyen().setSelectedItem(nqm);
 
-        JPanel detailPanel = new JPanel(new GridLayout(3, 1, 10, 10));
-        detailPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
-        JLabel lblMaNV = new JLabel("Mã nhân viên: " + tk.getManv());
-        String nhomQuyenStr;
-        switch (tk.getManhomquyen()) {
-            case 1:
-                nhomQuyenStr = "Admin";
-                break;
-            case 2:
-                nhomQuyenStr = "User";
-                break;
-            case 3:
-                nhomQuyenStr = "Nhân viên";
-                break;
-            default:
-                nhomQuyenStr = "Unknown";
+            this.trangThaiTextfield.getComboboxtrangthai().setSelectedItem(tkm.getTrangthai());
         }
-        JLabel lblNhomQuyen = new JLabel("Nhóm quyền: " + nhomQuyenStr);
-        String trangThaiStr = tk.getTrangthai() == 1 ? "Hoạt động" : "Ngừng hoạt động";
-        JLabel lblTrangThai = new JLabel("Trạng thái: " + trangThaiStr);
+        if ("detail".equals(typeDialog)) {
+            manvTextfield.getTxtInput().setEditable(false);
+            matkhauTextfield.getTxtInput().setEditable(false);
+            nhomquyenTextfield.getComboboxnhomquyen().setEnabled(false);
+            trangThaiTextfield.getComboboxtrangthai().setEnabled(false);
+            okButton.setVisible(false);
+        } else if ("update".equals(typeDialog)) {
+            manvTextfield.getTxtInput().setEditable(false);
+        }
+    }
+    private void init() {
+        manvTextfield = new InputField("Mã nhân viên ",200,10);
+        centerPanel.add(manvTextfield);
+        matkhauTextfield = new InputField("Mật khẩu ",200,10);
+        centerPanel.add(matkhauTextfield);
 
-        detailPanel.add(lblMaNV);
-        detailPanel.add(lblNhomQuyen);
-        detailPanel.add(lblTrangThai);
+        ArrayList<NhomQuyenModel> listnq = new ArrayList<>();
+        listnq.addAll(pqs.getAllNhomquyen());
+        System.out.println(listnq);
+        nhomquyenTextfield = new InputField("Tên nhóm quyền: ", listnq,200,20);
+        centerPanel.add(nhomquyenTextfield);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnClose = new JButton("Đóng");
-        btnClose.addActionListener(_ -> dialog.dispose());
-        buttonPanel.add(btnClose);
+        String[] trangthai = new String[]{"Hoạt động","Ngừng hoạt động"};
+        trangThaiTextfield = new InputField("Trạng thái: ", trangthai,200,20);
+        centerPanel.add(trangThaiTextfield);
 
-        dialog.add(detailPanel, BorderLayout.CENTER);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
-        dialog.setVisible(true);
+        this.add(centerPanel, BorderLayout.CENTER);
+
+        okButton = ButtonEdit.createButton(setNameButton(getTitle()),80,30);
+        cancelButton = ButtonEdit.createButton("Thoát",80,30);
+        bottomPanel.add(okButton);
+        bottomPanel.add(cancelButton);
+
+        this.add(bottomPanel, BorderLayout.SOUTH);
+        setEdit();
+
+        //action
+        okButton.addActionListener(tkController);
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+    }
+
+    public InputField getManvTextfield() {
+        return manvTextfield;
+    }
+
+    public void setManvTextfield(InputField manvTextfield) {
+        this.manvTextfield = manvTextfield;
+    }
+
+    public InputField getMatkhauTextfield() {
+        return matkhauTextfield;
+    }
+
+    public void setMatkhauTextfield(InputField matkhauTextfield) {
+        this.matkhauTextfield = matkhauTextfield;
+    }
+
+    public InputField getNhomquyenTextfield() {
+        return nhomquyenTextfield;
+    }
+
+    public void setNhomquyenTextfield(InputField nhomquyenTextfield) {
+        this.nhomquyenTextfield = nhomquyenTextfield;
+    }
+
+    public InputField getTrangThaiTextfield() {
+        return trangThaiTextfield;
+    }
+
+    public void setTrangThaiTextfield(InputField trangThaiTextfield) {
+        this.trangThaiTextfield = trangThaiTextfield;
+    }
+
+    public JButton getOkButton() {
+        return okButton;
+    }
+
+    public void setOkButton(JButton okButton) {
+        this.okButton = okButton;
+    }
+
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
+
+    public void setCancelButton(JButton cancelButton) {
+        this.cancelButton = cancelButton;
+    }
+
+    public String getTypeDialog() {
+        return typeDialog;
+    }
+
+    public void setTypeDialog(String typeDialog) {
+        this.typeDialog = typeDialog;
+    }
+
+    public JPanel getCenterPanel() {
+        return centerPanel;
+    }
+
+    public void setCenterPanel(JPanel centerPanel) {
+        this.centerPanel = centerPanel;
+    }
+
+    public JPanel getBottomPanel() {
+        return bottomPanel;
+    }
+
+    public void setBottomPanel(JPanel bottomPanel) {
+        this.bottomPanel = bottomPanel;
+    }
+
+    public TaiKhoan getTk() {
+        return tk;
+    }
+
+    public void setTk(TaiKhoan tk) {
+        this.tk = tk;
+    }
+
+    public TaiKhoanService getTks() {
+        return tks;
+    }
+
+    public void setTks(TaiKhoanService tks) {
+        this.tks = tks;
+    }
+
+    public PhanQuyenService getPqs() {
+        return pqs;
+    }
+
+    public void setPqs(PhanQuyenService pqs) {
+        this.pqs = pqs;
+    }
+
+    public TaiKhoanController getTkController() {
+        return tkController;
+    }
+
+    public void setTkController(TaiKhoanController tkController) {
+        this.tkController = tkController;
     }
 }

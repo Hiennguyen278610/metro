@@ -19,6 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TuyenDuong extends JPanel {
+    private static final int machucnang_tuyenduong = 3;
     Color BackgroundColor = new Color(0, 2, 2);
     private IntegratedSearch search;
     private MainFunction mainfunc;
@@ -75,7 +76,7 @@ public class TuyenDuong extends JPanel {
         });
         headerPanel.add(search, BorderLayout.WEST);
 
-        mainfunc = new MainFunction(new String[] { "create", "delete", "update", "detail" });
+        mainfunc = new MainFunction(machucnang_tuyenduong,new String[] { "create", "delete", "update", "detail" });
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));
         functionBarPanel.setPreferredSize(new Dimension(50, 50));
@@ -133,7 +134,9 @@ public class TuyenDuong extends JPanel {
 
         // action check xem nhan nut nao
         for (ToolBar tb : mainfunc.getBtn().values()) {
-            tb.addMouseListener(action);
+            if(tb != null) {
+                tb.addMouseListener(action);
+            }
         }
 
         MainPanel.add(contentDataPanel, BorderLayout.CENTER);

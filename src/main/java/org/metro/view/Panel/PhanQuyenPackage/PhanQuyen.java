@@ -15,6 +15,7 @@ import java.awt.*;
 import java.util.List;
 
 public class PhanQuyen extends JPanel {
+    private static final int machucnang_phanquyen = 10;
     private MainFrame mf;
     private JTable phanquyenTable;
     private DefaultTableModel phanquyentabelModel;
@@ -27,7 +28,7 @@ public class PhanQuyen extends JPanel {
     private PhanQuyenController pqAction = new PhanQuyenController(this,null);
     public PhanQuyen() {
         this.setLayout(new BorderLayout());
-        mainfunc = new MainFunction(new String[]{"create","delete","update","detail"});
+        mainfunc = new MainFunction(machucnang_phanquyen,new String[]{"create","delete","update","detail"});
         searchfunc = new IntegratedSearch(new String[]{"--","mã nhóm quyền","tên nhóm quyền"});
         headerPanel = new JPanel(new BorderLayout());
         centerPanel = new JPanel(new BorderLayout());
@@ -67,7 +68,9 @@ public class PhanQuyen extends JPanel {
 
         //add su kien click
         for(String tb : mainfunc.getBtn().keySet()) {
-            mainfunc.getBtn().get(tb).addActionListener(pqAction);
+            if(mainfunc.getBtn().get(tb) != null) {
+                mainfunc.getBtn().get(tb).addActionListener(pqAction);
+            }
         }
     }
 

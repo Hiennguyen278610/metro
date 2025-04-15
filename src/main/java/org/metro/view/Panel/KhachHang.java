@@ -16,6 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class KhachHang extends JPanel implements ActionListener, ItemListener {
+    private static final int machucnang_khachhang = 7;
     Color BackgroundColor = new Color(0, 2, 2);
     JPanel contentCenter, functionBar;
     JTable khachHangTable;
@@ -90,9 +91,11 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
         });
 
         String[] actions = { "create", "update", "delete", "detail" };
-        mainFunction = new MainFunction(actions);
+        mainFunction = new MainFunction(machucnang_khachhang,actions);
         for (String action : actions) {
-            mainFunction.btn.get(action).addActionListener(this);
+            if(mainFunction.btn.get(action) != null) {
+                mainFunction.btn.get(action).addActionListener(this);
+            }
         }
         functionBar.add(mainFunction);
         JPanel combinedPanel = new JPanel(new BorderLayout());

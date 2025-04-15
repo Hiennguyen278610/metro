@@ -41,7 +41,7 @@ public class SidebarPanel extends JPanel {
         JPanel menuPanel = new JPanel(new BorderLayout());
         menuPanel.setBounds(0, 100, 300, 660);
         menuPanel.setBackground(Color.decode("#BDCDD6"));
-        menuTaskbar = new MenuTaskbar(new MainFrame(), SessionManager.getCurrentUser().getManv());
+        menuTaskbar = new MenuTaskbar(new MainFrame());
         menuTaskbar.setBorder(BorderFactory.createLineBorder(Color.black, 2));
         menuPanel.add(menuTaskbar, BorderLayout.CENTER);
         add(menuPanel);
