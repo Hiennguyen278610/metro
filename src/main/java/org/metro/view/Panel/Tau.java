@@ -78,7 +78,7 @@ public class Tau extends JPanel {
         NgayNhapTauTextField.setPreferredSize(new Dimension(200, 30));
 
         JButton ThemTauButton = new JButton("THÊM");
-        ThemTauButton.addActionListener(_ -> {
+        ThemTauButton.addActionListener(e -> {
             Window window = SwingUtilities.getWindowAncestor(this);
             TauDialog dialog = new TauDialog(window);
             dialog.setVisible(true);
@@ -88,15 +88,15 @@ public class Tau extends JPanel {
 
         });
         JButton SuaTauButton = new JButton("SỬA");
-        SuaTauButton.addActionListener(_ -> {
+        SuaTauButton.addActionListener(e -> {
             setTextfieldEnable();
         });
         JButton XoaTauButton = new JButton("XÓA");
-        XoaTauButton.addActionListener(_ -> {
+        XoaTauButton.addActionListener(e -> {
             XoaTau();
         });
         JButton LuuTauButton = new JButton("LƯU");
-        LuuTauButton.addActionListener(_ -> {
+        LuuTauButton.addActionListener(e -> {
             if (ValidateDuLieu() == true)
                 setTextfieldDisable();
         });
@@ -151,7 +151,7 @@ public class Tau extends JPanel {
                 }, 300);
             }
         });
-        search.btnReset.addActionListener(_ -> {
+        search.btnReset.addActionListener(e -> {
             search.txtSearchForm.setText("");
             updateData();
         });
@@ -162,7 +162,7 @@ public class Tau extends JPanel {
         XuatExcelButton.setBackground(Color.white);
         XuatExcelButton.setBorder(new MatteBorder(0, 0, 2, 0, Color.black));
         XuatExcelButton.setFocusable(false);
-        XuatExcelButton.addActionListener(_ -> {
+        XuatExcelButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showSaveDialog(null);
             if (result == JFileChooser.APPROVE_OPTION) {

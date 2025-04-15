@@ -70,7 +70,7 @@ public class TuyenDuong extends JPanel {
                 }, 300);
             }
         });
-        search.btnReset.addActionListener(_ -> {
+        search.btnReset.addActionListener(e -> {
             search.txtSearchForm.setText("");
             loadData();
         });

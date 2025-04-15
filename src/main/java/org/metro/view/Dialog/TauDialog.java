@@ -54,7 +54,7 @@ public class TauDialog extends JDialog {
         buttonPanel.add(btnHuy);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        btnLuu.addActionListener(_ -> {
+        btnLuu.addActionListener(e -> {
             if (!validateData())
                 return;
 
@@ -72,7 +72,7 @@ public class TauDialog extends JDialog {
             }
         });
 
-        btnHuy.addActionListener(_ -> dispose());
+        btnHuy.addActionListener(e -> dispose());
 
         pack();
     }
