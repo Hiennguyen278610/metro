@@ -51,12 +51,12 @@ CREATE TABLE nhomquyen (
     tennhomquyen VARCHAR(100) NOT NULL,
     PRIMARY KEY (manhomquyen)
 );
-INSERT INTO nhomquyen (manhomquyen,tennhomquyen)
-VALUES (1,'Admin'),
-       (2,'Nhân viên bán vé'),
-        (3,'Quản lí tàu tuyến'),
-        (4,'Quản lí lịch trình'),
-        (5,'Quản lí trạm');
+INSERT INTO nhomquyen (tennhomquyen)
+VALUES ('Quản lí hệ thống'),
+    ('Nhân viên soát vé'),
+    ('Nhân viên thống kê'),
+    ('Nhân viên điều hành'),
+    ('Kế toán');
 -- ----------------------------------------------------------------
 -- Bảng NHOMCHUCNANG
 CREATE TABLE nhomchucnang (
@@ -64,18 +64,12 @@ CREATE TABLE nhomchucnang (
     tenchucnang VARCHAR(100) NOT NULL,
     PRIMARY KEY (machucnang)
 );
-INSERT INTO nhomchucnang (machucnang,tenchucnang)
-VALUES (1,'Tàu'),
-       (2,'Trạm'),
-       (3,'Tuyến Đường'),
-       (4,'Lịch Trình'),
-       (5,'Vé Tàu'),
-       (6,'Bảo Trì'),
-       (7,'Khách Hàng'),
-       (8,'Nhân Viên'),
-       (9,'Tài Khoản'),
-       (10,'Phân Quyền'),
-       (11,'Thống kê');
+INSERT INTO nhomchucnang (tenchucnang)
+VALUES ('Quản lý khách hàng'),
+    ('Quản lý nhân viên'),
+    ('Quản lý nhóm quyền'),
+    ('Quản lý tài khoản'),
+    ('Thống kê báo cáo');
 -- ----------------------------------------------------------------
 -- Bảng CHITIETQUYEN
 CREATE TABLE chitietquyen (
@@ -87,112 +81,26 @@ CREATE TABLE chitietquyen (
     CONSTRAINT fk_chitietquyen_nhomchucnang FOREIGN KEY (machucnang) REFERENCES nhomchucnang(machucnang) ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO chitietquyen (manhomquyen, machucnang, hanhdong)
-        # quyen admin
-VALUES (1,1,'create'),
-       (1,1,'detail'),
-       (1,1,'delete'),
-       (1,1,'update'),
-
-       (1,2,'create'),
-       (1,2,'detail'),
-       (1,2,'delete'),
-       (1,2,'update'),
-
-       (1,3,'create'),
-       (1,3,'detail'),
-       (1,3,'delete'),
-       (1,3,'update'),
-
-       (1,4,'create'),
-       (1,4,'detail'),
-       (1,4,'delete'),
-       (1,4,'update'),
-
-       (1,5,'create'),
-       (1,5,'detail'),
-       (1,5,'delete'),
-       (1,5,'update'),
-
-       (1,6,'create'),
-       (1,6,'detail'),
-       (1,6,'delete'),
-       (1,6,'update'),
-
-       (1,7,'create'),
-       (1,7,'detail'),
-       (1,7,'delete'),
-       (1,7,'update'),
-
-       (1,8,'create'),
-       (1,8,'detail'),
-       (1,8,'delete'),
-       (1,8,'update'),
-
-       (1,9,'create'),
-       (1,9,'detail'),
-       (1,9,'delete'),
-       (1,9,'update'),
-
-       (1,10,'create'),
-       (1,10,'detail'),
-       (1,10,'delete'),
-       (1,10,'update'),
-
-       (1,11,'create'),
-       (1,11,'detail'),
-       (1,11,'delete'),
-       (1,11,'update'),
-        #quyen nhan vien ban ve
-       (2,5,'create'),
-       (2,5,'detail'),
-
-       (2,7,'detail'),
-       (2,7,'update'),
-
-       (2,3,'detail'),
-       #quyen quan li tau
-        (3,1,'detail'),
-        (3,1,'update'),
-
-        (3,4,'detail'),
-
-        (3,3,'detail'),
-       #quan li lich trinh
-        (4,1,'detail'),
-
-       (4,8,'create'),
-       (4,8,'detail'),
-       (4,8,'delete'),
-       (4,8,'update'),
-
-       (4,4,'create'),
-       (4,4,'detail'),
-       (4,4,'delete'),
-       (4,4,'update'),
-
-       (4,3,'detail'),
-        #quan li tram
-       (5,5,'detail'),
-
-       (5,1,'detail'),
-
-       (5,7,'detail'),
-
-       (5,8,'create'),
-       (5,8,'detail'),
-       (5,8,'delete'),
-       (5,8,'update'),
-
-       (5,4,'detail'),
-
-       (5,3,'detail'),
-
-       (5,9,'create'),
-       (5,9,'detail'),
-       (5,9,'delete'),
-       (5,9,'update');
-
-select * from chitietquyen;
+VALUES (1, 1, 'create'),
+    (1, 1, 'delete'),
+    (1, 1, 'update'),
+    (1, 1, 'view'),
+    (1, 2, 'create'),
+    (1, 2, 'delete'),
+    (1, 2, 'update'),
+    (1, 2, 'view'),
+    (1, 3, 'create'),
+    (1, 3, 'delete'),
+    (1, 3, 'update'),
+    (1, 3, 'view'),
+    (1, 4, 'create'),
+    (1, 4, 'delete'),
+    (1, 4, 'update'),
+    (1, 4, 'view'),
+    (1, 5, 'create'),
+    (1, 5, 'delete'),
+    (1, 5, 'update'),
+    (1, 5, 'view');
 -- ----------------------------------------------------------------
 -- Bảng NHANVIEN
 CREATE TABLE nhanvien (
@@ -312,19 +220,20 @@ CREATE TABLE tram (
     x INT NOT NULL,
     y INT NOT NULL,
     diachi VARCHAR(255) NOT NULL,
+    chiphitram DOUBLE NOT NULL,
     PRIMARY KEY (matram)
 );
-INSERT INTO tram (tentram, x, y, diachi)
-VALUES ('Tram Ben Thanh', 100, 100, 'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM'),
-    ('Tram Sai Gon', 100, 200, 'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM'),
-    ('Tram Hoa Hung', 100, 300, 'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM'),
-    ('Tram Tan Binh', 100, 400, 'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM'),
-    ('Tram Phu Nhuan', 200, 400, 'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM'),
-    ('Tram Go Vap', 200, 500, 'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM'),
-    ('Tram Binh Thanh', 200, 600, 'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM'),
-    ('Tram Thu Duc', 200, 700, 'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM'),
-    ('Tram Quan 7', 200, 800, 'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM'),
-    ('Tram Nha Be', 200, 900, 'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM');
+INSERT INTO tram (tentram, x, y, diachi, chiphitram)
+VALUES ('Tram Ben Thanh', 100, 100, 'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM', 10000.00),
+    ('Tram Sai Gon', 100, 200, 'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM', 10000.00),
+    ('Tram Hoa Hung', 100, 300, 'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM', 10000.00),
+    ('Tram Tan Binh', 100, 400, 'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM', 10000.00),
+    ('Tram Phu Nhuan', 200, 400, 'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM', 10000.00),
+    ('Tram Go Vap', 200, 500, 'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM', 10000.00),
+    ('Tram Binh Thanh', 200, 600, 'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM', 10000.00),
+    ('Tram Thu Duc', 200, 700, 'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM', 10000.00),
+    ('Tram Quan 7', 200, 800, 'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM', 10000.00),
+    ('Tram Nha Be', 200, 900, 'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM', 10000.00);
 
 -- ----------------------------------------------------------------
 -- Bảng TUYEN
@@ -351,13 +260,19 @@ CREATE TABLE tau (
     soghe INT NOT NULL,
     trangthaitau VARCHAR(100) NOT NULL,
     ngaynhap DATE NOT NULL,
+    chiphitau DOUBLE NOT NULL,
     PRIMARY KEY (matau)
 );
-INSERT INTO tau (soghe, trangthaitau, ngaynhap)
-VALUES (50, 'Đang hoạt động', '2025-01-01'),
-    (20, 'Đang bảo trì', '2025-01-02'),
-    (100, 'Ngừng hoạt động', '2025-01-02'),
-    (25, 'Đang hoạt động', '2025-01-03');
+INSERT INTO tau (soghe, trangthaitau, ngaynhap, chiphitau)
+VALUES (50, 'Đang hoạt động', '2025-01-01', 10000.00),
+    (20, 'Đang bảo trì', '2025-01-02', 10000.00),
+    (100, 'Ngừng hoạt động', '2025-01-02', 10000.00),
+    (25, 'Đang hoạt động', '2025-01-03', 10000.00),
+    (40, 'Đang hoạt động', '2025-01-04', 10000.00),
+    (60, 'Đang hoạt động', '2025-02-10', 10000.00),
+    (80, 'Đang bảo trì', '2025-02-15', 10000.00),
+    (55, 'Ngừng hoạt động', '2025-03-01', 10000.00),
+    (30, 'Đang hoạt động', '2025-03-10', 10000.00);
 -- ----------------------------------------------------------------
 -- Bảng TUYEN_TRAM
 CREATE TABLE tuyen_tram (
@@ -409,8 +324,8 @@ VALUES (
         1,
         1,
         1,
-        '2025-04-01 09:00:00',
-        '2025-04-01 09:30:00',
+        '2019-04-01 09:00:00',
+        '2019-04-01 09:00:00',
         'Chờ khởi hành'
     ),
     (
@@ -418,8 +333,8 @@ VALUES (
         2,
         1,
         1,
-        '2025-04-02 10:00:00',
-        '2025-04-02 10:20:00',
+        '2018-04-02 10:00:00',
+        '2018-04-02 10:10:00',
         'Đang khởi hành'
     ),
     (
@@ -445,8 +360,8 @@ VALUES (
         2,
         1,
         1,
-        '2025-04-05 12:00:00',
-        '2025-04-05 12:30:00',
+        '2025-08-05 12:00:00',
+        '2025-08-05 12:00:00',
         'Đang khởi hành'
     ),
     (
@@ -454,8 +369,8 @@ VALUES (
         4,
         1,
         1,
-        '2025-04-06 13:00:00',
-        '2025-04-06 13:25:00',
+        '2018-08-06 13:00:00',
+        '2018-08-06 13:25:00',
         'Hoàn Thành'
     ),
     (
@@ -463,8 +378,8 @@ VALUES (
         3,
         1,
         1,
-        '2025-04-07 14:00:00',
-        '2025-04-07 14:30:00',
+        '2020-04-07 14:00:00',
+        '2020-04-07 14:30:00',
         'Chờ khởi hành'
     ),
     (
@@ -481,8 +396,8 @@ VALUES (
         1,
         1,
         1,
-        '2025-04-09 06:45:00',
-        '2025-04-09 07:10:00',
+        '2025-11-09 06:45:00',
+        '2025-11-09 07:10:00',
         'Hoàn Thành'
     ),
     (
@@ -490,10 +405,15 @@ VALUES (
         3,
         1,
         0,
-        '2025-05-01 06:00:00',
-        '2025-05-01 06:05:00',
+        '2022-12-01 06:00:00',
+        '2022-12-01 06:05:00',
         'Đang khởi hành'
-    );
+    ),
+    (2, 5, 2, 1, '2016-04-10 08:00:00', '2016-04-10 08:45:00', 'Hoàn thành'),
+    (3, 5, 2, 1, '2017-09-11 08:00:00', '2017-09-11 08:50:00', 'Đang khởi hành'),
+    (4, 6, 3, 0, '2025-04-12 09:00:00', '2025-04-12 09:40:00', 'Hoàn thành'),
+    (5, 6, 4, 0, '2024-04-13 10:00:00', '2024-04-13 10:35:00', 'Hoàn thành'),
+    (1, 7, 5, 1, '2024-02-14 07:30:00', '2024-02-14 08:00:00', 'Hoàn thành');
 -- ----------------------------------------------------------------
 -- Bảng VETAU
 CREATE TABLE vetau (
@@ -506,9 +426,9 @@ CREATE TABLE vetau (
     CONSTRAINT FK_mave_khachhang FOREIGN KEY (makh) REFERENCES khachhang(makh) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 INSERT INTO vetau (machuyen, makh, giave)
-VALUES (3, 1, 8500.00),
+VALUES (3, 1, 85000.00),
     (3, 2, 21000.00),
-    (3, 3, 13750.50),
+    (3, 3, 137500.50),
     (3, 4, 9000.00),
     (3, 5, 23000.00),
     (3, 6, 15000.00),
@@ -520,12 +440,22 @@ VALUES (3, 1, 8500.00),
     (6, 12, 16000.00),
     (6, 13, 9500.00),
     (6, 14, 22200.00),
-    (6, 15, 12350.00),
+    (6, 15, 123500.00),
     (9, 16, 14000.00),
     (9, 17, 23500.00),
     (9, 18, 10000.00),
     (9, 19, 18800.00),
-    (9, 20, 7800.00);
+    (9, 20, 7800.00),
+    (10, 1, 9500.00),
+    (10, 2, 15000.00),
+    (10, 3, 13500.00),
+    (10, 4, 14500.00),
+    (11, 5, 13000.00),
+    (11, 6, 9000.00),
+    (11, 7, 8700.00),
+    (11, 8, 9200.00),
+    (12, 9, 16000.00),
+    (12, 10, 200000.00);
 -- ----------------------------------------------------------------
 -- Bảng LICHBAOTRI
 CREATE TABLE lichbaotri (
@@ -534,66 +464,35 @@ CREATE TABLE lichbaotri (
     ngaybaotri DATE NOT NULL,
     trangthaibaotri VARCHAR(100) NOT NULL,
     ngaytao DATETIME NOT NULL,
+    chiphibaotri DOUBLE NOT NULL,
     PRIMARY KEY (mabaotri),
     CONSTRAINT FK_baotri_matau FOREIGN KEY (matau) REFERENCES tau(matau) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-INSERT INTO lichbaotri (matau, ngaybaotri, trangthaibaotri, ngaytao)
+INSERT INTO lichbaotri (matau, ngaybaotri, trangthaibaotri, ngaytao, chiphibaotri)
 VALUES (
         1,
         '2025-03-23',
         'Đang bảo trì',
-        '2025-03-22 15:45:00'
-    ),
+        '2025-03-22 15:45:00',
+        20000.00),
     (
         2,
         '2025-03-22',
         'Hoàn thành',
-        '2025-03-21 15:45:00'
-    ),
+        '2025-03-21 15:45:00',
+        20000.00),
     (
         3,
         '2025-03-21',
         'Đang bảo trì',
-        '2025-03-22 15:45:00'
-    ),
+        '2025-03-22 15:45:00',
+        20000.00),
     (
         4,
         '2025-03-20',
         'Chờ kiểm tra',
-        '2025-03-22 15:45:00'
-    );
-# Update bang tram
-ALTER TABLE `tram`
-ADD COLUMN `diachi` VARCHAR(255)
-AFTER `tentram`;
--- Cập nhật địa chỉ cho các trạm
-UPDATE `tram`
-SET `diachi` = 'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM'
-WHERE `matram` = 1;
-UPDATE `tram`
-SET `diachi` = 'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM'
-WHERE `matram` = 2;
-UPDATE `tram`
-SET `diachi` = 'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM'
-WHERE `matram` = 3;
-UPDATE `tram`
-SET `diachi` = 'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM'
-WHERE `matram` = 4;
-UPDATE `tram`
-SET `diachi` = 'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM'
-WHERE `matram` = 5;
-UPDATE `tram`
-SET `diachi` = 'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM'
-WHERE `matram` = 6;
-UPDATE `tram`
-SET `diachi` = 'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM'
-WHERE `matram` = 7;
-UPDATE `tram`
-SET `diachi` = 'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM'
-WHERE `matram` = 8;
-UPDATE `tram`
-SET `diachi` = 'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM'
-WHERE `matram` = 9;
-UPDATE `tram`
-SET `diachi` = 'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM'
-WHERE `matram` = 10;
+        '2025-03-22 15:45:00',
+        20000.00),
+
+   (6, '2025-03-27', 'Chờ kiểm tra', '2025-03-26 19:00:00', 20000.00),
+   (7, '2025-03-28', 'Đang bảo trì', '2025-03-27 20:00:00', 20000.00);

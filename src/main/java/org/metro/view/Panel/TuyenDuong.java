@@ -25,14 +25,15 @@ public class TuyenDuong extends JPanel {
     private MainFunction mainfunc;
     private JPanel contentDataPanel, functionBarPanel;
     private DefaultTableModel dataTabelModel;
-    private JTable nhanVienTabel;
-    private JScrollPane nhanVienScroll;
+    private JTable tuyenDuongTable;
+    private JScrollPane tuyenDuongScroll;
     private JPanel XemDoThi;
     private CardLayout cardLayout;
     private TuyenDuongController action = new TuyenDuongController(this);
     private JPanel MainPanel;
     private DoThiTuyenDuong DoThiPanel;
     private Timer searchTimer;
+    private List<TuyenDuongModel> lst;
 
     public void initComponent() {
         this.setBackground(Color.white);
@@ -77,6 +78,11 @@ public class TuyenDuong extends JPanel {
         headerPanel.add(search, BorderLayout.WEST);
 
         mainfunc = new MainFunction(machucnang_tuyenduong,new String[] { "create", "delete", "update", "detail" });
+        for (String tb : mainfunc.getBtn().keySet()) {
+            if(mainfunc.getBtn().get(tb) != null) {
+                mainfunc.getBtn().get(tb).addActionListener(action);
+            }
+        }
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));
         functionBarPanel.setPreferredSize(new Dimension(50, 50));
@@ -125,24 +131,23 @@ public class TuyenDuong extends JPanel {
                 .setColumnIdentifiers(
                         new String[] { "Mã tàu", "Trạm bắt đầu", "Trạm đích", "Thời gian di chuyển", "Trạng thái" });
 
-        nhanVienTabel = new JTable();
-        nhanVienTabel.setFillsViewportHeight(true); // lap day JScrollPane
-        nhanVienTabel.setRowSelectionAllowed(true); // cho phep chon hang
-        nhanVienTabel.setModel(dataTabelModel);
-        nhanVienScroll = new JScrollPane(nhanVienTabel);
-        contentDataPanel.add(nhanVienScroll, BorderLayout.CENTER);
+        tuyenDuongTable = new JTable();
+        tuyenDuongTable.setFillsViewportHeight(true); // lap day JScrollPane
+        tuyenDuongTable.setRowSelectionAllowed(true); // cho phep chon hang
+        tuyenDuongTable.setModel(dataTabelModel);
+        tuyenDuongScroll = new JScrollPane(tuyenDuongTable);
+        contentDataPanel.add(tuyenDuongScroll, BorderLayout.CENTER);
 
         // action check xem nhan nut nao
         for (ToolBar tb : mainfunc.getBtn().values()) {
-            if(tb != null) {
-                tb.addMouseListener(action);
-            }
+            tb.addMouseListener(action);
         }
 
         MainPanel.add(contentDataPanel, BorderLayout.CENTER);
     }
 
     public TuyenDuong() {
+        lst = new TuyenDAO().selectAll();
         initComponent();
         loadData();
     }
@@ -155,7 +160,7 @@ public class TuyenDuong extends JPanel {
     }
 
     public void loadData() {
-        List<TuyenDuongModel> lst = new TuyenDAO().selectAll();
+        lst = new TuyenDAO().selectAll();
         reloadList(lst);
     }
 
@@ -190,4 +195,22 @@ public class TuyenDuong extends JPanel {
         return mainfunc;
     }
 
+    public TuyenDuongModel getSelectedTuyenDuong() {
+        int row = tuyenDuongTable.getSelectedRow();
+        if (row == -1)
+            return null;
+        int matuyen = (int) tuyenDuongTable.getValueAt(row, 0);
+        int tramdau = (int) tuyenDuongTable.getValueAt(row, 1);
+        int tramdich = (int) tuyenDuongTable.getValueAt(row, 2);
+        int thoigiandichuyen = (int) tuyenDuongTable.getValueAt(row, 3);
+        String trangthaituyen = (String) tuyenDuongTable.getValueAt(row, 4);
+        TuyenDuongModel tdm = new TuyenDuongModel(matuyen, tramdau, tramdich, thoigiandichuyen, trangthaituyen);
+        return tdm;
+    }
+
+    public void deleteTuyenDuong(int matuyenduong) {
+        TuyenDAO tdao = new TuyenDAO();
+        tdao.delete(matuyenduong);
+        loadData();
+    }
 }

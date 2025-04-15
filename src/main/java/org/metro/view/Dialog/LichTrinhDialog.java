@@ -142,7 +142,7 @@ public class LichTrinhDialog extends JDialog {
         }
 
         if (ok != null) {ok.addActionListener(controller);}
-        if (cancel != null) {cancel.addActionListener(e -> dispose());}
+        if (cancel != null) {cancel.addActionListener(_ -> dispose());}
         this.add(contentPanel);
     }
 

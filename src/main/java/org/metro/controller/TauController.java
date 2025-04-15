@@ -10,11 +10,8 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import org.metro.model.TauModel;
-import org.metro.view.Dialog.TauDialog;
 import org.metro.view.Panel.Tau;
 
 public class TauController implements ActionListener, ItemListener, KeyListener {
@@ -27,6 +24,7 @@ public class TauController implements ActionListener, ItemListener, KeyListener 
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) { // ktra khi combobox dc tich chon
+            @SuppressWarnings("unchecked")
             JComboBox<String> cbb = (JComboBox<String>) e.getSource();
             String str = (String) cbb.getSelectedItem();
             if (str != null) {
