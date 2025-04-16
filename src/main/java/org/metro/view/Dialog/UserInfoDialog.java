@@ -34,7 +34,7 @@ public class UserInfoDialog extends JDialog {
         infoPanel.add(lblManv);
 
         // vai trò
-        JLabel lblRole = new JLabel("Vai trò: " + getRoleName(user.getManhomquyen()));
+        JLabel lblRole = new JLabel("Vai trò: " + getRoleName(user.getNqm().getManhomquyen()));
         lblRole.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         infoPanel.add(lblRole);
 

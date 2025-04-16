@@ -18,7 +18,6 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     private NhanVien nv;
     private NhanVienDialog nvdl;
     private NhanVienModel nvm;
-    private JFrame parent;
 
     public NhanVienController(NhanVien nv,NhanVienDialog nvdl) {
         this.nvdl = nvdl;
@@ -30,7 +29,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     public void itemStateChanged(ItemEvent e) {
         String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
         String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
-        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
+        nv.reloadList(NhanVienService.searchByKeyWord(key,word));
     }
 
     @Override
@@ -130,7 +129,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
        }
        if(c.equals(nv.getSearchfunc().getBtnReset())) {
            nv.getSearchfunc().getTxtSearchForm().setText("");
-           nv.getSearchfunc().getCbxChoose().setSelectedItem(0);
+           nv.getSearchfunc().getCbxChoose().setSelectedItem("----");
            nv.reloadData();
        }
     }
@@ -158,7 +157,7 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
     public void keyReleased(KeyEvent e) {
         String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
         String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
-        nv.reloadList(nv.getNvs().searchByKeyWord(key,word));
+        nv.reloadList(NhanVienService.searchByKeyWord(key,word));
     }
 
 }

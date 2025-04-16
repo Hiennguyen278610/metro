@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class VeTau extends JPanel {
+    private static final int machucnang_vetau = 5;
     Color BackgroundColor = new Color(0, 2, 2);
     JPanel contentCenter, functionBar;
     JTable veTauTable;
@@ -71,7 +72,7 @@ public class VeTau extends JPanel {
         search = new IntegratedSearch(new String[] { "Tất cả", "Mã vé", "Mã chuyến", "Mã khách hàng", "Giá vé" });
 
         String[] actions = { "create", "update", "delete", "detail" };
-        mainFunction = new MainFunction(actions);
+        mainFunction = new MainFunction(machucnang_vetau,actions);
 
         functionBar.add(mainFunction);
         JPanel combinedPanel = new JPanel(new BorderLayout());
@@ -121,7 +122,9 @@ public class VeTau extends JPanel {
 
         // Gắn listener cho các nút chức năng (create, update, delete, detail)
         for (String key : mainFunction.getBtn().keySet()) {
-            mainFunction.getBtn().get(key).addActionListener(controller);
+            if(mainFunction.getBtn().get(key) != null) {
+                mainFunction.getBtn().get(key).addActionListener(controller);
+            }
         }
     }
 

@@ -15,6 +15,7 @@ import org.metro.view.Component.MainFunction;
 import java.awt.*;
 
 public class Tram extends JPanel {
+    private static final int machucnang_tram = 2;
     private JPanel functionPanel, contentPanel, functionBarPanel;
     private IntegratedSearch search;
     private MainFunction mainFunction;
@@ -40,9 +41,11 @@ public class Tram extends JPanel {
         search.getBtnReset().addMouseListener(action);
 
         String[] optMainFunc = { "create", "delete", "update" };
-        mainFunction = new MainFunction(optMainFunc);
+        mainFunction = new MainFunction(machucnang_tram,optMainFunc);
         for (String opt : optMainFunc) {
-            mainFunction.btn.get(opt).addMouseListener(action);
+            if(mainFunction.getBtn().get(opt) != null) {
+                mainFunction.getBtn().get(opt).addMouseListener(action);
+            }
         }
         functionBarPanel = new JPanel();
         functionBarPanel.setLayout(new BoxLayout(functionBarPanel, BoxLayout.X_AXIS));

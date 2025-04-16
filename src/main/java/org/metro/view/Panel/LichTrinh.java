@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class LichTrinh extends JPanel {
+    private static final int machucnang_lichtrinh = 4;
     Color BackgroundColor = new Color(0, 2, 2);
     JPanel contentCenter, functionBar;
     JTable lichTrinhTable;
@@ -73,7 +74,7 @@ public class LichTrinh extends JPanel {
         search = new IntegratedSearch(new String[] { "Tất cả", "Mã chuyến", "Mã nhân viên", "Mã tàu", "Mã tuyến", "Hướng đi", "Thời gian khởi hành", "Trạng thái lịch trình" });
 
         String[] actions = { "create", "update", "delete", "detail" };
-        mainFunction = new MainFunction(actions);
+        mainFunction = new MainFunction(machucnang_lichtrinh,actions);
 
         functionBar.add(mainFunction);
         JPanel combinedPanel = new JPanel(new BorderLayout());
@@ -121,7 +122,9 @@ public class LichTrinh extends JPanel {
         search.getBtnReset().addActionListener(controller);
 
         for (String key : mainFunction.getBtn().keySet()) {
-            mainFunction.getBtn().get(key).addActionListener(controller);
+            if(mainFunction.getBtn().get(key) != null) {
+                mainFunction.getBtn().get(key).addActionListener(controller);
+            }
         }
     }
 

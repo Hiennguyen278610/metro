@@ -1,5 +1,10 @@
 package org.metro.view.Panel;
 
+import org.metro.DAO.TaiKhoanDAO;
+import org.metro.controller.NhanVienController;
+import org.metro.controller.TaiKhoanController;
+import org.metro.model.NhanVienModel;
+import org.metro.model.PhanQuyenModel.NhomQuyenModel;
 import org.metro.model.TaiKhoanModel;
 import org.metro.service.TaiKhoanService;
 import org.metro.view.Component.IntegratedSearch;
@@ -11,188 +16,189 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TaiKhoan extends JPanel implements ActionListener, ItemListener {
+public class TaiKhoan extends JPanel {
+    private static final int machucnang_taikhoan = 9;
     Color BackgroundColor = new Color(0, 2, 2);
-    JPanel contentCenter, functionBar;
-    JTable taiKhoanTable;
-    JScrollPane taiKhoanScrollTable;
-    DefaultTableModel dTable;
-    MainFunction mainFunction;
-    IntegratedSearch search;
-    ArrayList<TaiKhoanModel> listtk;
-    Timer searchTimer;
+    private JPanel contentCenter, functionBar;
+    private JTable taiKhoanTable;
+    private JScrollPane taiKhoanScrollTable;
+    private DefaultTableModel dTable;
+    private MainFunction mainFunction;
+    private IntegratedSearch search;
+    private ArrayList<TaiKhoanModel> listtk;
+    private TaiKhoanController action = new TaiKhoanController(this,null);
 
     public TaiKhoan() {
-        initComponent();
+        listtk = new ArrayList<>();
+        init();
+        reloadData();
     }
+    private void init() {
+        this.setLayout(new BorderLayout(10,10));
+        this.setBackground(Color.decode("#dfe6e9"));
 
-    private void initComponent() {
-        this.setBackground(BackgroundColor);
-        this.setLayout(new BorderLayout(0, 0));
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        search = new IntegratedSearch(new String[]{"----","mã"});
+        headerPanel.add(search, BorderLayout.NORTH);
 
-        taiKhoanTable = new JTable();
-        taiKhoanScrollTable = new JScrollPane();
-        dTable = new DefaultTableModel() {
+        mainFunction = new MainFunction(9,new String[]{"create","delete","update","detail"});
+        functionBar= new JPanel();
+        functionBar.setLayout(new BoxLayout(functionBar,BoxLayout.Y_AXIS));
+        functionBar.setPreferredSize(new Dimension(50,50));
+        functionBar.add(mainFunction);
+
+        headerPanel.add(functionBar, BorderLayout.CENTER);
+        this.add(headerPanel, BorderLayout.NORTH);
+
+        contentCenter = new JPanel();
+        contentCenter.setBackground(Color.decode("#dfe6e9"));
+        contentCenter.setLayout(new BorderLayout());
+        contentCenter.setPreferredSize(new Dimension(1100,600));
+
+        dTable = new DefaultTableModel(){
             @Override
             // tao model voi so cot va hang co dinh khong cho sua chua
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        String[] columnNames = { "Mã TK", "Nhóm quyền", "Trạng thái" };
-        dTable.setColumnIdentifiers(columnNames);
+        dTable.setColumnIdentifiers(new String[]{"MÃ TK","tên nhóm quyền","trạng thái"});
+        taiKhoanTable = new JTable();
+        taiKhoanTable.setRowSelectionAllowed(true);
+        taiKhoanTable.setBackground(Color.decode("#ecf0f1"));
+        taiKhoanTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        taiKhoanTable.setForeground(Color.decode("#22a6b3"));
+        taiKhoanTable.setRowHeight(40);
         taiKhoanTable.setModel(dTable);
-        taiKhoanTable.setFocusable(false);
-        taiKhoanTable.setRowSelectionAllowed(true); // cho phep chon 1 hang nao do
-        taiKhoanScrollTable.setViewportView(taiKhoanTable);
-
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < columnNames.length; i++) {
+        for(int i = 0 ; i < taiKhoanTable.getColumnCount();++i) {
             taiKhoanTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-        taiKhoanTable.setAutoCreateRowSorter(true);
 
-        contentCenter = new JPanel();
-        contentCenter.setBackground(new Color(130, 190, 223));
-        contentCenter.setPreferredSize(new Dimension(1100, 600));
-        contentCenter.setLayout(new BorderLayout(10, 10));
-        this.add(contentCenter, BorderLayout.CENTER);
+        taiKhoanScrollTable = new JScrollPane(taiKhoanTable);
+        contentCenter.add(taiKhoanScrollTable,BorderLayout.CENTER);
 
-        functionBar = new JPanel();
-        functionBar.setLayout(new BoxLayout(functionBar, BoxLayout.X_AXIS));
-        functionBar.setPreferredSize(new Dimension(0, 50));
+        search.getCbxChoose().addItemListener(action);
+        search.getTxtSearchForm().addKeyListener(action);
+        search.getBtnReset().addActionListener(action);
 
-        search = new IntegratedSearch(new String[] { "ID" });
-        search.cbxChoose.addItemListener(this);
-        search.txtSearchForm.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (searchTimer != null) {
-                    searchTimer.cancel();
-                }
-                searchTimer = new Timer();
-                searchTimer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        SwingUtilities.invokeLater(() -> performSearch());
-                    }
-                }, 300);
+        for(String tb : mainFunction.getBtn().keySet()) {
+            if(mainFunction.getBtn().get(tb) != null) {
+                mainFunction.getBtn().get(tb).addActionListener(action);
             }
-        });
-        search.btnReset.addActionListener(e -> {
-            search.txtSearchForm.setText("");
-            loadDataTable();
-        });
-
-        String[] actions = { "create", "update", "delete", "detail" };
-        mainFunction = new MainFunction(actions);
-        for (String action : actions) {
-            mainFunction.btn.get(action).addActionListener(this);
         }
-        functionBar.add(mainFunction);
-        JPanel combinedPanel = new JPanel(new BorderLayout());
-        combinedPanel.add(search, BorderLayout.NORTH);
-        combinedPanel.add(functionBar, BorderLayout.CENTER);
-
-        contentCenter.add(combinedPanel, BorderLayout.NORTH);
-        contentCenter.add(taiKhoanScrollTable, BorderLayout.CENTER);
-
-        loadDataTable();
+        this.add(contentCenter, BorderLayout.CENTER);
     }
 
-    private void populateTable(ArrayList<TaiKhoanModel> list) {
+    public void reloadlist(List<TaiKhoanModel> lst) {
         dTable.setRowCount(0);
-        for (TaiKhoanModel tk : list) {
-            String roleStr;
-            switch (tk.getManhomquyen()) {
-                case 1:
-                    roleStr = "Admin";
-                    break;
-                case 2:
-                    roleStr = "User";
-                    break;
-                case 3:
-                    roleStr = "Nhân viên";
-                    break;
-                default:
-                    roleStr = "Unknown";
-            }
-            String statusStr = tk.getTrangthai() == 1 ? "Hoạt động" : "Ngừng hoạt động";
-            dTable.addRow(new Object[] {
-                    tk.getManv(),
-                    roleStr,
-                    statusStr
+        for(TaiKhoanModel tkm : lst) {
+            String tennhomquyen = (tkm.getNqm() == null) ? "":tkm.getNqm().getTennhomquyen();
+            dTable.addRow(new Object[]{
+                    tkm.getManv(),
+                    tennhomquyen,
+                    tkm.getTrangthai() == 1 ? "Hoạt Động" : "Ngưng hoạt động"
             });
         }
     }
 
-    // Hàm tìm kiếm: chỉ tìm theo mã nhân viên ("ID")
-    private void performSearch() {
-        String txt = search.txtSearchForm.getText().trim();
-        // Tìm kiếm theo mã nhân viên (loại "ID")
-        ArrayList<TaiKhoanModel> result = TaiKhoanService.search(txt, "ID");
-        populateTable(result);
+    public void reloadData() {
+        reloadlist(new TaiKhoanDAO().selectAll());
     }
 
-    // Hàm load toàn bộ dữ liệu (reset tìm kiếm)
-    public void loadDataTable() {
-        ArrayList<TaiKhoanModel> all = TaiKhoanService.search("", "Tất cả");
-        populateTable(all);
-    }
+    public TaiKhoanModel getSelectedTaiKhoan() {
+        int row = taiKhoanTable.getSelectedRow();
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == mainFunction.btn.get("create")) {
-            new TaiKhoanDialog().showAddTaiKhoanDialog(this, this::loadDataTable);
-        } else if (e.getSource() == mainFunction.btn.get("update")) {
-            int selectedRow = taiKhoanTable.getSelectedRow();
-            if (selectedRow != -1) {
-                int maTk = (int) taiKhoanTable.getValueAt(selectedRow, 0);
-                new TaiKhoanDialog().showUpdateTaiKhoanDialog(this, maTk, this::loadDataTable);
-            } else {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần cập nhật!");
-            }
-        } else if (e.getSource() == mainFunction.btn.get("delete")) {
-            int selectedRow = taiKhoanTable.getSelectedRow();
-            if (selectedRow != -1) {
-                int maTk = (int) taiKhoanTable.getValueAt(selectedRow, 0);
-                int option = JOptionPane.showConfirmDialog(this,
-                        "Bạn có chắc muốn xóa tài khoản này?",
-                        "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-                if (option == JOptionPane.YES_OPTION) {
-                    if (TaiKhoanService.delete(maTk)) {
-                        JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công!");
-                        loadDataTable();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Xóa tài khoản thất bại!");
-                    }
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản cần xóa!");
-            }
-        } else if (e.getSource() == mainFunction.btn.get("detail")) {
-            int selectedRow = taiKhoanTable.getSelectedRow();
-            if (selectedRow != -1) {
-                int maTk = (int) taiKhoanTable.getValueAt(selectedRow, 0);
-                TaiKhoanModel tk = TaiKhoanService.getByID(maTk);
-                if (tk != null) {
-                    new TaiKhoanDialog().showTaiKhoanDetailDialog(this, tk);
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn tài khoản để xem chi tiết!");
-            }
+        if (row >= 0) {
+            return TaiKhoanService.loadData().get(row);
         }
+        return null;
     }
 
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-            performSearch();
-        }
+    public Color getBackgroundColor() {
+        return BackgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        BackgroundColor = backgroundColor;
+    }
+
+    public JPanel getContentCenter() {
+        return contentCenter;
+    }
+
+    public void setContentCenter(JPanel contentCenter) {
+        this.contentCenter = contentCenter;
+    }
+
+    public JPanel getFunctionBar() {
+        return functionBar;
+    }
+
+    public void setFunctionBar(JPanel functionBar) {
+        this.functionBar = functionBar;
+    }
+
+    public JTable getTaiKhoanTable() {
+        return taiKhoanTable;
+    }
+
+    public void setTaiKhoanTable(JTable taiKhoanTable) {
+        this.taiKhoanTable = taiKhoanTable;
+    }
+
+    public JScrollPane getTaiKhoanScrollTable() {
+        return taiKhoanScrollTable;
+    }
+
+    public void setTaiKhoanScrollTable(JScrollPane taiKhoanScrollTable) {
+        this.taiKhoanScrollTable = taiKhoanScrollTable;
+    }
+
+    public DefaultTableModel getdTable() {
+        return dTable;
+    }
+
+    public void setdTable(DefaultTableModel dTable) {
+        this.dTable = dTable;
+    }
+
+    public MainFunction getMainFunction() {
+        return mainFunction;
+    }
+
+    public void setMainFunction(MainFunction mainFunction) {
+        this.mainFunction = mainFunction;
+    }
+
+    public IntegratedSearch getSearch() {
+        return search;
+    }
+
+    public void setSearch(IntegratedSearch search) {
+        this.search = search;
+    }
+
+    public ArrayList<TaiKhoanModel> getListtk() {
+        return listtk;
+    }
+
+    public void setListtk(ArrayList<TaiKhoanModel> listtk) {
+        this.listtk = listtk;
+    }
+
+    public TaiKhoanController getAction() {
+        return action;
+    }
+
+    public void setAction(TaiKhoanController action) {
+        this.action = action;
     }
 }
