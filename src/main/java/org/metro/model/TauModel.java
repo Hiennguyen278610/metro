@@ -4,19 +4,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class TauModel {
-    private String matau; // Mã tàu
+    private int matau; // Mã tàu
     private int soghe; // Số ghế trên tàu
     private String trangthaitau; // Trạng thái (Đang vận hành, bảo trì)
     private LocalDate ngaynhap; // Ngày nhập tàu
     private boolean isVisible; // Trạng thái hiển thị của tàu
 
-    public TauModel(String matau, int soghe, String trangthaitau) {
+    public TauModel(int matau, int soghe, String trangthaitau) {
         this.matau = matau;
         this.soghe = soghe;
         this.trangthaitau = trangthaitau;
     }
 
-    public TauModel(String matau, int soghe, String trangthaitau, LocalDate ngaynhap, boolean isVisible) {
+    public TauModel(int matau, int soghe, String trangthaitau, LocalDate ngaynhap, boolean isVisible) {
         this.matau = matau;
         this.soghe = soghe;
         this.trangthaitau = trangthaitau;
@@ -30,7 +30,7 @@ public class TauModel {
         this.ngaynhap = ngaynhap;
     }
 
-    public TauModel(String matau, int soghe, String trangthaitau, LocalDate ngaynhap) {
+    public TauModel(int matau, int soghe, String trangthaitau, LocalDate ngaynhap) {
         this.matau = matau;
         this.soghe = soghe;
         this.trangthaitau = trangthaitau;
@@ -46,7 +46,7 @@ public class TauModel {
         this.ngaynhap = ngaynhap;
     }
 
-    public String getMatau() {
+    public int getMatau() {
         return matau;
     }
 

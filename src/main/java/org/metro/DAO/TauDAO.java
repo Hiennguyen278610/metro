@@ -23,11 +23,11 @@ public class TauDAO implements IBaseDAO<TauModel> {
         throw new UnsupportedOperationException("Use delete(String matau) instead");
     }
 
-    public int delete(String matau) {
+    public int delete(int matau) {
         String sql = "Update tau set isVisible = 0 where matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, matau);
+            pstmt.setInt(1, matau);
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
             System.err.println("SQL Error during delete: " + ex.getMessage());
@@ -45,7 +45,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
                 ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 TauModel tau = new TauModel(
-                        rs.getString("matau"),
+                        rs.getInt("matau"),
                         rs.getInt("soghe"),
                         rs.getString("trangthaitau"),
                         rs.getDate("ngaynhap").toLocalDate(),
@@ -68,11 +68,11 @@ public class TauDAO implements IBaseDAO<TauModel> {
         String sql = "SELECT * FROM tau WHERE matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, matau);
+            pstmt.setInt(1, matau);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new TauModel(
-                            rs.getString("matau"),
+                            rs.getInt("matau"),
                             rs.getInt("soghe"),
                             rs.getString("trangthaitau"),
                             rs.getDate("ngaynhap").toLocalDate(),
@@ -135,7 +135,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
             LocalDate ngaynhap = LocalDate.parse(t.getNgaynhap(), FORMATTER);
             pstmt.setDate(3, Date.valueOf(ngaynhap));
 
-            pstmt.setString(4, t.getMatau());
+            pstmt.setInt(4, t.getMatau());
 
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
@@ -181,7 +181,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
         String sql = "SELECT isVisible FROM tau WHERE matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, matau);
+            pstmt.setInt(1, matau);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getBoolean("isVisible");
