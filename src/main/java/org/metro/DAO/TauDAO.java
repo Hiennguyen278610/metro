@@ -24,7 +24,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
     }
 
     public int delete(String matau) {
-        String sql = "DELETE FROM tau WHERE matau = ?";
+        String sql = "Update tau set isVisible = 0 where matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, matau);
@@ -48,7 +48,8 @@ public class TauDAO implements IBaseDAO<TauModel> {
                         rs.getString("matau"),
                         rs.getInt("soghe"),
                         rs.getString("trangthaitau"),
-                        rs.getDate("ngaynhap").toLocalDate());
+                        rs.getDate("ngaynhap").toLocalDate(),
+                        rs.getBoolean("isVisible"));
                 list.add(tau);
             }
         } catch (SQLException e) {
@@ -74,7 +75,8 @@ public class TauDAO implements IBaseDAO<TauModel> {
                             rs.getString("matau"),
                             rs.getInt("soghe"),
                             rs.getString("trangthaitau"),
-                            rs.getDate("ngaynhap").toLocalDate());
+                            rs.getDate("ngaynhap").toLocalDate(),
+                            rs.getBoolean("isVisible"));
                 }
             }
         } catch (SQLException ex) {
@@ -173,5 +175,22 @@ public class TauDAO implements IBaseDAO<TauModel> {
                     return false;
             }
         }).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public boolean checkVisible(String matau) {
+        String sql = "SELECT isVisible FROM tau WHERE matau = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, matau);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBoolean("isVisible");
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println("SQL Error during checkVisible: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return false;
     }
 }

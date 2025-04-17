@@ -43,7 +43,6 @@ public class Tau extends JPanel {
         this.setBackground(Color.white);
         this.setLayout(new FlowLayout(1, 0, 0));
         this.setPreferredSize(new Dimension(900, 600));
-        List<TauModel> list = new TauDAO().selectAll();
 
         JPanel ThongTinTauPanel = new JPanel();
         ThongTinTauPanel.setBackground(Color.pink);
@@ -296,6 +295,9 @@ public class Tau extends JPanel {
     }
 
     private RoundedPanel createTauPanel(TauModel tau) {
+        if (tau.isVisible() == false) {
+            return null;
+        }
         RoundedPanel panel = new RoundedPanel(20);
         panel.setPreferredSize(new Dimension(240, 240));
         panel.setBackground(Color.white);

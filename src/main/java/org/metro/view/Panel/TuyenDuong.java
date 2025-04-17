@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.metro.DAO.TauDAO;
 import org.metro.DAO.TuyenDAO;
 import org.metro.controller.TuyenDuongController;
 import org.metro.model.TuyenDuongModel;
@@ -77,9 +78,9 @@ public class TuyenDuong extends JPanel {
         });
         headerPanel.add(search, BorderLayout.WEST);
 
-        mainfunc = new MainFunction(machucnang_tuyenduong,new String[] { "create", "delete", "update", "detail" });
+        mainfunc = new MainFunction(machucnang_tuyenduong, new String[] { "create", "delete", "update", "detail" });
         for (String tb : mainfunc.getBtn().keySet()) {
-            if(mainfunc.getBtn().get(tb) != null) {
+            if (mainfunc.getBtn().get(tb) != null) {
                 mainfunc.getBtn().get(tb).addActionListener(action);
             }
         }
@@ -129,7 +130,8 @@ public class TuyenDuong extends JPanel {
         // dat ten cho cac row cua table
         dataTabelModel
                 .setColumnIdentifiers(
-                        new String[] { "Mã tàu", "Trạm bắt đầu", "Trạm đích", "Thời gian di chuyển", "Trạng thái" });
+                        new String[] { "Mã tuyến đường", "Trạm bắt đầu", "Trạm đích", "Thời gian di chuyển",
+                                "Trạng thái" });
 
         tuyenDuongTable = new JTable();
         tuyenDuongTable.setFillsViewportHeight(true); // lap day JScrollPane
@@ -168,11 +170,15 @@ public class TuyenDuong extends JPanel {
         dataTabelModel.setRowCount(0); // xoa het bang de tai lai tu dau
         if (listTuyenDuong != null) {
             for (TuyenDuongModel tdm : listTuyenDuong) {
+                if (new TauDAO().checkVisible(tdm.getTramdau()) == 0
+                        || new TauDAO().checkVisible(tdm.getTramdich()) == 0) {
+                    continue; // bo qua neu tram khong ton tai
+                }
                 dataTabelModel.addRow(new Object[] { tdm.getMatuyen(), tdm.getTramdau(), tdm.getTramdich(),
                         tdm.getThoigiandichuyen(), tdm.getTrangthaituyen() });
             }
-        }
 
+        }
     }
 
     public JPanel getXemDoThi() {

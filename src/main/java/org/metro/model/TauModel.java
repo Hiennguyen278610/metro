@@ -8,11 +8,20 @@ public class TauModel {
     private int soghe; // Số ghế trên tàu
     private String trangthaitau; // Trạng thái (Đang vận hành, bảo trì)
     private LocalDate ngaynhap; // Ngày nhập tàu
+    private boolean isVisible; // Trạng thái hiển thị của tàu
 
     public TauModel(String matau, int soghe, String trangthaitau) {
         this.matau = matau;
         this.soghe = soghe;
         this.trangthaitau = trangthaitau;
+    }
+
+    public TauModel(String matau, int soghe, String trangthaitau, LocalDate ngaynhap, boolean isVisible) {
+        this.matau = matau;
+        this.soghe = soghe;
+        this.trangthaitau = trangthaitau;
+        this.ngaynhap = ngaynhap;
+        this.isVisible = isVisible;
     }
 
     public TauModel(int soghe, String trangthaitau, LocalDate ngaynhap) {
@@ -59,6 +68,10 @@ public class TauModel {
 
     public void setTrangthaitau(String trangthaitau) {
         this.trangthaitau = trangthaitau;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
     }
 
     @Override
