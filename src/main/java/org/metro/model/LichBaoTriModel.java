@@ -10,16 +10,18 @@ public class LichBaoTriModel {
     private LocalDate ngaybaotri;
     private String trangthaibaotri;
     private LocalDateTime ngaytao;
+    private double chiphibaotri;
 
     private DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public LichBaoTriModel(int mabaotri, int matau, LocalDate ngaybaotri, String trangthaibaotri,
-            LocalDateTime ngaytao) {
+            LocalDateTime ngaytao, double chiphibaotri) {
         this.mabaotri = mabaotri;
         this.matau = matau;
         this.ngaybaotri = ngaybaotri;
         this.trangthaibaotri = trangthaibaotri;
         this.ngaytao = ngaytao;
+        this.chiphibaotri = chiphibaotri;
     }
 
     public LichBaoTriModel() {
@@ -71,5 +73,13 @@ public class LichBaoTriModel {
 
     public void setNgaytao(LocalDateTime ngaytao) {
         this.ngaytao = ngaytao;
+    }
+
+    public double getChiphibaotri() {
+        return chiphibaotri;
+    }
+
+    public void setChiphibaotri(double chiphibaotri) {
+        this.chiphibaotri = chiphibaotri;
     }
 }
