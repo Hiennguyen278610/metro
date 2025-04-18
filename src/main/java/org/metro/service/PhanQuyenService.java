@@ -13,7 +13,6 @@ import java.util.List;
 
 
 public class PhanQuyenService {
-    private static PhanQuyen pq;
     private static ChiTietQuyenDAO ctqDAO;
     private static NhomChucNangDAO ncnDAO;
     private static NhomQuyenDAO nqDAO;
