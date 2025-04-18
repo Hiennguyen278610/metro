@@ -12,7 +12,8 @@ import java.awt.*;
 
 public class TramDialog extends JDialog {
     private JButton btnAdd, btnExit, btnUpdate;
-    private InputField maField, tenField, addressField, xField, yField;
+    private InputField maField, tenField, addressField, xField, yField, chiphi;
+
     private JPanel contentPanel, bottomPanel;
     private TramModel tramModel;
     private Tram tram;
@@ -26,6 +27,7 @@ public class TramDialog extends JDialog {
         addressField = new InputField("Địa chỉ", 300, 60);
         xField = new InputField("Nhập tọa độ x", 300, 60);
         yField = new InputField("Nhập tọa độ y", 300, 60);
+        chiphi = new InputField("Chi phí", 300, 60);
         init(type);
     }
 
@@ -38,28 +40,30 @@ public class TramDialog extends JDialog {
         addressField = new InputField("Địa chỉ", 300, 60);
         xField = new InputField("Nhập tọa độ x", 300, 60);
         yField = new InputField("Nhập tọa độ y", 300, 60);
+        chiphi = new InputField("Chi phí", 300, 60);
         init(type);
     }
 
     public void init(String type) {
-        this.setSize(400, 320);
+        this.setSize(400, 340);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 0));
 
         contentPanel = new JPanel();
-        contentPanel.setPreferredSize(new Dimension(400, 250));
-        contentPanel.setLayout(new GridLayout(4, 1));
+        contentPanel.setPreferredSize(new Dimension(400, 280));
+        contentPanel.setLayout(new GridLayout(5, 1));
 
         contentPanel.add(tenField);
         contentPanel.add(addressField);
         contentPanel.add(xField);
         contentPanel.add(yField);
+        contentPanel.add(chiphi);
 
         bottomPanel = new JPanel(new FlowLayout());
         bottomPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
         bottomPanel.setBackground(Color.WHITE);
         bottomPanel.setPreferredSize(new Dimension(400, 70));
-        bottomPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
+        // bottomPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
 
         Font font = new Font("Segoe UI", Font.BOLD, 16);
 
@@ -89,6 +93,7 @@ public class TramDialog extends JDialog {
                 setAddressField(tramModel.getDiachi().trim());
                 setxField(tramModel.getX());
                 setyField(tramModel.getY());
+                setChiphi(tramModel.getChiphitram());
             default:
                 break;
         }
@@ -123,7 +128,8 @@ public class TramDialog extends JDialog {
             String diachi = getAddressField();
             int x = Integer.parseInt(getxField());
             int y = Integer.parseInt(getyField());
-            return new TramModel(matram, tentram, diachi, x, y);
+            double chiphi = Double.parseDouble(getChiphi());
+            return new TramModel(matram, tentram, diachi, x, y, chiphi);
         }
         return null;
     }
@@ -191,4 +197,13 @@ public class TramDialog extends JDialog {
     public void setyField(int yField) {
         this.yField.getTxtInput().setText(String.valueOf(yField));
     }
+
+    public String getChiphi() {
+        return this.chiphi.getTxtInput().getText();
+    }
+
+    public void setChiphi(double chiphi) {
+        this.chiphi.getTxtInput().setText(String.valueOf(chiphi));
+    }
+
 }
