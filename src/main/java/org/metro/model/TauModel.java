@@ -58,7 +58,7 @@ public class TauModel {
         return trangthaitau;
     }
 
-    public void setMatau(String matau) {
+    public void setMatau(int matau) {
         this.matau = matau;
     }
 

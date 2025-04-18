@@ -170,10 +170,6 @@ public class TuyenDuong extends JPanel {
         dataTabelModel.setRowCount(0); // xoa het bang de tai lai tu dau
         if (listTuyenDuong != null) {
             for (TuyenDuongModel tdm : listTuyenDuong) {
-                if (new TauDAO().checkVisible(tdm.getTramdau()) == 0
-                        || new TauDAO().checkVisible(tdm.getTramdich()) == 0) {
-                    continue; // bo qua neu tram khong ton tai
-                }
                 dataTabelModel.addRow(new Object[] { tdm.getMatuyen(), tdm.getTramdau(), tdm.getTramdich(),
                         tdm.getThoigiandichuyen(), tdm.getTrangthaituyen() });
             }

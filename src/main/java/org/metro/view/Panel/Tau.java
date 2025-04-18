@@ -123,7 +123,7 @@ public class Tau extends JPanel {
         TongSoTauPanel.setBorder(new MatteBorder(0, 0, 2, 0, Color.black));
         TongSoTauPanel.setBackground(Color.white);
         TongSoTauPanel.setLayout(null);
-        TongSoTauLabel = new JLabel("Tổng số tàu (" + list.size() + ")");
+        TongSoTauLabel = new JLabel("Tổng số tàu (" + listTau.size() + ")");
         TongSoTauLabel.setFont(new Font("Arial", Font.BOLD, 22));
         TongSoTauLabel.setBounds(30, 55, 200, 40);
         TongSoTauPanel.add(TongSoTauLabel);
@@ -188,12 +188,12 @@ public class Tau extends JPanel {
 
         DanhSachTauPanel = new JPanel();
         DanhSachTauPanel.setLayout(new FlowLayout(0, 36, 40));
-        DanhSachTauPanel.setPreferredSize(new Dimension(900, ((list.size() + 5) / 3) * 260));
+        DanhSachTauPanel.setPreferredSize(new Dimension(900, ((listTau.size() + 5) / 3) * 260));
         DanhSachTauPanel.setBackground(Color.white);
 
-        for (int i = 0; i < list.size(); i++) {
-            RoundedPanel panel = createTauPanel(list.get(i));
-            DanhSachTauPanel.add(panel);
+        for (int i = 0; i < listTau.size(); i++) {
+            RoundedPanel panel = createTauPanel(listTau.get(i));
+            if (panel != null) DanhSachTauPanel.add(panel);
         }
 
         JScrollPane DanhSachTauScrollPane = new JScrollPane(DanhSachTauPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -216,7 +216,7 @@ public class Tau extends JPanel {
 
     public void XoaTau() {
         String matau = this.MaTauTextField.getText();
-        int delete = new TauDAO().delete(matau);
+        int delete = new TauDAO().delete(Integer.parseInt(matau));
         if (delete > 0) {
             JOptionPane.showMessageDialog(this, "Xóa thành công!");
             updateData();
@@ -232,7 +232,7 @@ public class Tau extends JPanel {
         this.TongSoTauLabel.setText("Tổng số tàu (" + listTau.size() + ")");
         for (int i = 0; i < listTau.size(); i++) {
             RoundedPanel panel = createTauPanel(listTau.get(i));
-            DanhSachTauPanel.add(panel);
+            if (panel != null) DanhSachTauPanel.add(panel);
         }
         this.DanhSachTauPanel.revalidate();
         this.DanhSachTauPanel.repaint();
@@ -256,7 +256,7 @@ public class Tau extends JPanel {
         LocalDate localDate = LocalDate.parse(ngayNhap, formatter);
 
         String trangThai = (String) this.TrangThaiTauCBx.getSelectedItem();
-        TauModel hihi = new TauModel(ma, soghe, trangThai, localDate);
+        TauModel hihi = new TauModel(Integer.parseInt(ma), soghe, trangThai, localDate);
 
         int update = new TauDAO().update(hihi);
         if (update > 0) {
@@ -352,7 +352,7 @@ public class Tau extends JPanel {
     }
 
     private void updateForm(TauModel tau) {
-        this.MaTauTextField.setText(tau.getMatau());
+        this.MaTauTextField.setText(String.valueOf(tau.getMatau()));
         this.NgayNhapTauTextField.setText(tau.getNgaynhap());
         this.SoGheTextField.setText(tau.getSoghe() + "");
         this.TrangThaiTauCBx.setSelectedItem((String) tau.getTrangthaitau());

@@ -18,10 +18,10 @@ import org.metro.util.DatabaseUtils;
 public class TauDAO implements IBaseDAO<TauModel> {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    @Override
-    public int delete(int id) {
-        throw new UnsupportedOperationException("Use delete(String matau) instead");
-    }
+//    @Override
+//    public int delete(int id) {
+//        throw new UnsupportedOperationException("Use delete(String matau) instead");
+//    }
 
     public int delete(int matau) {
         String sql = "Update tau set isVisible = 0 where matau = ?";
@@ -61,14 +61,10 @@ public class TauDAO implements IBaseDAO<TauModel> {
 
     @Override
     public TauModel selectById(int id) {
-        throw new UnsupportedOperationException("Use selectById(String matau) instead");
-    }
-
-    public TauModel selectById(String matau) {
         String sql = "SELECT * FROM tau WHERE matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, matau);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new TauModel(
@@ -105,7 +101,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         // Assuming the ID is auto-generated and returned as a string
-                        String generatedId = generatedKeys.getString(1);
+                        int generatedId = generatedKeys.getInt(1);
                         t.setMatau(generatedId);
                     }
                 }
@@ -177,7 +173,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
         }).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public boolean checkVisible(String matau) {
+    public boolean checkVisible(int matau) {
         String sql = "SELECT isVisible FROM tau WHERE matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {

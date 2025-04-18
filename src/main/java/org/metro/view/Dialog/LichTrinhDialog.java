@@ -201,7 +201,7 @@ public class LichTrinhDialog extends JDialog {
             ComboBoxUtil.selectItemInComboBox(manvComboBox, manvComboBoxModel,
                     nv -> ((NhanVienModel)nv).getManv() == selected.getManv());
             ComboBoxUtil.selectItemInComboBox(matauComboBox, matauComboBoxModel,
-                    tau -> Integer.parseInt(((TauModel)tau).getMatau()) == selected.getMatau());
+                    tau -> tau.getMatau() == selected.getMatau());
             ComboBoxUtil.selectItemInComboBox(matuyenComboBox, matuyenComboBoxModel,
                     tuyen -> ((TuyenDuongModel)tuyen).getMatuyen() == selected.getMatuyen());
             huongdiComboBox.setSelectedIndex(selected.isHuongdi() ? 0 : 1);
@@ -221,7 +221,7 @@ public class LichTrinhDialog extends JDialog {
 
             int manv = ((NhanVienModel) manvComboBox.getSelectedItem()).getManv();
             int matuyen = ((TuyenDuongModel) matuyenComboBox.getSelectedItem()).getMatuyen();
-            int matau = Integer.parseInt(((TauModel) matauComboBox.getSelectedItem()).getMatau());
+            int matau = ((TauModel) matauComboBox.getSelectedItem()).getMatau();
             boolean huongdi = huongdiComboBox.getSelectedIndex() == 0;
 
             LocalDateTime tgkh = DateTimeUtil.getTimeComponents(tgkhJDateChooser, tgkhTimeComboBox);
