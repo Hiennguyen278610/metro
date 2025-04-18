@@ -56,7 +56,7 @@ public class MenuTaskbar extends JPanel {
         hm.put("7",new KhachHang());
         hm.put("8",new NhanVien());
         hm.put("9",new TaiKhoan());
-        hm.put("10",new PhanQuyen());
+        hm.put("10",new PhanQuyen(mainFrame));
         hm.put("11",new ThongKe());
 
         initComponent();
