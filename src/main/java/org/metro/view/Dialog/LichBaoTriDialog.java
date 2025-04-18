@@ -126,10 +126,10 @@ public class LichBaoTriDialog extends JDialog {
         this.setVisible(true);
     }
 
-    public boolean checkMaTau(String ma) {
+    public boolean checkMaTau(int ma) {
         List<TauModel> dsTau = new TauDAO().selectAll();
         for (TauModel tau : dsTau) {
-            if (tau.getMatau().equals(ma)) {
+            if (tau.getMatau() == ma) {
                 return true;
             }
         }
@@ -140,7 +140,7 @@ public class LichBaoTriDialog extends JDialog {
         if (matauField.getTxtInput().getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Mã tàu không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
-        } else if (!checkMaTau(matauField.getTxtInput().getText())) {
+        } else if (!checkMaTau(Integer.parseInt(matauField.getTxtInput().getText()))) {
             JOptionPane.showMessageDialog(this, "Mã tàu không hợp lệ!Hãy nhập lại", "Cảnh báo",
                     JOptionPane.WARNING_MESSAGE);
             return false;

@@ -18,16 +18,16 @@ import org.metro.util.DatabaseUtils;
 public class TauDAO implements IBaseDAO<TauModel> {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    @Override
-    public int delete(int id) {
-        throw new UnsupportedOperationException("Use delete(String matau) instead");
-    }
+//    @Override
+//    public int delete(int id) {
+//        throw new UnsupportedOperationException("Use delete(String matau) instead");
+//    }
 
-    public int delete(String matau) {
-        String sql = "DELETE FROM tau WHERE matau = ?";
+    public int delete(int matau) {
+        String sql = "Update tau set isVisible = 0 where matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, matau);
+            pstmt.setInt(1, matau);
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
             System.err.println("SQL Error during delete: " + ex.getMessage());
@@ -45,10 +45,11 @@ public class TauDAO implements IBaseDAO<TauModel> {
                 ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 TauModel tau = new TauModel(
-                        rs.getString("matau"),
+                        rs.getInt("matau"),
                         rs.getInt("soghe"),
                         rs.getString("trangthaitau"),
-                        rs.getDate("ngaynhap").toLocalDate());
+                        rs.getDate("ngaynhap").toLocalDate(),
+                        rs.getBoolean("isVisible"));
                 list.add(tau);
             }
         } catch (SQLException e) {
@@ -60,21 +61,18 @@ public class TauDAO implements IBaseDAO<TauModel> {
 
     @Override
     public TauModel selectById(int id) {
-        throw new UnsupportedOperationException("Use selectById(String matau) instead");
-    }
-
-    public TauModel selectById(String matau) {
         String sql = "SELECT * FROM tau WHERE matau = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, matau);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new TauModel(
-                            rs.getString("matau"),
+                            rs.getInt("matau"),
                             rs.getInt("soghe"),
                             rs.getString("trangthaitau"),
-                            rs.getDate("ngaynhap").toLocalDate());
+                            rs.getDate("ngaynhap").toLocalDate(),
+                            rs.getBoolean("isVisible"));
                 }
             }
         } catch (SQLException ex) {
@@ -103,7 +101,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         // Assuming the ID is auto-generated and returned as a string
-                        String generatedId = generatedKeys.getString(1);
+                        int generatedId = generatedKeys.getInt(1);
                         t.setMatau(generatedId);
                     }
                 }
@@ -133,7 +131,7 @@ public class TauDAO implements IBaseDAO<TauModel> {
             LocalDate ngaynhap = LocalDate.parse(t.getNgaynhap(), FORMATTER);
             pstmt.setDate(3, Date.valueOf(ngaynhap));
 
-            pstmt.setString(4, t.getMatau());
+            pstmt.setInt(4, t.getMatau());
 
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
@@ -173,5 +171,22 @@ public class TauDAO implements IBaseDAO<TauModel> {
                     return false;
             }
         }).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public boolean checkVisible(int matau) {
+        String sql = "SELECT isVisible FROM tau WHERE matau = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, matau);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBoolean("isVisible");
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println("SQL Error during checkVisible: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return false;
     }
 }

@@ -21,13 +21,13 @@ public class TauService {
         return tauDAO.update(tau) > 0;
     }
 
-    public static boolean delete(String matau) {
+    public static boolean delete(int matau) {
         return tauDAO.delete(matau) > 0;
     }
 
-    public static TauModel getById(String matau) {
-        return tauDAO.selectById(matau);
-    }
+//    public static TauModel getById(String matau) {
+//        return tauDAO.selectById(matau);
+//    }
 
     public static List<TauModel> search(String inpStr, String type) {
         List<TauModel> result = new ArrayList<>();
@@ -42,7 +42,7 @@ public class TauService {
         for (TauModel tau : allTau) {
             switch(type) {
                 case "Tất cả":
-                    if (tau.getMatau().toLowerCase().contains(lowerInpStr) ||
+                    if (String.valueOf(tau.getMatau()).toLowerCase().contains(lowerInpStr) ||
                             String.valueOf(tau.getSoghe()).contains(lowerInpStr) ||
                             tau.getTrangthaitau().toLowerCase().contains(lowerInpStr) ||
                             tau.getNgaynhap().toLowerCase().contains(lowerInpStr)) {
@@ -50,7 +50,7 @@ public class TauService {
                     }
                     break;
                 case "Mã tàu":
-                    if (tau.getMatau().toLowerCase().contains(lowerInpStr)) {
+                    if (String.valueOf(tau.getMatau()).toLowerCase().contains(lowerInpStr)) {
                         result.add(tau);
                     }
                     break;
