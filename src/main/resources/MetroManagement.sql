@@ -387,7 +387,7 @@ CREATE TABLE tau (
     soghe INT NOT NULL,
     trangthaitau VARCHAR(100) NOT NULL,
     ngaynhap DATE NOT NULL,
-    chiphitau DOUBLE NOT NULL,
+    chiphitau DOUBLE DEFAULT 0,
     isVisible BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (matau)
 );
