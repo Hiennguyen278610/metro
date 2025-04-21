@@ -11,13 +11,14 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
 
     @Override
     public int insert(LichBaoTriModel t) {
-        String query = "INSERT INTO lichbaotri(matau,ngaybaotri,trangthaibaotri,ngaytao) VALUES (?,?,?,?)";
+        String query = "INSERT INTO lichbaotri(matau,ngaybaotri,trangthaibaotri,ngaytao,chiphibaotri) VALUES (?,?,?,?,?)";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setInt(1, t.getMatau());
             prs.setDate(2, Date.valueOf(t.getNgaybaotri()));
             prs.setString(3, t.getTrangthaibaotri());
             prs.setTimestamp(4, Timestamp.valueOf(t.getNgaytao()));
+            prs.setDouble(5, t.getChiphibaotri());
             return prs.executeUpdate();
 
         } catch (Exception e) {
@@ -28,13 +29,14 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
 
     @Override
     public int update(LichBaoTriModel t) {
-        String query = "UPDATE lichbaotri SET matau = ?,ngaybaotri = ?,trangthaibaotri = ? WHERE mabaotri = ? ";
+        String query = "UPDATE lichbaotri SET matau = ?,ngaybaotri = ?,trangthaibaotri = ?, chiphibaotri = ? WHERE mabaotri = ? ";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setInt(1, t.getMatau());
             prs.setDate(2, Date.valueOf(t.getNgaybaotri()));
             prs.setString(3, t.getTrangthaibaotri());
-            prs.setInt(4, t.getMabaotri());
+            prs.setDouble(4, t.getChiphibaotri());
+            prs.setInt(5, t.getMabaotri());
             return prs.executeUpdate();
 
         } catch (Exception e) {
@@ -74,6 +76,7 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
                 lbt.setTrangthaibaotri(rs.getString(4));
                 dsBaoTri.add(lbt);
                 LocalDateTime localDateTime = rs.getTimestamp(5).toLocalDateTime();
+                lbt.setChiphibaotri(rs.getDouble("chiphibaotri"));
                 lbt.setNgaytao(localDateTime);
             }
         } catch (Exception e) {

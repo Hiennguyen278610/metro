@@ -73,13 +73,15 @@ public class TramController implements MouseListener, ItemListener, KeyListener 
             }
         } else if (tramDialog != null && e.getSource() == tramDialog.getBtnExit()) {
             tramDialog.dispose();
-        } else if (tramDialog != null && e.getSource() == tramDialog.getBtnAdd() && tramDialog.validation()) {
+        } else if (tramDialog != null && e.getSource() == tramDialog.getBtnAdd() && tramDialog.checkEmpty()
+                && tramDialog.validInformation()) {
             int matram = tram.getTramService().getNextID();
             String tentram = tramDialog.getTenField();
             String diachi = tramDialog.getAddressField();
             int x = Integer.parseInt(tramDialog.getxField());
             int y = Integer.parseInt(tramDialog.getyField());
-            TramModel tramModel = new TramModel(matram, tentram, diachi, x, y);
+            double chiphi = Double.parseDouble(tramDialog.getChiphi());
+            TramModel tramModel = new TramModel(matram, tentram, diachi, x, y, chiphi);
             if (tram.getTramService().insert(tramModel)) {
                 JOptionPane.showMessageDialog(tram, "Thêm thành công", "THÔNG BÁO",
                         JOptionPane.INFORMATION_MESSAGE);

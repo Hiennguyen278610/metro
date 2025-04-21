@@ -76,6 +76,7 @@ public class ChiTietQuyenDAO implements IBaseDAO<ChiTietPhanQuyenModel> {
     public ChiTietPhanQuyenModel selectById(int id) {
         return null;
     }
+
     //manv trong tai khoan
     public List<ChiTietPhanQuyenModel> getQuyen(int manv) {
             List<ChiTietPhanQuyenModel> listquyenchucnang = new ArrayList<>();

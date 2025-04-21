@@ -6,13 +6,23 @@ public class TramModel {
     private String diachi; // Địa chỉ trạm
     private int x;
     private int y;
+    private double chiphitram;
 
-    public TramModel(int matram, String tentram, String diachi, int x, int y) {
+    public double getChiphitram() {
+        return chiphitram;
+    }
+
+    public void setChiphitram(double chiphitram) {
+        this.chiphitram = chiphitram;
+    }
+
+    public TramModel(int matram, String tentram, String diachi, int x, int y, double chiphitram) {
         this.matram = matram;
         this.tentram = tentram;
         this.diachi = diachi;
         this.x = x;
         this.y = y;
+        this.chiphitram = chiphitram;
     }
 
     public TramModel(String tentram, int x, int y) {

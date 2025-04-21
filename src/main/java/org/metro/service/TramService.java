@@ -2,6 +2,9 @@ package org.metro.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import org.metro.DAO.TramDAO;
 import org.metro.model.TramModel;
 
@@ -50,16 +53,17 @@ public class TramService {
     public List<TramModel> search(String text, String type) {
         List<TramModel> result = new ArrayList<>();
         text = text.toLowerCase();
+
         switch (type) {
             case "Tất cả":
                 for (TramModel tramModel : dsTram) {
-                    if (String.valueOf(tramModel.getMatram()).contains(text) || tramModel.getTentram().contains(text)
-                            || tramModel.getDiachi().contains(text)) {
+                    if ((String.valueOf(tramModel.getMatram()).contains(text)) ||
+                            (tramModel.getTentram() != null && tramModel.getTentram().toLowerCase().contains(text)) ||
+                            (tramModel.getDiachi() != null && tramModel.getDiachi().toLowerCase().contains(text))) {
                         result.add(tramModel);
                     }
                 }
                 break;
-
             case "Mã trạm":
                 for (TramModel tramModel : dsTram) {
                     if (String.valueOf(tramModel.getMatram()).contains(text)) {
@@ -67,28 +71,25 @@ public class TramService {
                     }
                 }
                 break;
-
             case "Tên trạm":
                 for (TramModel tramModel : dsTram) {
-                    if (tramModel.getTentram().contains(text)) {
+                    if (tramModel.getTentram() != null && tramModel.getTentram().toLowerCase().contains(text)) {
                         result.add(tramModel);
                     }
                 }
                 break;
-
             case "Địa chỉ":
                 for (TramModel tramModel : dsTram) {
-                    if (tramModel.getDiachi().contains(text)) {
+                    if (tramModel.getDiachi() != null && tramModel.getDiachi().toLowerCase().contains(text)) {
                         result.add(tramModel);
                     }
                 }
                 break;
-
             default:
-                System.out.println("Khong the tim kiem");
+                System.out.println("Không thể tìm kiếm với loại: " + type);
                 break;
         }
-        return dsTram;
+        return result;
     }
 
     public int getNextID() {

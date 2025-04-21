@@ -13,13 +13,14 @@ public class TramDAO implements IBaseDAO<TramModel> {
 
     @Override
     public int insert(TramModel t) {
-        String query = "INSERT INTO tram(tentram,diachi,x,y ) VALUES (?,?,?,?)";
+        String query = "INSERT INTO tram(tentram,diachi,x,y,chiphitram) VALUES (?,?,?,?,?)";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setString(1, t.getTentram());
             prs.setString(2, t.getDiachi());
             prs.setInt(3, t.getX());
             prs.setInt(4, t.getY());
+            prs.setDouble(5, t.getChiphitram());
             return prs.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,15 +30,16 @@ public class TramDAO implements IBaseDAO<TramModel> {
 
     @Override
     public int update(TramModel t) {
-        String query = "UPDATE tram SET tentram = ?, diachi = ?,x = ?, y = ? WHERE matram = ?";
+        String query = "UPDATE tram SET tentram = ?, diachi = ?, x = ?, y = ?, chiphitram = ? WHERE matram = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setString(1, t.getTentram());
             prs.setString(2, t.getDiachi());
             prs.setInt(3, t.getX());
             prs.setInt(4, t.getY());
-            prs.setInt(5, t.getMatram());
-            System.out.println(prs.executeUpdate());
+            prs.setDouble(5, t.getChiphitram());
+            prs.setInt(6, t.getMatram());
+            // System.out.println(prs.executeUpdate());
             return prs.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +75,8 @@ public class TramDAO implements IBaseDAO<TramModel> {
                 String diachi = rs.getString("diachi");
                 int x = rs.getInt("x");
                 int y = rs.getInt("y");
-                dsTram.add(new TramModel(ma, tentram, diachi, x, y));
+                double chiphi = rs.getDouble("chiphitram");
+                dsTram.add(new TramModel(ma, tentram, diachi, x, y, chiphi));
             }
 
         } catch (Exception e) {

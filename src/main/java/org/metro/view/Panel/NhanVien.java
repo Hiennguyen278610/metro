@@ -77,9 +77,7 @@ public class NhanVien extends JPanel {
         
         nhanVienTabel = new JTable();
         nhanVienTabel.setRowSelectionAllowed(true); // cho phep chon hang
-        nhanVienTabel.setBackground(Color.decode("#ecf0f1"));
         nhanVienTabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        nhanVienTabel.setForeground(Color.decode("#22a6b3"));
         nhanVienTabel.setRowHeight(40);
         nhanVienTabel.setModel(dataTabelModel);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

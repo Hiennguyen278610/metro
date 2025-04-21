@@ -22,7 +22,7 @@ import org.metro.model.*;
 
 public class LichBaoTriDialog extends JDialog {
     private JButton btnAdd, btnExit, btnUpdate;
-    private InputField statusField, matauField, mabaotriField, timeField, createAt;
+    private InputField statusField, matauField, mabaotriField, timeField, createAt, chiphibaotri;
 
     private JPanel contentPanel, bottomPanel;
     private LichBaoTriModel lbtModel;
@@ -34,9 +34,10 @@ public class LichBaoTriDialog extends JDialog {
         super(parent, title, true);
         this.lbt = lbt;
         action = new LichBaoTriController(lbt, this);
-        matauField = new InputField("Mã tàu", 200, 70);
-        statusField = new InputField("Trạng thái bảo trì", 200, 70);
-        timeField = new InputField("Ngày bảo trì", 200, 70);
+        matauField = new InputField("Mã tàu", 200, 50);
+        statusField = new InputField("Trạng thái bảo trì", 200, 50);
+        timeField = new InputField("Ngày bảo trì", 200, 50);
+        chiphibaotri = new InputField("Chi phí bảo trì", 200, 50);
         init(type);
     }
 
@@ -50,14 +51,17 @@ public class LichBaoTriDialog extends JDialog {
             matauField = new InputField("Mã tàu:", Integer.toString(lbtModel.getMatau()), 250, 10);
             timeField = new InputField("Ngày bảo trì:", lbtModel.convertLocalDate(), 250, 10);
             statusField = new InputField("Trạng thái bảo trì:", lbtModel.getTrangthaibaotri(), 250, 10);
+            chiphibaotri = new InputField("Chi phí bảo trì: ", String.valueOf(lbtModel.getChiphibaotri()), 250, 10);
             createAt = new InputField("Ngày tạo", lbtModel.convertLocalDateTime(), 200, 10);
         } else if (type.equals("update")) {
-            matauField = new InputField("Mã tàu", 200, 70);
+            matauField = new InputField("Mã tàu", 200, 50);
             this.setMatauField(Integer.toString(lbtModel.getMatau()));
-            statusField = new InputField("Trạng thái bảo trì", 200, 70);
+            statusField = new InputField("Trạng thái bảo trì", 200, 50);
             this.setStatusField(lbtModel.getTrangthaibaotri());
-            timeField = new InputField("Ngày bảo trì", 200, 70);
+            timeField = new InputField("Ngày bảo trì", 200, 50);
             this.setTimeField(lbtModel.convertLocalDate());
+            chiphibaotri = new InputField("Chi phí bảo trì", 200, 50);
+            this.setChiphibaotri(String.valueOf(lbtModel.getChiphibaotri()));
         }
         init(type);
     }
@@ -67,18 +71,20 @@ public class LichBaoTriDialog extends JDialog {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 0));
         contentPanel = new JPanel();
-        contentPanel.setPreferredSize(new Dimension(400, 220));
+        contentPanel.setPreferredSize(new Dimension(400, 240));
         if (type.equals("detail")) {
-            contentPanel.setLayout(new GridLayout(5, 1));
+            contentPanel.setLayout(new GridLayout(6, 1));
             contentPanel.add(mabaotriField);
             contentPanel.add(matauField);
             contentPanel.add(timeField);
             contentPanel.add(statusField);
+            contentPanel.add(chiphibaotri);
             contentPanel.add(createAt);
         } else {
-            contentPanel.setLayout(new GridLayout(3, 1));
+            contentPanel.setLayout(new GridLayout(4, 1));
             contentPanel.add(matauField);
             contentPanel.add(timeField);
+            contentPanel.add(chiphibaotri);
             contentPanel.add(statusField);
         }
 
@@ -136,36 +142,130 @@ public class LichBaoTriDialog extends JDialog {
         return false;
     }
 
-    public boolean validation() {
-        if (matauField.getTxtInput().getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã tàu không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (!checkMaTau(Integer.parseInt(matauField.getTxtInput().getText()))) {
-            JOptionPane.showMessageDialog(this, "Mã tàu không hợp lệ!Hãy nhập lại", "Cảnh báo",
-                    JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (timeField.getTxtInput().getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Ngày bảo trì không được rỗng", "Cảnh báo",
-                    JOptionPane.WARNING_MESSAGE);
-            return false;
-        } else if (statusField.getTxtInput().getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Trạng thái bảo trì không được rỗng", "Cảnh báo",
-                    JOptionPane.WARNING_MESSAGE);
+    public boolean checkEmpty() {
+        // Kiểm tra mã tàu
+        if (matauField.getTxtInput().getText().trim().isEmpty()) {
+            showWarning("Mã tàu không được rỗng");
             return false;
         }
+
+        // Kiểm tra ngày bảo trì
+        if (timeField.getTxtInput().getText().trim().isEmpty()) {
+            showWarning("Ngày bảo trì không được rỗng");
+            return false;
+        }
+
+        // Kiểm tra trạng thái
+        if (statusField.getTxtInput().getText().trim().isEmpty()) {
+            showWarning("Trạng thái bảo trì không được rỗng");
+            return false;
+        }
+
         return true;
     }
 
-    public LichBaoTriModel getLichBaoTriModel() {
-        if (validation()) {
-            int mabaotri = lbtModel.getMabaotri();
-            int matau = Integer.parseInt(getMatauField());
-            LocalDate ngaybaotri = LocalDate.parse(getTimeField(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            String trangthaibaotri = getStatusField();
-            LocalDateTime ngaytao = lbtModel.getNgaytao();
-            return new LichBaoTriModel(mabaotri, matau, ngaybaotri, trangthaibaotri, ngaytao);
+    public boolean isNumber(String number) {
+        try {
+            Integer.parseInt(number.trim());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
-        return null;
+    }
+
+    public boolean validInformation() {
+        try {
+            String matau = matauField.getTxtInput().getText().trim();
+            String trangthai = statusField.getTxtInput().getText().trim();
+            String ngayBaoTri = timeField.getTxtInput().getText().trim();
+
+            // Kiểm tra mã tàu
+            if (!isNumber(matau)) {
+                showWarning("Mã tàu phải là một số!");
+                return false;
+            }
+
+            // Kiểm tra trạng thái (không được là số)
+            if (isNumber(trangthai)) {
+                showWarning("Trạng thái không hợp lệ!");
+                return false;
+            }
+
+            // Kiểm tra định dạng ngày
+            if (!isValidDate(ngayBaoTri)) {
+                showWarning("Ngày bảo trì không hợp lệ (dd/MM/yyyy)");
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            showWarning("Lỗi khi kiểm tra thông tin: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private boolean isValidDate(String dateStr) {
+        try {
+            String normalizedDate = chuanHoaNgay(dateStr);
+            LocalDate.parse(normalizedDate, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static String chuanHoaNgay(String date) {
+        if (date == null || date.trim().isEmpty()) {
+            return date;
+        }
+        date = date.trim();
+        String[] parts = date.split("/");
+        if (parts.length != 3) {
+            return date;
+        }
+
+        // Chuẩn hóa ngày và tháng
+        if (parts[0].length() == 1) {
+            parts[0] = "0" + parts[0];
+        }
+        if (parts[1].length() == 1) {
+            parts[1] = "0" + parts[1];
+        }
+
+        return parts[0] + "/" + parts[1] + "/" + parts[2];
+    }
+
+    public LichBaoTriModel getLichBaoTriModel() {
+        try {
+            if (!checkEmpty() || !validInformation()) {
+                return null;
+            }
+
+            int matau = Integer.parseInt(matauField.getTxtInput().getText().trim());
+            String ngayBaoTriStr = timeField.getTxtInput().getText().trim();
+            String chuanHoaNagayBaoTri = chuanHoaNgay(ngayBaoTriStr);
+            LocalDate ngaybaotri = LocalDate.parse(chuanHoaNagayBaoTri, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String trangthaibaotri = statusField.getTxtInput().getText().trim();
+            double chiphi = Double.parseDouble(chiphibaotri.getTxtInput().getText().trim());
+            return new LichBaoTriModel(
+                    lbtModel.getMabaotri(),
+                    matau,
+                    ngaybaotri,
+                    trangthaibaotri,
+                    lbtModel.getNgaytao(),
+                    chiphi);
+        } catch (Exception e) {
+            showWarning("Lỗi khi tạo đối tượng: " + e.getMessage());
+            return null;
+        }
+    }
+
+    private void showWarning(String message) {
+        JOptionPane.showMessageDialog(
+                null,
+                message,
+                "THÔNG BÁO",
+                JOptionPane.WARNING_MESSAGE);
     }
 
     public JButton getBtnAdd() {
@@ -214,5 +314,14 @@ public class LichBaoTriDialog extends JDialog {
 
     public void setTimeField(String time) {
         this.timeField.getTxtInput().setText(time);
+    }
+
+    public String getChiphibaotri() {
+        return chiphibaotri.getTxtInput().getText();
+    }
+
+    public void setChiphibaotri(String chiphibaotri) {
+        this.chiphibaotri.getTxtInput().setText(chiphibaotri);
+        ;
     }
 }

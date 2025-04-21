@@ -71,9 +71,7 @@ public class TaiKhoan extends JPanel {
         dTable.setColumnIdentifiers(new String[]{"MÃ TK","tên nhóm quyền","trạng thái"});
         taiKhoanTable = new JTable();
         taiKhoanTable.setRowSelectionAllowed(true);
-        taiKhoanTable.setBackground(Color.decode("#ecf0f1"));
         taiKhoanTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        taiKhoanTable.setForeground(Color.decode("#22a6b3"));
         taiKhoanTable.setRowHeight(40);
         taiKhoanTable.setModel(dTable);
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
