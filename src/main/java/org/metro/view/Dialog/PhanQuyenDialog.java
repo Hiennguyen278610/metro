@@ -6,6 +6,7 @@ import org.metro.model.PhanQuyenModel.NhomChucNangModel;
 import org.metro.model.PhanQuyenModel.NhomQuyenModel;
 import org.metro.service.PhanQuyenService;
 import org.metro.util.SessionManager;
+import org.metro.view.MainFrame;
 import org.metro.view.Panel.PhanQuyenPackage.PhanQuyen;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PhanQuyenDialog extends JDialog {
+    private MainFrame mf;
     private PhanQuyen pq;
     private PhanQuyenService pqs = new PhanQuyenService();
     private String tennhomquyen; // lay tu viec click vao 1 row
@@ -37,11 +39,12 @@ public class PhanQuyenDialog extends JDialog {
     private JButton them;
     private JButton thoat;
     private PhanQuyenController pqcontroller;
-    public PhanQuyenDialog(String title,PhanQuyen pq,String tennhomquyen) {
+    public PhanQuyenDialog(String title,PhanQuyen pq,String tennhomquyen,MainFrame mf) {
+        this.mf = mf;
         this.title = title;
         this.pq = pq;
         this.tennhomquyen = tennhomquyen;
-        pqcontroller = new PhanQuyenController(pq,this);
+        pqcontroller = new PhanQuyenController(pq,this,mf);
         this.setTitle(getTitle());
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
@@ -208,6 +211,9 @@ public class PhanQuyenDialog extends JDialog {
     }
 
     public String getTennhomquyen() {return tennhomquyen;}
+    public void setTextfieldQuyen(JTextField textfieldQuyen) {
+        this.textfieldQuyen = textfieldQuyen;
+    }
     public JTextField getTextfieldQuyen() {return textfieldQuyen;}
     public JTable getTable() {return table;}
 

@@ -25,8 +25,8 @@ public class PhanQuyen extends JPanel {
     private JPanel headerPanel;
     private JPanel centerPanel;
     private JPanel headerMainFuncPanel;
-    private PhanQuyenController pqAction = new PhanQuyenController(this,null);
-    public PhanQuyen() {
+    private PhanQuyenController pqAction = new PhanQuyenController(this,null,mf);
+    public PhanQuyen(MainFrame mf) {
         this.setLayout(new BorderLayout());
         mainfunc = new MainFunction(machucnang_phanquyen,new String[]{"create","delete","update","detail"});
         searchfunc = new IntegratedSearch(new String[]{"--","mã nhóm quyền","tên nhóm quyền"});

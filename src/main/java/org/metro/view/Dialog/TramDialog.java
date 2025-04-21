@@ -12,7 +12,8 @@ import java.awt.*;
 
 public class TramDialog extends JDialog {
     private JButton btnAdd, btnExit, btnUpdate;
-    private InputField maField, tenField, addressField, xField, yField;
+    private InputField maField, tenField, addressField, xField, yField, chiphi;
+
     private JPanel contentPanel, bottomPanel;
     private TramModel tramModel;
     private Tram tram;
@@ -26,6 +27,7 @@ public class TramDialog extends JDialog {
         addressField = new InputField("Địa chỉ", 300, 60);
         xField = new InputField("Nhập tọa độ x", 300, 60);
         yField = new InputField("Nhập tọa độ y", 300, 60);
+        chiphi = new InputField("Chi phí", 300, 60);
         init(type);
     }
 
@@ -38,28 +40,30 @@ public class TramDialog extends JDialog {
         addressField = new InputField("Địa chỉ", 300, 60);
         xField = new InputField("Nhập tọa độ x", 300, 60);
         yField = new InputField("Nhập tọa độ y", 300, 60);
+        chiphi = new InputField("Chi phí", 300, 60);
         init(type);
     }
 
     public void init(String type) {
-        this.setSize(400, 320);
+        this.setSize(400, 340);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 0));
 
         contentPanel = new JPanel();
-        contentPanel.setPreferredSize(new Dimension(400, 250));
-        contentPanel.setLayout(new GridLayout(4, 1));
+        contentPanel.setPreferredSize(new Dimension(400, 280));
+        contentPanel.setLayout(new GridLayout(5, 1));
 
         contentPanel.add(tenField);
         contentPanel.add(addressField);
         contentPanel.add(xField);
         contentPanel.add(yField);
+        contentPanel.add(chiphi);
 
         bottomPanel = new JPanel(new FlowLayout());
         bottomPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
         bottomPanel.setBackground(Color.WHITE);
         bottomPanel.setPreferredSize(new Dimension(400, 70));
-        bottomPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
+        // bottomPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
 
         Font font = new Font("Segoe UI", Font.BOLD, 16);
 
@@ -89,6 +93,7 @@ public class TramDialog extends JDialog {
                 setAddressField(tramModel.getDiachi().trim());
                 setxField(tramModel.getX());
                 setyField(tramModel.getY());
+                setChiphi(tramModel.getChiphitram());
             default:
                 break;
         }
@@ -99,7 +104,7 @@ public class TramDialog extends JDialog {
         this.setVisible(true);
     }
 
-    public boolean validation() {
+    public boolean checkEmpty() {
         if (getTenField().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên trạm không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -112,18 +117,71 @@ public class TramDialog extends JDialog {
         } else if (getyField().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tọa độ y không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
+        } else if (getChiphi().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Chi phí không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
         return true;
     }
 
+    public boolean isValidCost(String input) {
+        try {
+            if (input.matches("^0\\d+")) {
+                // dau + lap lai nhieu lan
+                return false;
+            }
+            double cost = Double.parseDouble(input);
+            return cost > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isNumber(String number) {
+        try {
+            Integer.parseInt(number);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean validInformation() {
+        String x = getxField().trim();
+        String y = getyField().trim();
+        String chiPhi = getChiphi().trim();
+
+        if (!isNumber(x)) {
+            showWarning("Tọa độ x phải là một số!");
+            return false;
+        }
+
+        if (!isNumber(y)) {
+            showWarning("Tọa độ y phải là một số!");
+            return false;
+        }
+
+        if (!isValidCost(chiPhi)) {
+            showWarning("Chi phí phải là số thực dương hợp lệ!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showWarning(String message) {
+        JOptionPane.showMessageDialog(null, message, "THÔNG BÁO", JOptionPane.WARNING_MESSAGE);
+    }
+
     public TramModel getTramModel() {
-        if (validation()) {
+        if (checkEmpty() && validInformation()) {
             int matram = tramModel.getMatram();
             String tentram = getTenField();
             String diachi = getAddressField();
             int x = Integer.parseInt(getxField());
             int y = Integer.parseInt(getyField());
-            return new TramModel(matram, tentram, diachi, x, y);
+            double chiphi = Double.parseDouble(getChiphi());
+            return new TramModel(matram, tentram, diachi, x, y, chiphi);
         }
         return null;
     }
@@ -191,4 +249,13 @@ public class TramDialog extends JDialog {
     public void setyField(int yField) {
         this.yField.getTxtInput().setText(String.valueOf(yField));
     }
+
+    public String getChiphi() {
+        return this.chiphi.getTxtInput().getText();
+    }
+
+    public void setChiphi(double chiphi) {
+        this.chiphi.getTxtInput().setText(String.valueOf(chiphi));
+    }
+
 }

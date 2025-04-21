@@ -3,6 +3,7 @@ package org.metro.util;
 import org.metro.model.PhanQuyenModel.ChiTietPhanQuyenModel;
 import org.metro.model.TaiKhoanModel;
 import org.metro.service.PhanQuyenService;
+import org.metro.service.TaiKhoanService;
 
 import java.util.List;
 
@@ -46,5 +47,13 @@ public class SessionManager {
     public static void clearSession() {
         currentUser = null;
         listQuyenCurrentUser = null;
+    }
+
+    //reload lại mỗi khi sửa trong phân quyền
+    public static void reloadQuyen() {
+        if(currentUser != null) {
+            int manhomquyen = TaiKhoanService.getByID(currentUser.getManv()).getNqm().getManhomquyen();
+            listQuyenCurrentUser = pqs.getChiTietPhanQuyen(manhomquyen);
+        }
     }
 }

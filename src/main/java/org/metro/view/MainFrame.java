@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 import org.metro.controller.MainController;
+import org.metro.controller.PhanQuyenController;
 import org.metro.service.SetLogoService;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -19,6 +20,7 @@ import org.metro.util.SessionManager;
 import org.metro.view.Component.MenuTaskbar;
 import org.metro.view.Component.RoundedPanel;
 import org.metro.view.Dialog.UserInfoDialog;
+import org.metro.view.Panel.PhanQuyenPackage.PhanQuyen;
 
 public class MainFrame extends JFrame {
     private JPanel DangXuatPanel;
@@ -32,7 +34,12 @@ public class MainFrame extends JFrame {
     public JPanel MainContent;
     private MenuTaskbar menuTaskbar;
 
+    private PhanQuyen pq;
+    private PhanQuyenController pqc;
+
     public MainFrame() {
+        pq = new PhanQuyen(this);
+        pqc = new PhanQuyenController(pq,null,this);
         setSize(1200, 800);
         setTitle("Quan ly Metro");
         setLocationRelativeTo(null);
@@ -301,4 +308,7 @@ public class MainFrame extends JFrame {
         return MinimizeIcon;
     }
 
+    public MenuTaskbar getMenuTaskbar() {
+        return menuTaskbar;
+    }
 }

@@ -4,9 +4,11 @@ import org.metro.model.PhanQuyenModel.ChiTietPhanQuyenModel;
 import org.metro.model.PhanQuyenModel.NhomChucNangModel;
 import org.metro.model.PhanQuyenModel.NhomQuyenModel;
 import org.metro.service.PhanQuyenService;
+import org.metro.util.SessionManager;
 import org.metro.view.Component.ToolBar;
 import org.metro.view.Dialog.NhanVienDialog;
 import org.metro.view.Dialog.PhanQuyenDialog;
+import org.metro.view.MainFrame;
 import org.metro.view.Panel.PhanQuyenPackage.PhanQuyen;
 
 import javax.swing.*;
@@ -19,10 +21,12 @@ import java.util.List;
 public class PhanQuyenController implements ActionListener {
     private PhanQuyen pq;
     private PhanQuyenDialog pqDialog;
+    private MainFrame mf;
 
-    public PhanQuyenController(PhanQuyen pq, PhanQuyenDialog pqDialog) {
+    public PhanQuyenController(PhanQuyen pq, PhanQuyenDialog pqDialog,MainFrame mf) {
         this.pq = pq;
         this.pqDialog = pqDialog;
+        this.mf = mf;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class PhanQuyenController implements ActionListener {
                     if (namebtn == null || namebtn.trim().isEmpty()) return;
 
                     if ("create".equals(namebtn)) {
-                        PhanQuyenDialog pqDialog = new PhanQuyenDialog(namebtn,pq,"Nhập tên nhóm quyền....");
+                        PhanQuyenDialog pqDialog = new PhanQuyenDialog(namebtn,pq,"Nhập tên nhóm quyền....",mf);
                         pqDialog.setVisible(true);
                     } else {
                         NhomQuyenModel nqm = pq.getSelectedPhanquyen();
@@ -45,10 +49,10 @@ public class PhanQuyenController implements ActionListener {
                             return;
                         }
                         if("update".equals(namebtn)) {
-                            PhanQuyenDialog  phanQuyenDialog = new PhanQuyenDialog(namebtn,pq,nqm.getTennhomquyen());
+                            PhanQuyenDialog  phanQuyenDialog = new PhanQuyenDialog(namebtn,pq,nqm.getTennhomquyen(),mf);
                             phanQuyenDialog.setVisible(true);
                         } else if("detail".equals(namebtn)) {
-                            PhanQuyenDialog phanQuyenDialog = new PhanQuyenDialog(namebtn,pq,nqm.getTennhomquyen());
+                            PhanQuyenDialog phanQuyenDialog = new PhanQuyenDialog(namebtn,pq,nqm.getTennhomquyen(),mf);
                             phanQuyenDialog.setVisible(true);
                         }
                     }
@@ -118,8 +122,6 @@ public class PhanQuyenController implements ActionListener {
                 System.out.println("co xoa");
                 listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"xoa"));
             }
-
-
         }
         if(PhanQuyenService.insertChiTietPhanQuyen(listctpqm)) {
             JOptionPane.showMessageDialog(null,"Thêm quyền thành công","thông báo",JOptionPane.INFORMATION_MESSAGE);
@@ -170,7 +172,7 @@ public class PhanQuyenController implements ActionListener {
             }
             if(xoa) {
                 System.out.println("co xoa");
-                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"xoa"));
+                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"delete"));
             }
         }
         if(PhanQuyenService.deleteChiTietPhanQuyen(mnq)) {
@@ -182,12 +184,55 @@ public class PhanQuyenController implements ActionListener {
             }
             JOptionPane.showMessageDialog(null,"cập nhật nhóm quyền thành công","thông báo",JOptionPane.INFORMATION_MESSAGE);
             pq.reloadData();
+            SessionManager.reloadQuyen();
+            if (mf != null) {
+                mf.getMenuTaskbar().refresh();
+            } else {
+                System.out.println("loi r");
+            }
             pqDialog.dispose();
         }
     }
 
     //ham xu li xem chi tiet nhom quyen
     private void chitietnhomquyen() {
+        NhomQuyenModel nqm = pq.getSelectedPhanquyen();
+        if (nqm == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn một nhóm quyền", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        pqDialog.getTextfieldQuyen().setText(nqm.getTennhomquyen());
+        pqDialog.getTextfieldQuyen().setEditable(false);
+        List<NhomChucNangModel> listncnm = PhanQuyenService.getNhomChucNang();
+        List<ChiTietPhanQuyenModel> listctpqm = PhanQuyenService.getChiTietPhanQuyen(nqm.getManhomquyen());
+        DefaultTableModel dtm = (DefaultTableModel) pqDialog.getTable().getModel();
+        dtm.setRowCount(0);
+        for (NhomChucNangModel ncnm : listncnm) {
+            String tenchucnang = ncnm.getTenchucnang();
+            boolean them = false, sua = false, chitiet = false, xoa = false;
+
+            // Kiểm tra quyền tương ứng với chức năng này
+            for (ChiTietPhanQuyenModel ctpqm : listctpqm) {
+                if (ctpqm.getMachucnang() == ncnm.getMachucnang()) {
+                    switch (ctpqm.getTenquyen().toLowerCase()) {
+                        case "create":
+                            them = true;
+                            break;
+                        case "update":
+                            sua = true;
+                            break;
+                        case "detail":
+                            chitiet = true;
+                            break;
+                        case "xoa":
+                            xoa = true;
+                            break;
+                    }
+                }
+            }
+            dtm.addRow(new Object[]{tenchucnang, them, sua, chitiet, xoa});
+        }
+        pqDialog.getTable().setEnabled(false);
 
     }
 }
