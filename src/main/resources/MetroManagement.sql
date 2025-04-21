@@ -294,71 +294,71 @@ CREATE TABLE tram (
 INSERT INTO tram (tentram, x, y, diachi, chiphitram)
 VALUES (
         'Tram Ben Thanh',
-        100,
-        100,
+        300,
+        300,
         'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM',
         10000.00
     ),
     (
         'Tram Sai Gon',
-        100,
         200,
-        'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM',
+        400,
+        'Đại học Sài Gòn, Phường 3, Quận 5, TP.HCM',
         10000.00
     ),
     (
         'Tram Hoa Hung',
         100,
-        300,
+        500,
         'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM',
         10000.00
     ),
     (
         'Tram Tan Binh',
-        100,
-        400,
+        50,
+        150,
         'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM',
         10000.00
     ),
     (
         'Tram Phu Nhuan',
-        200,
-        400,
+        220,
+        180,
         'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM',
         10000.00
     ),
     (
         'Tram Go Vap',
-        200,
-        500,
+        400,
+        100,
         'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM',
         10000.00
     ),
     (
         'Tram Binh Thanh',
+        350,
         200,
-        600,
         'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM',
         10000.00
     ),
     (
         'Tram Thu Duc',
-        200,
-        700,
+        500,
+        50,
         'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM',
         10000.00
     ),
     (
         'Tram Quan 7',
-        200,
-        800,
+        550,
+        500,
         'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM',
         10000.00
     ),
     (
         'Tram Nha Be',
-        200,
-        900,
+        600,
+        600,
         'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM',
         10000.00
     );
@@ -376,10 +376,14 @@ CREATE TABLE tuyen (
 );
 INSERT INTO tuyen (trambatdau, tramketthuc, thoigian, trangthai)
 VALUES (1, 2, 40, 'Hoat dong'),
-    (3, 4, 35, 'Hoat dong'),
-    (5, 6, 50, 'Hoat dong'),
-    (7, 8, 45, 'Hoat dong'),
-    (9, 10, 55, 'Hoat dong');
+    (2, 3, 35, 'Hoat dong'),
+    (1, 4, 50, 'Hoat dong'),
+    (1, 7, 45, 'Hoat dong'),
+    (7, 6, 55, 'Hoat dong'),
+    (7, 5, 20, 'Hoat dong'),
+    (6, 8, 25, 'Hoat dong'),
+    (1, 9, 30, 'Hoat dong'),
+    (9, 10, 20, 'Hoat dong');
 -- ----------------------------------------------------------------
 -- Bảng TAU
 CREATE TABLE tau (
