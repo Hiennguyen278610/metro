@@ -81,7 +81,7 @@ public class KhachHangDialog {
         dialog.setLocationRelativeTo(parent);
         dialog.setLayout(new BorderLayout());
 
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Mã khách hàng không được chỉnh sửa

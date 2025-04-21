@@ -96,7 +96,7 @@ public class TuyenDuongDialog extends JDialog {
         }
 
         // Action của nút Lưu
-        btnLuu.addActionListener(_ -> {
+        btnLuu.addActionListener(e -> {
             if (!validateInput())
                 return;
 
@@ -132,7 +132,7 @@ public class TuyenDuongDialog extends JDialog {
             dispose();
         });
 
-        btnDong.addActionListener(_ -> dispose());
+        btnDong.addActionListener(e -> dispose());
     }
 
     private String getTitleByMode(Mode mode) {
