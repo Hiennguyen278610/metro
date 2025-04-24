@@ -3,6 +3,7 @@ package org.metro.view.Panel;
 import org.metro.model.LichTrinhModel;
 import org.metro.service.LichTrinhService;
 import org.metro.controller.LichTrinhController;
+import org.metro.service.TuyenDuongService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 
@@ -48,7 +49,7 @@ public class LichTrinh extends JPanel {
             }
         };
         // Loại bỏ cột thời gian đến thực tế
-        String[] columnNames = { "Mã chuyến", "Mã nhân viên", "Hướng đi", "Thời gian khởi hành", "Trạng thái" };
+        String[] columnNames = { "Mã chuyến", "Hướng đi", "Thời gian khởi hành", "Trạng thái" };
         dTable.setColumnIdentifiers(columnNames);
         lichTrinhTable.setModel(dTable);
         lichTrinhTable.setFocusable(false);
@@ -92,11 +93,10 @@ public class LichTrinh extends JPanel {
         for (LichTrinhModel lichTrinh : listLichTrinh) {
             // Định dạng thời gian theo yêu cầu
             String formattedTime = lichTrinh.getThoigiankhoihanh().format(displayFormatter);
-
+            String huongDiDisplay = TuyenDuongService.getHuongDiDisplay(lichTrinh.getMatuyen(), lichTrinh.isHuongdi());
             Object[] rowData = {
                     lichTrinh.getMachuyen(),
-                    lichTrinh.getManv(),
-                    lichTrinh.getHuongdi() ? "Đi" : "Về", // Hiển thị hướng đi dễ đọc hơn
+                    huongDiDisplay, // Hiển thị tên trạm
                     formattedTime, // Thời gian khởi hành đã định dạng
                     lichTrinh.getTrangthai()
             };

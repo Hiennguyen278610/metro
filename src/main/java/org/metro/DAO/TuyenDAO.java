@@ -80,6 +80,18 @@ public class TuyenDAO implements IBaseDAO<TuyenDuongModel> {
 
     @Override
     public TuyenDuongModel selectById(int id) {
+        String query = "SELECT * FROM tuyen WHERE matuyen = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+             PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setInt(1, id);
+            ResultSet rs = prs.executeQuery();
+            if (rs.next()) {
+                return new TuyenDuongModel(rs.getInt("matuyen"), rs.getInt("trambatdau"),
+                        rs.getInt("tramketthuc"), rs.getInt("thoigian"), rs.getString("trangthai"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

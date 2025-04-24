@@ -6,6 +6,7 @@ import org.metro.model.LichTrinhModel;
 import org.metro.model.NhanVienModel;
 import org.metro.model.VeTauModel;
 import org.metro.service.KhachHangService;
+import org.metro.service.TuyenDuongService;
 import org.metro.service.VeTauService;
 import org.metro.util.ComboBoxUtil;
 import org.metro.view.Component.handleComponents;
@@ -13,6 +14,12 @@ import org.metro.view.Panel.VeTau;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class VeTauDialog extends JDialog {
     private JTextField sdtKhachTextField, giaveTextField;
@@ -25,6 +32,9 @@ public class VeTauDialog extends JDialog {
     private VeTauModel vetauModel;
     private VeTauController action;
     private KhachHangDialog khachHangDialog;
+    
+    // Đơn giá vé: 500 VNĐ/phút di chuyển
+    private static final double DONGIAVE = 500;
 
     // Dialog thêm, sửa, chi tiết vé tàu
     public VeTauDialog(Frame parent, String type, VeTau veTau, VeTauModel vetauModel) {
@@ -54,15 +64,61 @@ public class VeTauDialog extends JDialog {
         handleComponents.addLabelGBL(contentPanel, "Số điện thoại khách:", 0, 1, gbc);
         handleComponents.addLabelGBL(contentPanel, "Giá vé:", 0, 2, gbc);
 
+        // Khởi tạo tất cả các trường nhập liệu trước
+        sdtKhachTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 1, gbc);
+        giaveTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 2, gbc);
+        
+        // Vô hiệu hóa việc chỉnh sửa giá vé
+        giaveTextField.setEditable(false);
+
+        // Khởi tạo combobox
         machuyenComboBoxModel = new DefaultComboBoxModel<>();
         machuyenComboBox = new JComboBox<>(machuyenComboBoxModel);
-        ComboBoxUtil.loadComboBoxData(machuyenComboBoxModel, ComboBoxUtil.getDataSupplier(LichTrinhModel.class));
+        
+        // Thêm ItemListener để cập nhật giá vé khi chọn chuyến
+        machuyenComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    updateGiaVe();
+                }
+            }
+        });
+
         gbc.gridx = 1;
         gbc.gridy = 0;
         contentPanel.add(machuyenComboBox, gbc);
+        
+        // Sau khi đã khởi tạo các trường giao diện, tiến hành nạp dữ liệu
+        // Lấy danh sách lịch trình và lọc theo điều kiện
+        Supplier<List<LichTrinhModel>> lichTrinhSupplier = ComboBoxUtil.getDataSupplier(LichTrinhModel.class);
+        if (lichTrinhSupplier != null) {
+            List<LichTrinhModel> allLichTrinh = lichTrinhSupplier.get();
+            LocalDate today = LocalDate.now();
 
-        sdtKhachTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 1, gbc);
-        giaveTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 2, gbc);
+            List<LichTrinhModel> filteredLichTrinh = allLichTrinh.stream()
+                .filter(lt -> "Chờ khởi hành".equals(lt.getTrangthailichtrinh()))
+                .filter(lt -> lt.getTgkhoihanh() != null && lt.getTgkhoihanh().toLocalDate().isEqual(today))
+                .collect(Collectors.toList());
+
+            machuyenComboBoxModel.removeAllElements(); // Xóa các item cũ (nếu có)
+            
+            // Chỉ thêm các phần tử nếu danh sách không rỗng
+            if (!filteredLichTrinh.isEmpty()) {
+                for (LichTrinhModel lt : filteredLichTrinh) {
+                    machuyenComboBoxModel.addElement(lt);
+                }
+                // Gọi updateGiaVe sau khi đã nạp dữ liệu vào combobox
+                updateGiaVe();
+            } else {
+                // Đặt giá trị mặc định cho giá vé nếu không có lịch trình nào
+                giaveTextField.setText("0");
+            }
+        } else {
+            System.err.println("Không thể lấy danh sách lịch trình.");
+            // Đặt giá trị mặc định cho giá vé
+            giaveTextField.setText("0");
+        }
 
         // Buttons - Đặt text chính xác cho mỗi loại dialog
         gbc.gridwidth = 1;
@@ -76,15 +132,41 @@ public class VeTauDialog extends JDialog {
             ok = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, 3, gbc);
         }
 
-        // Thêm action listener cho nút OK và Cancel
-        if (ok != null) {
-            ok.addActionListener(action);
-        }
-        if (cancel != null) {
-            cancel.addActionListener(e -> dispose());
-        }
+        if (ok != null) {ok.addActionListener(action);}
+        if (cancel != null) {cancel.addActionListener(e -> dispose());}
 
         this.add(contentPanel);
+    }
+    
+    // Phương thức để cập nhật giá vé dựa trên chuyến đã chọn
+    private void updateGiaVe() {
+        if (giaveTextField == null) {
+            System.err.println("Lỗi: giaveTextField chưa được khởi tạo!");
+            return;
+        }
+        
+        if (machuyenComboBox == null || machuyenComboBox.getSelectedItem() == null) {
+            giaveTextField.setText("0");
+            return;
+        }
+        
+        LichTrinhModel selectedLichTrinh = (LichTrinhModel) machuyenComboBox.getSelectedItem();
+        int matuyen = selectedLichTrinh.getMatuyen();
+        
+        // Lấy thông tin tuyến đường từ mã tuyến
+        org.metro.model.TuyenDuongModel tuyenDuong = TuyenDuongService.getById(matuyen);
+        
+        if (tuyenDuong != null) {
+            // Tính giá vé dựa trên thời gian di chuyển và đơn giá
+            int thoiGianDiChuyen = tuyenDuong.getThoigiandichuyen();
+            double giaVe = thoiGianDiChuyen * DONGIAVE;
+            
+            // Hiển thị giá vé đã tính
+            giaveTextField.setText(String.valueOf(giaVe));
+        } else {
+            giaveTextField.setText("0");
+            System.err.println("Không tìm thấy thông tin tuyến đường với mã: " + matuyen);
+        }
     }
 
     // Hàm check SDT khách hàng tồn tại và trả về mã khách
@@ -115,21 +197,17 @@ public class VeTauDialog extends JDialog {
 
         switch (type) {
             case "create":
-                // Trường hợp thêm mới
                 editEnabled(true);
                 break;
             case "update":
-                // Trường hợp cập nhật
                 editEnabled(true);
                 loadVeTauData();
                 break;
             case "detail":
-                // Trường hợp xem chi tiết, không cho phép nhập
                 editEnabled(false);
                 loadVeTauData();
                 break;
             case "delete":
-                // Trường hợp xóa, thường không cần dialog
                 break;
             default:
                 System.err.println("Button được nhấn là " + type);
@@ -140,6 +218,7 @@ public class VeTauDialog extends JDialog {
     public void editEnabled(boolean enabled) {
         if (machuyenComboBox != null) machuyenComboBox.setEnabled(enabled);
         if (sdtKhachTextField != null) sdtKhachTextField.setEnabled(enabled);
+        // Ô giá vé luôn không được chỉnh sửa
         if (giaveTextField != null) giaveTextField.setEnabled(enabled);
     }
 
@@ -147,11 +226,10 @@ public class VeTauDialog extends JDialog {
     private void loadVeTauData() {
         VeTauModel veTauSelected = (vetauModel != null) ? vetauModel : veTau.getSelectedVeTau();
         if (veTauSelected != null) {
-            // Lấy thông tin khách hàng theo mã khách hàng để hiển thị số điện thoại
             KhachHangModel kh = KhachHangService.getById(veTauSelected.getMakh());
 
             ComboBoxUtil.selectItemInComboBox(machuyenComboBox, machuyenComboBoxModel,
-                    nv -> ((LichTrinhModel)nv).getManv() == veTauSelected.getMachuyen());
+                    nv -> ((LichTrinhModel)nv).getMachuyen() == veTauSelected.getMachuyen());
             sdtKhachTextField.setText(kh != null ? kh.getSdt() : "Không tìm thấy");
             giaveTextField.setText(String.valueOf(veTauSelected.getGiave()));
         } else {
@@ -162,11 +240,16 @@ public class VeTauDialog extends JDialog {
     // Phương thức lấy dữ liệu từ form và tạo đối tượng VeTauModel
     public VeTauModel getVeTauFromForm() {
         try {
-            // Kiểm tra null trước khi truy cập các thành phần
             if (machuyenComboBox == null || sdtKhachTextField == null || giaveTextField == null) {
                 JOptionPane.showMessageDialog(this,
                         "Lỗi: Các trường dữ liệu chưa được khởi tạo!",
                         "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+
+            if (machuyenComboBox.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, "Hôm nay không có chuyến hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                machuyenComboBox.requestFocus();
                 return null;
             }
 
@@ -175,13 +258,7 @@ public class VeTauDialog extends JDialog {
                 sdtKhachTextField.requestFocus();
                 return null;
             }
-            if (giaveTextField.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập giá vé!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                giaveTextField.requestFocus();
-                return null;
-            }
-
-            // Lấy mã chuyến từ ComboBox
+            
             int machuyen = ((LichTrinhModel) machuyenComboBox.getSelectedItem()).getMachuyen();
 
             // Kiểm tra SĐT khách hàng có tồn tại trong DB không
@@ -191,16 +268,13 @@ public class VeTauDialog extends JDialog {
             // Nếu không tìm thấy khách hàng, hiển thị dialog thêm khách hàng mới
             if (khachHang == null) {
                 int choice = JOptionPane.showConfirmDialog(this,
-                        "Số điện thoại này chưa có trong hệ thống. Bạn có muốn thêm khách hàng mới không?",
+                        "Số điện thoại này chưa có trong hệ thống. Hãy thêm khách hàng mới",
                         "Thông báo", JOptionPane.YES_NO_OPTION);
 
                 if (choice == JOptionPane.YES_OPTION) {
-                    // Hiển thị dialog thêm khách hàng mới với callback để tạo vé sau khi thêm thành công
-                    khachHangDialog.showAddKhachHangDialog(this, () -> {
-                        // Kiểm tra lại sau khi thêm khách hàng
+                    khachHangDialog.showAddKhachHangDialog(this, sdtKhach, () -> {
                         KhachHangModel newCustomer = checkSdtKhachHang(sdtKhach);
                         if (newCustomer != null) {
-                            // Tạo vé tàu với khách hàng mới
                             createVeTauWithCustomer(machuyen, newCustomer, giaveTextField.getText().trim());
                         }
                     });
@@ -216,8 +290,6 @@ public class VeTauDialog extends JDialog {
                 giaveTextField.requestFocus();
                 return null;
             }
-
-            // mave = 0 để đánh dấu tự động tăng
             return new VeTauModel(0, machuyen, khachHang.getMaKh(), giave);
         } catch (Exception e) {
             e.printStackTrace();
@@ -226,7 +298,6 @@ public class VeTauDialog extends JDialog {
         }
     }
 
-    // Tạo vé tàu với thông tin khách hàng đã có
     private void createVeTauWithCustomer(int machuyen, KhachHangModel khachHang, String giaveText) {
         try {
             double giave = Double.parseDouble(giaveText.replace(",", "."));

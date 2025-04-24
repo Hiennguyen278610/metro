@@ -10,6 +10,11 @@ public class KhachHangDialog {
 
     // Dialog thêm khách hàng mới
     public void showAddKhachHangDialog(Component parent, Runnable updateCallback) {
+        showAddKhachHangDialog(parent, "", updateCallback);
+    }
+
+    // Dialog thêm khách hàng mới với số điện thoại được điền sẵn
+    public void showAddKhachHangDialog(Component parent, String phoneNumber, Runnable updateCallback) {
         JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Thêm khách hàng mới", Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(400, 300);
         dialog.setLocationRelativeTo(parent);
@@ -23,7 +28,7 @@ public class KhachHangDialog {
         JTextField txtTenKh = new JTextField();
 
         JLabel lblSdt = new JLabel("Số điện thoại:");
-        JTextField txtSdt = new JTextField();
+        JTextField txtSdt = new JTextField(phoneNumber); // Điền sẵn số điện thoại
 
         JLabel lblSolan = new JLabel("Số lần đi:");
         JTextField txtSolan = new JTextField();

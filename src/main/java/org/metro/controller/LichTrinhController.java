@@ -119,6 +119,13 @@ public class LichTrinhController implements ActionListener, ItemListener, KeyLis
                 dialog.setVisible(true);
                 break;
             case "delete":
+                if ("Hoàn Thành".equals(lichTrinhModel.getTrangthailichtrinh())) {
+                    JOptionPane.showMessageDialog(lichTrinh, 
+                        "Không thể xóa lịch trình đã hoàn thành!",
+                        "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
                 int confirm = JOptionPane.showConfirmDialog(lichTrinh,
                         "Bạn có chắc muốn xóa lịch trình này?",
                         "Xác nhận", JOptionPane.YES_NO_OPTION);

@@ -375,15 +375,15 @@ CREATE TABLE tuyen (
     CONSTRAINT FK_tuyen_tramketthuc FOREIGN KEY (tramketthuc) REFERENCES tram(matram) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 INSERT INTO tuyen (trambatdau, tramketthuc, thoigian, trangthai)
-VALUES (1, 2, 40, 'Hoat dong'),
-    (2, 3, 35, 'Hoat dong'),
-    (1, 4, 50, 'Hoat dong'),
-    (1, 7, 45, 'Hoat dong'),
-    (7, 6, 55, 'Hoat dong'),
-    (7, 5, 20, 'Hoat dong'),
-    (6, 8, 25, 'Hoat dong'),
-    (1, 9, 30, 'Hoat dong'),
-    (9, 10, 20, 'Hoat dong');
+VALUES (1, 2, 40, 'Đang hoạt động'),
+    (2, 3, 35, 'Đang hoạt động'),
+    (1, 4, 50, 'Đang hoạt động'),
+    (1, 7, 45, 'Đang hoạt động'),
+    (7, 6, 55, 'Đang hoạt động'),
+    (7, 5, 20, 'Đang hoạt động'),
+    (6, 8, 25, 'Đang hoạt động'),
+    (1, 9, 30, 'Đang hoạt động'),
+    (9, 10, 20, 'Đang hoạt động');
 -- ----------------------------------------------------------------
 -- Bảng TAU
 CREATE TABLE tau (
@@ -548,7 +548,7 @@ VALUES (
         1,
         '2016-04-10 08:00:00',
         '2016-04-10 08:45:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     ),
     (
         3,
@@ -566,7 +566,7 @@ VALUES (
         0,
         '2025-04-12 09:00:00',
         '2025-04-12 09:40:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     ),
     (
         5,
@@ -575,7 +575,7 @@ VALUES (
         0,
         '2024-04-13 10:00:00',
         '2024-04-13 10:35:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     ),
     (
         1,
@@ -584,7 +584,7 @@ VALUES (
         1,
         '2024-02-14 07:30:00',
         '2024-02-14 08:00:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     );
 -- ----------------------------------------------------------------
 -- Bảng VETAU
