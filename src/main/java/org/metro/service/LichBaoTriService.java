@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.metro.DAO.LichBaoTriDAO;
 import org.metro.model.LichBaoTriModel;
+import org.metro.model.TauModel;
 import org.metro.view.Panel.LichBaoTri;
 
 public class LichBaoTriService {
@@ -115,6 +116,15 @@ public class LichBaoTriService {
         if (lbtDAO.delete(mabaotri) > 0)
             return true;
         return false;
+    }
+
+    public String[] getMaTau() {
+        List<TauModel> dsTau = new TauService().getAll();
+        String[] matau = new String[dsTau.size()];
+        for (int i = 0; i < dsTau.size(); i++) {
+            matau[i] = String.valueOf(dsTau.get(i).getMatau());
+        }
+        return matau;
     }
 
     public LichBaoTriModel getById(int mabaotri) {

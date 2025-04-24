@@ -14,12 +14,15 @@ public class InputField extends JPanel {
     private JTextField txtInput;
     private JComboBox<NhomQuyenModel> comboboxnhomquyen;
     private JComboBox<String> comboboxtrangthai;
+
     public InputField(String label, int width, int height) {
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new FlowLayout(0, 7, 5));
         this.init(width, height);
         lbContent = new JLabel(label);
         lbContent.setFont(new Font("Segoe UI", Font.BOLD, 15));
         txtInput = new JTextField();
+        txtInput.setPreferredSize(new Dimension(200, 40));
+        // this.setBorder(BorderFactory.createLineBorder(Color.RED));
         this.add(lbContent);
         this.add(txtInput);
     }
@@ -43,7 +46,7 @@ public class InputField extends JPanel {
         lbContent = new JLabel(label);
         lbContent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         comboboxnhomquyen = new JComboBox<>();
-        for(NhomQuyenModel NQM : itemCbx) {
+        for (NhomQuyenModel NQM : itemCbx) {
             comboboxnhomquyen.addItem(NQM);
         }
         comboboxnhomquyen.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -52,7 +55,7 @@ public class InputField extends JPanel {
         this.add(comboboxnhomquyen);
     }
 
-    public InputField(String label,String[] trangthai,int w,int h) {
+    public InputField(String label, String[] trangthai, int w, int h) {
         this.setLayout(new GridLayout(2, 1));
         this.init(w, h);
         lbContent = new JLabel(label);

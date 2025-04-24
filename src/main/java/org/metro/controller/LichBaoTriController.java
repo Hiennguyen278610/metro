@@ -100,10 +100,11 @@ public class LichBaoTriController implements MouseListener, ItemListener, KeyLis
         } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnAdd() && lbtDialog.checkEmpty()
                 && lbtDialog.validInformation()) {
             int mabaotri = lbt.getLbtService().getNextID();
-            int matau = Integer.parseInt(lbtDialog.getMatauField());
-            String chuanHoaNagayBaoTri = lbtDialog.chuanHoaNgay(lbtDialog.getTimeField());
-            LocalDate ngaybaotri = LocalDate.parse(chuanHoaNagayBaoTri, formatTime);
-            String trangthaibaotri = lbtDialog.getStatusField();
+            int matau = Integer.parseInt(lbtDialog.getSelectMaTau().getCboChoose().getSelectedItem().toString());
+            String chuanHoaNgayBaoTri = lbtDialog.chuanHoaNgay(lbtDialog.getTimeField());
+            LocalDate ngaybaotri = LocalDate.parse(chuanHoaNgayBaoTri, formatTime);
+            String trangthaibaotri = lbtDialog.getSelectTrangThai().getCboChoose().getSelectedItem()
+                    .toString();
             double chiphibaotri = Double.parseDouble(lbtDialog.getChiphibaotri());
             LocalDateTime now = LocalDateTime.now();
             LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, ngaybaotri, trangthaibaotri, now,
