@@ -3,6 +3,8 @@ package org.metro.view.Chart;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -96,6 +98,18 @@ public class MetroChartFactory {
         CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.WHITE);
         plot.setRangeGridlinePaint(new Color(0xDDDDDD));
+
+        CategoryAxis domainAxis = plot.getDomainAxis();
+
+        if (period.equals("DAY")){
+            domainAxis.setCategoryLabelPositions(
+                    CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 4.0)
+            );
+        }
+
+
+
+        domainAxis.setMaximumCategoryLabelWidthRatio(1.0f);
 
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setItemMargin(0.1);

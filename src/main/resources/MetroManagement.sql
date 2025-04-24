@@ -21,6 +21,7 @@ CREATE TABLE khachhang (
     tenkh VARCHAR(255) NOT NULL,
     sdt VARCHAR(15) NOT NULL,
     solan INT NOT NULL,
+    isVisible BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (makh)
 );
 INSERT INTO khachhang (tenkh, sdt, solan)
@@ -44,6 +45,8 @@ VALUES ('Nguyễn Văn Anh', '0387913347', 1),
     ('Đinh Ngọc Cho', '0956677889', 2),
     ('Châu Văn Nói', '0977788990', 3),
     ('Hà Thị Thành', '0988899001', 4);
+
+
 -- ----------------------------------------------------------------
 -- Bảng NHOMQUYEN
 CREATE TABLE nhomquyen (

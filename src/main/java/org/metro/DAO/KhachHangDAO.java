@@ -9,13 +9,13 @@ import java.util.List;
 
 public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
 
-    // Lấy toàn bộ danh sách khách hàng
+    // Lấy toàn bộ danh sách khách hàng còn hiển thị
     public List<KhachHangModel> getAll() {
         List<KhachHangModel> list = new ArrayList<>();
-        String query = "SELECT * FROM khachhang";
+        String query = "SELECT * FROM khachhang WHERE isVisible = 1";  // 👈 Thêm điều kiện
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 KhachHangModel kh = new KhachHangModel(
                         rs.getInt("makh"),
@@ -32,10 +32,9 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
 
     @Override
     public int insert(KhachHangModel t) {
-        // Giả sử cột makh là AUTO_INCREMENT nên không cần truyền vào
-        String sql = "INSERT INTO khachhang (tenkh, sdt, solan) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO khachhang (tenkh, sdt, solan, isVisible) VALUES (?, ?, ?, 1)";
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, t.getTenKh());
             pstmt.setString(2, t.getSdt());
             pstmt.setInt(3, t.getSolan());
@@ -50,7 +49,7 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
     public int update(KhachHangModel t) {
         String sql = "UPDATE khachhang SET tenkh = ?, sdt = ?, solan = ? WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, t.getTenKh());
             pstmt.setString(2, t.getSdt());
             pstmt.setInt(3, t.getSolan());
@@ -64,12 +63,13 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
 
     @Override
     public int delete(int maKh) {
-        String sql = "DELETE FROM khachhang WHERE makh = ?";
+        String sql = "UPDATE khachhang SET isVisible = 0 WHERE makh = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maKh);
             return pstmt.executeUpdate();
         } catch (SQLException ex) {
+            System.err.println("SQL Error during delete: " + ex.getMessage());
             ex.printStackTrace();
             return 0;
         }
@@ -82,9 +82,9 @@ public class KhachHangDAO implements IBaseDAO<KhachHangModel> {
 
     @Override
     public KhachHangModel selectById(int maKh) {
-        String sql = "SELECT * FROM khachhang WHERE makh = ?";
+        String sql = "SELECT * FROM khachhang WHERE makh = ? AND isVisible = 1";  // 👈 Thêm điều kiện
         try (Connection conn = DatabaseUtils.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maKh);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
