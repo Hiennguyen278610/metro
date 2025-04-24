@@ -5,8 +5,14 @@ import org.metro.service.KhachHangService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.regex.Pattern;
 
 public class KhachHangDialog {
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^0\\d{9}$");
+    private boolean isValidPhoneNumber(String phone) {
+        if (phone == null || phone.isEmpty()) return false;
+        return PHONE_PATTERN.matcher(phone).matches();
+    }
 
     // Dialog thêm khách hàng mới
     public void showAddKhachHangDialog(Component parent, Runnable updateCallback) {
@@ -45,10 +51,22 @@ public class KhachHangDialog {
             String tenKh = txtTenKh.getText().trim();
             String sdt = txtSdt.getText().trim();
             String solanStr = txtSolan.getText().trim();
+            
+            // Kiểm tra các trường dữ liệu nhập vào
             if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
+            
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(dialog, 
+                    "Số điện thoại không hợp lệ! Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+                txtSdt.requestFocus();
+                return;
+            }
+            
             int solan;
             try {
                 solan = Integer.parseInt(solanStr);
@@ -117,10 +135,21 @@ public class KhachHangDialog {
             String tenKh = txtTenKh.getText().trim();
             String sdt = txtSdt.getText().trim();
             String solanStr = txtSolan.getText().trim();
+        
             if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
+            
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(dialog, 
+                    "Số điện thoại không hợp lệ! Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+                txtSdt.requestFocus();
+                return;
+            }
+            
             int solan;
             try {
                 solan = Integer.parseInt(solanStr);
