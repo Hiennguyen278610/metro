@@ -184,7 +184,10 @@ public class LichBaoTriDialog extends JDialog {
                 showWarning("Mã tàu phải là một số!");
                 return false;
             }
-
+            if (checkMaTau(Integer.parseInt(matau)) == false) {
+                showWarning("Mã tàu không tồn tại!");
+                return false;
+            }
             // Kiểm tra trạng thái (không được là số)
             if (isNumber(trangthai)) {
                 showWarning("Trạng thái không hợp lệ!");
