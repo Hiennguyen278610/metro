@@ -17,11 +17,12 @@ public class InputField extends JPanel {
 
     public InputField(String label, int width, int height) {
         this.setLayout(new FlowLayout(2, 7, 5));
+        // this.setLayout(new GridLayout(5, 5));
         this.init(width, height);
-        lbContent = new JLabel(label);
+        lbContent = new JLabel(label, JLabel.LEFT);
         lbContent.setFont(new Font("Segoe UI", Font.BOLD, 15));
         txtInput = new JTextField();
-        txtInput.setPreferredSize(new Dimension(180, 40));
+        txtInput.setPreferredSize(new Dimension(250, 40));
         // this.setBorder(BorderFactory.createLineBorder(Color.RED));
         this.add(lbContent);
         this.add(txtInput);

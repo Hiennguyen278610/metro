@@ -24,7 +24,7 @@ public class SelectInput extends JPanel {
         // this.setBorder(BorderFactory.createLineBorder(Color.RED));
         cboChoose = new JComboBox<>();
         cboChoose.setModel(new DefaultComboBoxModel<>(arr));
-        cboChoose.setPreferredSize(new Dimension(180, 40));
+        cboChoose.setPreferredSize(new Dimension(250, 40));
         cboChoose.setBackground(Color.WHITE);
         cboChoose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         // cboChoose.setBorder(null);

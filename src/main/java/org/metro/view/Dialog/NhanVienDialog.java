@@ -10,10 +10,11 @@ import java.awt.*;
 import java.util.regex.Pattern;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
-public class NhanVienDialog extends JDialog{
-    private InputField manvTextfield,tennvTextfield,sodienthoaiTextfield,gioitinhTextfield,chucvuTextfield;
-    private JButton ok,cancel;
+public class NhanVienDialog extends JDialog {
+    private InputField manvTextfield, tennvTextfield, sodienthoaiTextfield, gioitinhTextfield, chucvuTextfield;
+    private JButton ok, cancel;
     private String nhanVienType;
     private JPanel contentPanel;
     private JPanel bottomPanel;
@@ -21,6 +22,7 @@ public class NhanVienDialog extends JDialog{
     private NhanVienModel nvm;
     private NhanVienController action;
     private static final Pattern PHONE_PATTERN = Pattern.compile("^0\\d{9}$"); // Hiền thêm để check số điện thoại
+
     private boolean isValidPhoneNumber(String phone) {
         if (phone == null || phone.isEmpty()) {
             return false;
@@ -28,152 +30,159 @@ public class NhanVienDialog extends JDialog{
         return PHONE_PATTERN.matcher(phone).matches();
     }
 
-        // dialog them, sua , chi tiet nhanvien
-        public NhanVienDialog(Frame parent, String nhanVienType,NhanVien nv,NhanVienModel nvm) {
-            super(parent,true);
-            this.nv = nv;
-            this.nhanVienType = nhanVienType;
-            this.nvm = nvm;
-            action = new NhanVienController(this.nv,this);
-            this.setLayout(new BorderLayout());
-            this.setTitle(setTitleType());
-            this.setSize(700,400);
-            this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            this.setLocationRelativeTo(parent);
-            this.init();
-            checkButtonClicked();
-            this.setResizable(true);
+    // dialog them, sua , chi tiet nhanvien
+    public NhanVienDialog(Frame parent, String nhanVienType, NhanVien nv, NhanVienModel nvm) {
+        super(parent, true);
+        this.nv = nv;
+        this.nhanVienType = nhanVienType;
+        this.nvm = nvm;
+        action = new NhanVienController(this.nv, this);
+        this.setLayout(new BorderLayout());
+        this.setTitle(setTitleType());
+        this.setSize(500, 400);
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(parent);
+        this.init();
+        checkButtonClicked();
+        this.setResizable(true);
+    }
+
+    private void init() {
+        contentPanel = new JPanel();
+        bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 40));
+        contentPanel.setBackground(Color.white);
+        if ("create".equals(this.getNhanVienType())) {
+            contentPanel.setLayout(new GridLayout(4, 1, 2, 2));
+            this.add(createDialog(contentPanel), BorderLayout.CENTER);
+        } else if ("update".equals(this.getNhanVienType()) || "detail".equals(this.getNhanVienType())) {
+            contentPanel.setLayout(new GridLayout(4, 1, 2, 2));
+            this.add(updateANDdetailDialog(contentPanel), BorderLayout.CENTER);
         }
+        ok = setNameBtn(getNhanVienType());
+        cancel = ButtonEdit.createButton("Thoát", 80, 30);
+        bottomPanel.add(ok);
+        bottomPanel.add(cancel);
+        this.add(bottomPanel, BorderLayout.SOUTH);
 
-        private void init() {
-            contentPanel = new JPanel();
-            bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            if("create".equals(this.getNhanVienType())) {
-                contentPanel.setLayout(new GridLayout(4,1,2,2));
-                this.add(createDialog(contentPanel),BorderLayout.CENTER);
-            } else if("update".equals(this.getNhanVienType()) || "detail".equals(this.getNhanVienType())) {
-                contentPanel.setLayout(new GridLayout(4,1,2,2));
-                this.add(updateANDdetailDialog(contentPanel),BorderLayout.CENTER);
-            }
-            ok = setNameBtn(getNhanVienType());
-            cancel = ButtonEdit.createButton("Thoát",80,30);
-            bottomPanel.add(ok);
-            bottomPanel.add(cancel);
-            this.add(bottomPanel,BorderLayout.SOUTH);
-
-            // thêm sự kiện cho nút bấm
-            ok.addActionListener(e -> {
-                if ("create".equals(nhanVienType) || "update".equals(nhanVienType)) {
-                    String phone = sodienthoaiTextfield.getTxtInput().getText().trim();
-                    if (!isValidPhoneNumber(phone)) {
-                        JOptionPane.showMessageDialog(this, 
+        // thêm sự kiện cho nút bấm
+        ok.addActionListener(e -> {
+            if ("create".equals(nhanVienType) || "update".equals(nhanVienType)) {
+                String phone = sodienthoaiTextfield.getTxtInput().getText().trim();
+                if (!isValidPhoneNumber(phone)) {
+                    JOptionPane.showMessageDialog(this,
                             "Số điện thoại không hợp lệ! Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0.",
                             "Lỗi",
                             JOptionPane.ERROR_MESSAGE);
-                        sodienthoaiTextfield.getTxtInput().requestFocus();
-                        return;
-                    }
+                    sodienthoaiTextfield.getTxtInput().requestFocus();
+                    return;
                 }
-                
-                // Gọi xử lý sự kiện ban đầu
-                action.actionPerformed(e);
-            });
-            cancel.addActionListener(action);
-        }
-
-        public JButton setNameBtn(String name) {
-            String buttonName;
-            switch (name) {
-                case "create":
-                    buttonName = "Thêm";
-                    break;
-                case "update":
-                    buttonName = "Cập nhật";
-                    break;
-                default:
-                    buttonName = "";
-                    break;
             }
-            return ButtonEdit.createButton(buttonName,80,30);
-        }
 
-        public JPanel createDialog(JPanel contentPanel) {
-            tennvTextfield = new InputField("tên nhân viên",200,10);
-            sodienthoaiTextfield = new InputField("số điện thoại ",200,10);
-            gioitinhTextfield = new InputField("giới tính ",200,10);
-            chucvuTextfield = new InputField("chức vụ",200,10);
-            
-            // Check số điện thoại: Hiền Thêm
-            sodienthoaiTextfield.getTxtInput().setToolTipText("Nhập số điện thoại 10 số, bắt đầu bằng số 0");
-            
-            contentPanel.add(tennvTextfield);
-            contentPanel.add(sodienthoaiTextfield);
-            contentPanel.add(gioitinhTextfield);
-            contentPanel.add(chucvuTextfield);
-            return contentPanel;
-        }
+            // Gọi xử lý sự kiện ban đầu
+            action.actionPerformed(e);
+        });
+        cancel.addActionListener(action);
+    }
 
-        public JPanel updateANDdetailDialog(JPanel contentPanel) {
-            tennvTextfield = new InputField("tên nhân viên",200,30);
-            sodienthoaiTextfield = new InputField("số điện thoại ",200,30);
-            gioitinhTextfield = new InputField("giới tính ",200,30);
-            chucvuTextfield = new InputField("chức vụ",200,30);
-            
-            // Check số điện thoại: Hiền Thêm
-            sodienthoaiTextfield.getTxtInput().setToolTipText("Nhập số điện thoại 10 số, bắt đầu bằng số 0");
-            
-            contentPanel.add(tennvTextfield);
-            contentPanel.add(sodienthoaiTextfield);
-            contentPanel.add(gioitinhTextfield);
-            contentPanel.add(chucvuTextfield);
-            return contentPanel;
+    public JButton setNameBtn(String name) {
+        String buttonName;
+        switch (name) {
+            case "create":
+                buttonName = "Thêm";
+                break;
+            case "update":
+                buttonName = "Cập nhật";
+                break;
+            default:
+                buttonName = "";
+                break;
         }
+        return ButtonEdit.createButton(buttonName, 80, 30);
+    }
 
-        //ham set title cho tung kieu them,sua,xem chi tiet
-        private String setTitleType() {
-            if(nhanVienType == null) {
-                return null;
-            }
-            switch (nhanVienType) {
-                case "create":
-                    return "THÊM NHÂN VIÊN";
-                case "update":
-                    return "SỬA THÔNG TIN NHÂN VIÊN";
-                case "detail":
-                    return "THÔNG TIN CHI TIẾT NHÂN VIÊN";
-                default: return "ERROR";
-            }
+    public JPanel createDialog(JPanel contentPanel) {
+        tennvTextfield = new InputField("Tên nhân viên", 300, 50);
+        sodienthoaiTextfield = new InputField("Số điện thoại ", 300, 50);
+        gioitinhTextfield = new InputField("Giới tính ", 300, 50);
+        chucvuTextfield = new InputField("Chức vụ", 300, 50);
+
+        // Check số điện thoại: Hiền Thêm
+        sodienthoaiTextfield.getTxtInput().setToolTipText("Nhập số điện thoại 10 số, bắt đầu bằng số 0");
+
+        contentPanel.add(tennvTextfield);
+        contentPanel.add(sodienthoaiTextfield);
+        contentPanel.add(gioitinhTextfield);
+        contentPanel.add(chucvuTextfield);
+        return contentPanel;
+    }
+
+    public JPanel updateANDdetailDialog(JPanel contentPanel) {
+        tennvTextfield = new InputField("Tên nhân viên", 200, 30);
+        sodienthoaiTextfield = new InputField("Số điện thoại ", 200, 30);
+        gioitinhTextfield = new InputField("Giới tính ", 200, 30);
+        chucvuTextfield = new InputField("Chức vụ", 200, 30);
+
+        // Check số điện thoại: Hiền Thêm
+        sodienthoaiTextfield.getTxtInput().setToolTipText("Nhập số điện thoại 10 số, bắt đầu bằng số 0");
+
+        contentPanel.add(tennvTextfield);
+        contentPanel.add(sodienthoaiTextfield);
+        contentPanel.add(gioitinhTextfield);
+        contentPanel.add(chucvuTextfield);
+        return contentPanel;
+    }
+
+    // ham set title cho tung kieu them,sua,xem chi tiet
+    private String setTitleType() {
+        if (nhanVienType == null) {
+            return null;
         }
-
-        //check xem nut them,sua,xoa,delete dc nhan
-        public void checkButtonClicked() {
-            switch (nhanVienType) {
-                case "update":
-                    editEnabled(true);
-                    break;
-                case "detail":
-                    editEnabled(false);
-                    break;
-                default:
-                    System.err.println("button duoc nhan la " + nhanVienType);
-
-            }
+        switch (nhanVienType) {
+            case "create":
+                return "THÊM NHÂN VIÊN";
+            case "update":
+                return "SỬA THÔNG TIN NHÂN VIÊN";
+            case "detail":
+                return "THÔNG TIN CHI TIẾT NHÂN VIÊN";
+            default:
+                return "ERROR";
         }
+    }
 
-        //ham cho phep chinh sua
-        public void editEnabled(boolean enabled) {
-            NhanVienModel nhanvienduocchon = nv.getSelectedNhanvien();
-            if(nhanvienduocchon != null) {
-                this.getTennvTextfield().getTxtInput().setText(nhanvienduocchon.getTennv());
-                this.getSodienthoaiTextfield().getTxtInput().setText(nhanvienduocchon.getSdtnv());
-                this.getGioitinhTextfield().getTxtInput().setText(nhanvienduocchon.getGioitinh());
-                this.getChucvuTextfield().getTxtInput().setText(nhanvienduocchon.getChucvu());
-            }
-            if(tennvTextfield != null) tennvTextfield.getTxtInput().setEnabled(enabled);
-            if(sodienthoaiTextfield != null) sodienthoaiTextfield.getTxtInput().setEnabled(enabled);
-            if(gioitinhTextfield != null) gioitinhTextfield.getTxtInput().setEnabled(enabled);
-            if(chucvuTextfield != null) chucvuTextfield.getTxtInput().setEnabled(enabled);
+    // check xem nut them,sua,xoa,delete dc nhan
+    public void checkButtonClicked() {
+        switch (nhanVienType) {
+            case "update":
+                editEnabled(true);
+                break;
+            case "detail":
+                editEnabled(false);
+                break;
+            default:
+                System.err.println("button duoc nhan la " + nhanVienType);
+
         }
+    }
+
+    // ham cho phep chinh sua
+    public void editEnabled(boolean enabled) {
+        NhanVienModel nhanvienduocchon = nv.getSelectedNhanvien();
+        if (nhanvienduocchon != null) {
+            this.getTennvTextfield().getTxtInput().setText(nhanvienduocchon.getTennv());
+            this.getSodienthoaiTextfield().getTxtInput().setText(nhanvienduocchon.getSdtnv());
+            this.getGioitinhTextfield().getTxtInput().setText(nhanvienduocchon.getGioitinh());
+            this.getChucvuTextfield().getTxtInput().setText(nhanvienduocchon.getChucvu());
+        }
+        if (tennvTextfield != null)
+            tennvTextfield.getTxtInput().setEnabled(enabled);
+        if (sodienthoaiTextfield != null)
+            sodienthoaiTextfield.getTxtInput().setEnabled(enabled);
+        if (gioitinhTextfield != null)
+            gioitinhTextfield.getTxtInput().setEnabled(enabled);
+        if (chucvuTextfield != null)
+            chucvuTextfield.getTxtInput().setEnabled(enabled);
+    }
 
     public InputField getManvTextfield() {
         return manvTextfield;

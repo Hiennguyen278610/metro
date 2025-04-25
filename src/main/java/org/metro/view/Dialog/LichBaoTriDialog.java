@@ -34,10 +34,10 @@ public class LichBaoTriDialog extends JDialog {
         super(parent, title, true);
         this.lbt = lbt;
         action = new LichBaoTriController(lbt, this);
-        selectMaTau = new SelectInput("Mã tàu", lbt.getLbtService().getMaTau(), 320, 50);
-        selectTrangThai = new SelectInput("Trạng thái", new String[] { "Đang bảo trì", "Hoàn thành" }, 320, 50);
-        timeField = new InputField("Ngày bảo trì", 320, 50);
-        chiphibaotri = new InputField("Chi phí bảo trì", 320, 50);
+        selectMaTau = new SelectInput("Mã tàu", lbt.getLbtService().getMaTau(), 380, 50);
+        selectTrangThai = new SelectInput("Trạng thái", new String[] { "Đang bảo trì", "Hoàn thành" }, 380, 50);
+        timeField = new InputField("Ngày bảo trì", 380, 50);
+        chiphibaotri = new InputField("Chi phí bảo trì", 390, 50);
         init(type);
     }
 
@@ -54,24 +54,24 @@ public class LichBaoTriDialog extends JDialog {
             chiphibaotri = new InputField("Chi phí bảo trì: ", String.valueOf(lbtModel.getChiphibaotri()), 250, 10);
             createAt = new InputField("Ngày tạo", lbtModel.convertLocalDateTime(), 200, 10);
         } else if (type.equals("update")) {
-            selectMaTau = new SelectInput("Mã tàu", lbt.getLbtService().getMaTau(), 320, 50);
+            selectMaTau = new SelectInput("Mã tàu", lbt.getLbtService().getMaTau(), 380, 50);
             selectMaTau.getCboChoose().setSelectedItem(String.valueOf(lbtModel.getMatau()));
-            selectTrangThai = new SelectInput("Trạng thái", new String[] { "Đang bảo trì", "Hoàn thành" }, 320, 50);
+            selectTrangThai = new SelectInput("Trạng thái", new String[] { "Đang bảo trì", "Hoàn thành" }, 380, 50);
             selectTrangThai.getCboChoose().setSelectedItem(lbtModel.getTrangthaibaotri());
-            timeField = new InputField("Ngày bảo trì", 320, 50);
+            timeField = new InputField("Ngày bảo trì", 380, 50);
             this.setTimeField(lbtModel.convertLocalDate());
-            chiphibaotri = new InputField("Chi phí bảo trì", 320, 50);
+            chiphibaotri = new InputField("Chi phí bảo trì", 390, 50);
             this.setChiphibaotri(String.valueOf(lbtModel.getChiphibaotri()));
         }
         init(type);
     }
 
     public void init(String type) {
-        this.setSize(400, 350);
+        this.setSize(450, 370);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 0));
         contentPanel = new JPanel();
-        contentPanel.setPreferredSize(new Dimension(400, 240));
+        contentPanel.setPreferredSize(new Dimension(400, 260));
         if (type.equals("detail")) {
             contentPanel.setLayout(new GridLayout(6, 1));
             contentPanel.add(mabaotriField);
