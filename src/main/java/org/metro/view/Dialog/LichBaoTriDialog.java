@@ -56,8 +56,7 @@ public class LichBaoTriDialog extends JDialog {
         } else if (type.equals("update")) {
             selectMaTau = new SelectInput("Mã tàu", lbt.getLbtService().getMaTau(), 320, 50);
             selectMaTau.getCboChoose().setSelectedItem(String.valueOf(lbtModel.getMatau()));
-            selectTrangThai = new SelectInput("Trạng thái bảo trì", new String[] { "Đang bảo trì", "Hoàn thành" }, 320,
-                    50);
+            selectTrangThai = new SelectInput("Trạng thái", new String[] { "Đang bảo trì", "Hoàn thành" }, 320, 50);
             selectTrangThai.getCboChoose().setSelectedItem(lbtModel.getTrangthaibaotri());
             timeField = new InputField("Ngày bảo trì", 320, 50);
             this.setTimeField(lbtModel.convertLocalDate());
@@ -82,7 +81,7 @@ public class LichBaoTriDialog extends JDialog {
             contentPanel.add(chiphibaotri);
             contentPanel.add(createAt);
         } else {
-            contentPanel.setLayout(new FlowLayout(1, 7, 10));
+            contentPanel.setLayout(new FlowLayout(1, 7, 7));
             contentPanel.setBackground(Color.WHITE);
             contentPanel.add(selectMaTau);
             contentPanel.add(timeField);

@@ -14,7 +14,7 @@ public class SelectInput extends JPanel {
     private Font font = new Font("Segoe UI", Font.BOLD, 15);
 
     public SelectInput(String content, String[] arr, int w, int h) {
-        this.setLayout(new FlowLayout(0, 10, 5));
+        this.setLayout(new FlowLayout(2, 10, 5));
         this.setPreferredSize(new Dimension(w, h));
         this.setBackground(Color.white);
         this.lbContent = new JLabel(content);
@@ -24,7 +24,7 @@ public class SelectInput extends JPanel {
         // this.setBorder(BorderFactory.createLineBorder(Color.RED));
         cboChoose = new JComboBox<>();
         cboChoose.setModel(new DefaultComboBoxModel<>(arr));
-        cboChoose.setPreferredSize(new Dimension(200, 40));
+        cboChoose.setPreferredSize(new Dimension(180, 40));
         cboChoose.setBackground(Color.WHITE);
         cboChoose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         // cboChoose.setBorder(null);
