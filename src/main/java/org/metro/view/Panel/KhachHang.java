@@ -85,7 +85,7 @@ public class KhachHang extends JPanel implements ActionListener, ItemListener {
                 }, 300);
             }
         });
-        search.btnReset.addActionListener(_ -> {
+        search.btnReset.addActionListener(e -> {
             search.txtSearchForm.setText("");
             loadDataTable();
         });

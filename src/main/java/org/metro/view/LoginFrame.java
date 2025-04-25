@@ -3,6 +3,8 @@ package org.metro.view;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URL;
+import java.util.Objects;
 import javax.swing.*;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
@@ -66,9 +68,17 @@ public class LoginFrame extends JFrame {
         leftContent.setBounds(0, 0, 350, 600);
         leftContent.setBackground(mainColor);
         leftContent.setLayout(null);
-        ImageIcon metroIcon = new ImageIcon(getClass().getResource("/svg/metro_logo.svg"));
-        Image metroImage = metroIcon.getImage().getScaledInstance(220, 220, Image.SCALE_SMOOTH);
-        JLabel lblMetro = new JLabel(new ImageIcon(metroImage), JLabel.CENTER);
+        JLabel lblIcon = new JLabel();
+        URL iconUrl = getClass().getResource("/svg/metro_logo.svg");
+
+        if (iconUrl != null) {
+            FlatSVGIcon svgIcon = new FlatSVGIcon(iconUrl);
+            lblIcon.setIcon(svgIcon.derive(220, 220));
+        } else {
+            System.err.println("Không tìm thấy file metro_logo.svg trong đường dẫn /svg/");
+        }
+        JLabel lblMetro = new JLabel("", JLabel.CENTER);
+        lblMetro.setIcon(lblIcon.getIcon());
         lblMetro.setBounds(70, 120, 220, 220);
         leftContent.add(lblMetro);
         JLabel lblTitle = new JLabel("<html><div style='text-align: center;'>QUẢN LÝ VẬN HÀNH<br>METRO</div></html>");

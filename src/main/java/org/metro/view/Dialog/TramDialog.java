@@ -104,7 +104,7 @@ public class TramDialog extends JDialog {
         this.setVisible(true);
     }
 
-    public boolean validation() {
+    public boolean checkEmpty() {
         if (getTenField().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tên trạm không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -117,12 +117,64 @@ public class TramDialog extends JDialog {
         } else if (getyField().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Tọa độ y không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;
+        } else if (getChiphi().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Chi phí không được rỗng", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
         return true;
     }
 
+    public boolean isValidCost(String input) {
+        try {
+            if (input.matches("^0\\d+")) {
+                // dau + lap lai nhieu lan
+                return false;
+            }
+            double cost = Double.parseDouble(input);
+            return cost > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isNumber(String number) {
+        try {
+            Integer.parseInt(number);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean validInformation() {
+        String x = getxField().trim();
+        String y = getyField().trim();
+        String chiPhi = getChiphi().trim();
+
+        if (!isNumber(x)) {
+            showWarning("Tọa độ x phải là một số!");
+            return false;
+        }
+
+        if (!isNumber(y)) {
+            showWarning("Tọa độ y phải là một số!");
+            return false;
+        }
+
+        if (!isValidCost(chiPhi)) {
+            showWarning("Chi phí phải là số thực dương hợp lệ!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showWarning(String message) {
+        JOptionPane.showMessageDialog(null, message, "THÔNG BÁO", JOptionPane.WARNING_MESSAGE);
+    }
+
     public TramModel getTramModel() {
-        if (validation()) {
+        if (checkEmpty() && validInformation()) {
             int matram = tramModel.getMatram();
             String tentram = getTenField();
             String diachi = getAddressField();

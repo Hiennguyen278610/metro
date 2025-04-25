@@ -2,6 +2,9 @@ package org.metro.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import org.metro.DAO.TramDAO;
 import org.metro.model.TramModel;
 
@@ -100,6 +103,16 @@ public class TramService {
 
     public List<TramModel> getDsTram() {
         return dsTram;
+    }
+    
+    // Phương thức mới: Hiền tạo ngày 24/04/2025
+    public String getTenTramById(int matram) {
+        for (TramModel tram : dsTram) {
+            if (tram.getMatram() == matram) {
+                return tram.getTentram();
+            }
+        }
+        return "Không xác định";
     }
 
     public TramService() {

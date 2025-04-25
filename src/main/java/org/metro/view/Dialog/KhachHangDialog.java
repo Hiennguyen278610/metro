@@ -5,11 +5,22 @@ import org.metro.service.KhachHangService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.regex.Pattern;
 
 public class KhachHangDialog {
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^0\\d{9}$");
+    private boolean isValidPhoneNumber(String phone) {
+        if (phone == null || phone.isEmpty()) return false;
+        return PHONE_PATTERN.matcher(phone).matches();
+    }
 
     // Dialog thêm khách hàng mới
     public void showAddKhachHangDialog(Component parent, Runnable updateCallback) {
+        showAddKhachHangDialog(parent, "", updateCallback);
+    }
+
+    // Dialog thêm khách hàng mới với số điện thoại được điền sẵn
+    public void showAddKhachHangDialog(Component parent, String phoneNumber, Runnable updateCallback) {
         JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(parent), "Thêm khách hàng mới", Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(400, 300);
         dialog.setLocationRelativeTo(parent);
@@ -23,7 +34,7 @@ public class KhachHangDialog {
         JTextField txtTenKh = new JTextField();
 
         JLabel lblSdt = new JLabel("Số điện thoại:");
-        JTextField txtSdt = new JTextField();
+        JTextField txtSdt = new JTextField(phoneNumber); // Điền sẵn số điện thoại
 
         JLabel lblSolan = new JLabel("Số lần đi:");
         JTextField txtSolan = new JTextField();
@@ -40,10 +51,22 @@ public class KhachHangDialog {
             String tenKh = txtTenKh.getText().trim();
             String sdt = txtSdt.getText().trim();
             String solanStr = txtSolan.getText().trim();
+            
+            // Kiểm tra các trường dữ liệu nhập vào
             if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
+            
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(dialog, 
+                    "Số điện thoại không hợp lệ! Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+                txtSdt.requestFocus();
+                return;
+            }
+            
             int solan;
             try {
                 solan = Integer.parseInt(solanStr);
@@ -81,7 +104,7 @@ public class KhachHangDialog {
         dialog.setLocationRelativeTo(parent);
         dialog.setLayout(new BorderLayout());
 
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Mã khách hàng không được chỉnh sửa
@@ -112,10 +135,21 @@ public class KhachHangDialog {
             String tenKh = txtTenKh.getText().trim();
             String sdt = txtSdt.getText().trim();
             String solanStr = txtSolan.getText().trim();
+        
             if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
                 return;
             }
+            
+            if (!isValidPhoneNumber(sdt)) {
+                JOptionPane.showMessageDialog(dialog, 
+                    "Số điện thoại không hợp lệ! Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0.",
+                    "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+                txtSdt.requestFocus();
+                return;
+            }
+            
             int solan;
             try {
                 solan = Integer.parseInt(solanStr);

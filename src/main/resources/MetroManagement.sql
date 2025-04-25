@@ -21,6 +21,7 @@ CREATE TABLE khachhang (
     tenkh VARCHAR(255) NOT NULL,
     sdt VARCHAR(15) NOT NULL,
     solan INT NOT NULL,
+    isVisible BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (makh)
 );
 INSERT INTO khachhang (tenkh, sdt, solan)
@@ -44,6 +45,8 @@ VALUES ('Nguyễn Văn Anh', '0387913347', 1),
     ('Đinh Ngọc Cho', '0956677889', 2),
     ('Châu Văn Nói', '0977788990', 3),
     ('Hà Thị Thành', '0988899001', 4);
+
+
 -- ----------------------------------------------------------------
 -- Bảng NHOMQUYEN
 CREATE TABLE nhomquyen (
@@ -294,71 +297,71 @@ CREATE TABLE tram (
 INSERT INTO tram (tentram, x, y, diachi, chiphitram)
 VALUES (
         'Tram Ben Thanh',
-        100,
-        100,
+        300,
+        300,
         'Công viên 23/9, Phường Bến Thành, Quận 1, TP.HCM',
         10000.00
     ),
     (
         'Tram Sai Gon',
-        100,
         200,
-        'Bến xe Miền Đông, Phường 26, Quận Bình Thạnh, TP.HCM',
+        400,
+        'Đại học Sài Gòn, Phường 3, Quận 5, TP.HCM',
         10000.00
     ),
     (
         'Tram Hoa Hung',
         100,
-        300,
+        500,
         'Ngã tư Hòa Hưng, Phường 12, Quận 10, TP.HCM',
         10000.00
     ),
     (
         'Tram Tan Binh',
-        100,
-        400,
+        50,
+        150,
         'Công viên Lê Thị Riêng, Phường 15, Quận Tân Bình, TP.HCM',
         10000.00
     ),
     (
         'Tram Phu Nhuan',
-        200,
-        400,
+        220,
+        180,
         'Chợ Phú Nhuận, Phường 15, Quận Phú Nhuận, TP.HCM',
         10000.00
     ),
     (
         'Tram Go Vap',
-        200,
-        500,
+        400,
+        100,
         'Vòng xoay Ngã 6 Gò Vấp, Quận Gò Vấp, TP.HCM',
         10000.00
     ),
     (
         'Tram Binh Thanh',
+        350,
         200,
-        600,
         'Cầu Bình Lợi, Phường 13, Quận Bình Thạnh, TP.HCM',
         10000.00
     ),
     (
         'Tram Thu Duc',
-        200,
-        700,
+        500,
+        50,
         'Ngã tư Thủ Đức, Phường Linh Chiểu, TP. Thủ Đức, TP.HCM',
         10000.00
     ),
     (
         'Tram Quan 7',
-        200,
-        800,
+        550,
+        500,
         'Trung tâm thương mại SC VivoCity, Phường Tân Phong, Quận 7, TP.HCM',
         10000.00
     ),
     (
         'Tram Nha Be',
-        200,
-        900,
+        600,
+        600,
         'Bến phà Bình Khánh, Huyện Nhà Bè, TP.HCM',
         10000.00
     );
@@ -375,11 +378,15 @@ CREATE TABLE tuyen (
     CONSTRAINT FK_tuyen_tramketthuc FOREIGN KEY (tramketthuc) REFERENCES tram(matram) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 INSERT INTO tuyen (trambatdau, tramketthuc, thoigian, trangthai)
-VALUES (1, 2, 40, 'Hoat dong'),
-    (3, 4, 35, 'Hoat dong'),
-    (5, 6, 50, 'Hoat dong'),
-    (7, 8, 45, 'Hoat dong'),
-    (9, 10, 55, 'Hoat dong');
+VALUES (1, 2, 40, 'Đang hoạt động'),
+    (2, 3, 35, 'Đang hoạt động'),
+    (1, 4, 50, 'Đang hoạt động'),
+    (1, 7, 45, 'Đang hoạt động'),
+    (7, 6, 55, 'Đang hoạt động'),
+    (7, 5, 20, 'Đang hoạt động'),
+    (6, 8, 25, 'Đang hoạt động'),
+    (1, 9, 30, 'Đang hoạt động'),
+    (9, 10, 20, 'Đang hoạt động');
 -- ----------------------------------------------------------------
 -- Bảng TAU
 CREATE TABLE tau (
@@ -544,7 +551,7 @@ VALUES (
         1,
         '2016-04-10 08:00:00',
         '2016-04-10 08:45:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     ),
     (
         3,
@@ -562,7 +569,7 @@ VALUES (
         0,
         '2025-04-12 09:00:00',
         '2025-04-12 09:40:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     ),
     (
         5,
@@ -571,7 +578,7 @@ VALUES (
         0,
         '2024-04-13 10:00:00',
         '2024-04-13 10:35:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     ),
     (
         1,
@@ -580,7 +587,7 @@ VALUES (
         1,
         '2024-02-14 07:30:00',
         '2024-02-14 08:00:00',
-        'Hoàn thành'
+        'Hoàn Thành'
     );
 -- ----------------------------------------------------------------
 -- Bảng VETAU

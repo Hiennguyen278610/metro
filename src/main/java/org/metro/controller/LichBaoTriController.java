@@ -97,13 +97,18 @@ public class LichBaoTriController implements MouseListener, ItemListener, KeyLis
                     lbt.loadData(lbt.getLbtService().getDsBaoTri());
                 }
             }
-        } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnAdd() && lbtDialog.validation()) {
+        } else if (lbtDialog != null && e.getSource() == lbtDialog.getBtnAdd() && lbtDialog.checkEmpty()
+                && lbtDialog.validInformation()) {
             int mabaotri = lbt.getLbtService().getNextID();
-            int matau = Integer.parseInt(lbtDialog.getMatauField());
-            LocalDate ngaybaotri = LocalDate.parse(lbtDialog.getTimeField(), formatTime);
-            String trangthaibaotri = lbtDialog.getStatusField();
+            int matau = Integer.parseInt(lbtDialog.getSelectMaTau().getCboChoose().getSelectedItem().toString());
+            String chuanHoaNgayBaoTri = lbtDialog.chuanHoaNgay(lbtDialog.getTimeField());
+            LocalDate ngaybaotri = LocalDate.parse(chuanHoaNgayBaoTri, formatTime);
+            String trangthaibaotri = lbtDialog.getSelectTrangThai().getCboChoose().getSelectedItem()
+                    .toString();
+            double chiphibaotri = Double.parseDouble(lbtDialog.getChiphibaotri());
             LocalDateTime now = LocalDateTime.now();
-            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, ngaybaotri, trangthaibaotri, now);
+            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, ngaybaotri, trangthaibaotri, now,
+                    chiphibaotri);
             if (lbt.getLbtService().insert(newlbt)) {
                 JOptionPane.showMessageDialog(lbt, "Thêm thành công", "THÔNG BÁO",
                         JOptionPane.INFORMATION_MESSAGE);

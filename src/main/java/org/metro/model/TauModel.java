@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 public class TauModel {
     private int matau; // Mã tàu
     private int soghe; // Số ghế trên tàu
-    private String trangthaitau; // Trạng thái (Đang vận hành, bảo trì)
+    private String trangthaitau; // Trạng thái tàu (Đang hoạt động, Đang bảo trì, Ngừng hoạt động)
     private LocalDate ngaynhap; // Ngày nhập tàu
     private boolean isVisible; // Trạng thái hiển thị của tàu
 
