@@ -129,7 +129,7 @@ public class VeTauDialog extends JDialog {
             ok = handleComponents.addButtonGBL(contentPanel, "CẬP NHẬT", 0, 3, gbc);
             cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 3, gbc);
         } else {
-            ok = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, 3, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, 3, gbc);
         }
 
         if (ok != null) {ok.addActionListener(action);}
@@ -230,7 +230,7 @@ public class VeTauDialog extends JDialog {
 
             ComboBoxUtil.selectItemInComboBox(machuyenComboBox, machuyenComboBoxModel,
                     nv -> ((LichTrinhModel)nv).getMachuyen() == veTauSelected.getMachuyen());
-            sdtKhachTextField.setText(kh != null ? kh.getSdt() : "Không tìm thấy");
+            sdtKhachTextField.setText(kh != null ? kh.getSdt() : "Dữ liệu của khách đã bị xóa hoặc không tồn tại");
             giaveTextField.setText(String.valueOf(veTauSelected.getGiave()));
         } else {
             System.err.println("Không có dữ liệu vé tàu để hiển thị");
