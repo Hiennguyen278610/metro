@@ -23,13 +23,16 @@ public class TaiKhoanDialog extends  JDialog{
     private JPanel centerPanel;
     private JPanel bottomPanel;
     private TaiKhoan tk;
+    private TaiKhoanModel tkm;
     private TaiKhoanService tks;
     private PhanQuyenService pqs;
     private TaiKhoanController tkController;
 
-    public TaiKhoanDialog(String typeDialog, TaiKhoan tk) {
+    public TaiKhoanDialog(Frame parent, String typeDialog, TaiKhoan tk, TaiKhoanModel tkm) {
+        super(parent,true);
         this.tk = tk;
         this.typeDialog = typeDialog;
+        this.tkm = tkm;
         tks = new TaiKhoanService();
         pqs = new PhanQuyenService();
         tkController = new TaiKhoanController(tk,this);
@@ -37,12 +40,12 @@ public class TaiKhoanDialog extends  JDialog{
         this.setSize(500,400);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
-        centerPanel = new JPanel(new GridLayout(4,2,10,5));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 40));
+        centerPanel = new JPanel(new GridLayout(4,1,10,5));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         centerPanel.setBackground(Color.WHITE);
         bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,5,5));
         this.init();
-//        setEdit();
+        setEdit();
     }
 
     public String titleDialog() {
@@ -75,35 +78,35 @@ public class TaiKhoanDialog extends  JDialog{
         return namebtn;
     }
 
+
     private void setEdit() {
+        if("create".equals(typeDialog)) return;
         TaiKhoanModel tkm = tk.getSelectedTaiKhoan();
         if(tkm != null) {
             this.manvTextfield.getTxtInput().setText(String.valueOf(tkm.getManv()));
             this.matkhauTextfield.getTxtInput().setText(String.valueOf(tkm.getMatkhau()));
             NhomQuyenModel nqm = tkm.getNqm();
             this.nhomquyenTextfield.getComboboxnhomquyen().setSelectedItem(nqm);
-
-            this.trangThaiTextfield.getComboboxtrangthai().setSelectedItem(tkm.getTrangthai());
+            this.trangThaiTextfield.getCombobox().setSelectedItem(tkm.getTrangthai());
         }
         if ("detail".equals(typeDialog)) {
-            manvTextfield.getTxtInput().setEditable(false);
-            matkhauTextfield.getTxtInput().setEditable(false);
-            nhomquyenTextfield.getComboboxnhomquyen().setEnabled(false);
-            trangThaiTextfield.getComboboxtrangthai().setEnabled(false);
+            this.manvTextfield.getTxtInput().setEditable(false);
+            this.matkhauTextfield.getTxtInput().setEditable(false);
+            this.nhomquyenTextfield.getComboboxnhomquyen().setEnabled(false);
+            this.trangThaiTextfield.getCombobox().setEnabled(false);
             okButton.setVisible(false);
         } else if ("update".equals(typeDialog)) {
-            manvTextfield.getTxtInput().setEditable(false);
+            this.manvTextfield.getTxtInput().setEditable(false);
         }
     }
     private void init() {
-        manvTextfield = new InputField("Mã nhân viên ",300,10);
+        manvTextfield = new InputField("Mã nhân viên ",300,10,"");
         centerPanel.add(manvTextfield);
-        matkhauTextfield = new InputField("Mật khẩu ",300,10);
+        matkhauTextfield = new InputField("Mật khẩu ",300,10,"");
         centerPanel.add(matkhauTextfield);
 
         ArrayList<NhomQuyenModel> listnq = new ArrayList<>();
         listnq.addAll(pqs.getAllNhomquyen());
-        System.out.println(listnq);
         nhomquyenTextfield = new InputField("Tên nhóm quyền: ", listnq,300,20);
         centerPanel.add(nhomquyenTextfield);
 
@@ -119,7 +122,6 @@ public class TaiKhoanDialog extends  JDialog{
         bottomPanel.add(cancelButton);
 
         this.add(bottomPanel, BorderLayout.SOUTH);
-        setEdit();
 
         //action
         okButton.addActionListener(tkController);
@@ -233,5 +235,13 @@ public class TaiKhoanDialog extends  JDialog{
 
     public void setTkController(TaiKhoanController tkController) {
         this.tkController = tkController;
+    }
+
+    public TaiKhoanModel getTkm() {
+        return tkm;
+    }
+
+    public void setTkm(TaiKhoanModel tkm) {
+        this.tkm = tkm;
     }
 }

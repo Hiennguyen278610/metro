@@ -15,7 +15,7 @@ public class NhomQuyenDAO implements IBaseDAO<NhomQuyenModel> {
 
     @Override
     public int insert(NhomQuyenModel nhomQuyenModel) {
-       String query = "insert into nhomquyen(tennhomquyen) values(?)";
+       String query = "insert into nhomquyen(tennhomquyen,isVisible) values(?,1)";
        try(Connection c = DatabaseUtils.getConnection();
        PreparedStatement ps = c.prepareStatement(query,Statement.RETURN_GENERATED_KEYS)) {
            ps.setString(1, nhomQuyenModel.getTennhomquyen());
@@ -35,7 +35,7 @@ public class NhomQuyenDAO implements IBaseDAO<NhomQuyenModel> {
 
     @Override
     public int update(NhomQuyenModel nhomQuyenModel) {
-        String query = "update nhomquyen set tennhomquyen = ? where manhomquyen = ?";
+        String query = "update nhomquyen set tennhomquyen = ? where manhomquyen = ? and isVisible = 1";
         try(Connection c = DatabaseUtils.getConnection();
             PreparedStatement ps = c.prepareStatement(query)) {
             ps.setString(1, nhomQuyenModel.getTennhomquyen());
@@ -49,13 +49,21 @@ public class NhomQuyenDAO implements IBaseDAO<NhomQuyenModel> {
 
     @Override
     public int delete(int id) {
-        return 0;
+        String query = "update nhomquyen set isVisible = 0 where manhomquyen = ?";
+        try(Connection c = DatabaseUtils.getConnection();
+        PreparedStatement prs = c.prepareStatement(query)) {
+            prs.setInt(1,id);
+            return prs.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
     public List<NhomQuyenModel> selectAll() {
         List<NhomQuyenModel> listnq = new ArrayList<>();
-        String query = "select * from nhomquyen";
+        String query = "select * from nhomquyen where isVisible = 1";
         try(Connection c = DatabaseUtils.getConnection();
             PreparedStatement prs = c.prepareStatement(query);
             ResultSet rs = prs.executeQuery();) {

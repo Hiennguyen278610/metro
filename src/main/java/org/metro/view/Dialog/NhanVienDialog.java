@@ -21,14 +21,6 @@ public class NhanVienDialog extends JDialog {
     private NhanVien nv;
     private NhanVienModel nvm;
     private NhanVienController action;
-    private static final Pattern PHONE_PATTERN = Pattern.compile("^0\\d{9}$"); // Hiền thêm để check số điện thoại
-
-    private boolean isValidPhoneNumber(String phone) {
-        if (phone == null || phone.isEmpty()) {
-            return false;
-        }
-        return PHONE_PATTERN.matcher(phone).matches();
-    }
 
     // dialog them, sua , chi tiet nhanvien
     public NhanVienDialog(Frame parent, String nhanVienType, NhanVien nv, NhanVienModel nvm) {
@@ -50,38 +42,19 @@ public class NhanVienDialog extends JDialog {
     private void init() {
         contentPanel = new JPanel();
         bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 40));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
         contentPanel.setBackground(Color.white);
-        if ("create".equals(this.getNhanVienType())) {
-            contentPanel.setLayout(new GridLayout(4, 1, 2, 2));
-            this.add(createDialog(contentPanel), BorderLayout.CENTER);
-        } else if ("update".equals(this.getNhanVienType()) || "detail".equals(this.getNhanVienType())) {
-            contentPanel.setLayout(new GridLayout(4, 1, 2, 2));
-            this.add(updateANDdetailDialog(contentPanel), BorderLayout.CENTER);
-        }
+        contentPanel.setLayout(new GridLayout(4, 1, 2, 2));
+        this.add(createDialog(contentPanel), BorderLayout.CENTER);
         ok = setNameBtn(getNhanVienType());
+        if(getNhanVienType().equals("detail")) ok.setVisible(false);
         cancel = ButtonEdit.createButton("Thoát", 80, 30);
         bottomPanel.add(ok);
         bottomPanel.add(cancel);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
         // thêm sự kiện cho nút bấm
-        ok.addActionListener(e -> {
-            if ("create".equals(nhanVienType) || "update".equals(nhanVienType)) {
-                String phone = sodienthoaiTextfield.getTxtInput().getText().trim();
-                if (!isValidPhoneNumber(phone)) {
-                    JOptionPane.showMessageDialog(this,
-                            "Số điện thoại không hợp lệ! Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng số 0.",
-                            "Lỗi",
-                            JOptionPane.ERROR_MESSAGE);
-                    sodienthoaiTextfield.getTxtInput().requestFocus();
-                    return;
-                }
-            }
-
-            // Gọi xử lý sự kiện ban đầu
-            action.actionPerformed(e);
-        });
+       ok.addActionListener(action);
         cancel.addActionListener(action);
     }
 
@@ -102,29 +75,10 @@ public class NhanVienDialog extends JDialog {
     }
 
     public JPanel createDialog(JPanel contentPanel) {
-        tennvTextfield = new InputField("Tên nhân viên", 300, 50);
-        sodienthoaiTextfield = new InputField("Số điện thoại ", 300, 50);
-        gioitinhTextfield = new InputField("Giới tính ", 300, 50);
-        chucvuTextfield = new InputField("Chức vụ", 300, 50);
-
-        // Check số điện thoại: Hiền Thêm
-        sodienthoaiTextfield.getTxtInput().setToolTipText("Nhập số điện thoại 10 số, bắt đầu bằng số 0");
-
-        contentPanel.add(tennvTextfield);
-        contentPanel.add(sodienthoaiTextfield);
-        contentPanel.add(gioitinhTextfield);
-        contentPanel.add(chucvuTextfield);
-        return contentPanel;
-    }
-
-    public JPanel updateANDdetailDialog(JPanel contentPanel) {
-        tennvTextfield = new InputField("Tên nhân viên", 200, 30);
-        sodienthoaiTextfield = new InputField("Số điện thoại ", 200, 30);
-        gioitinhTextfield = new InputField("Giới tính ", 200, 30);
-        chucvuTextfield = new InputField("Chức vụ", 200, 30);
-
-        // Check số điện thoại: Hiền Thêm
-        sodienthoaiTextfield.getTxtInput().setToolTipText("Nhập số điện thoại 10 số, bắt đầu bằng số 0");
+        tennvTextfield = new InputField("Tên nhân viên", 300, 50,"");
+        sodienthoaiTextfield = new InputField("Số điện thoại ", 300, 50,"");
+        gioitinhTextfield = new InputField("Giới tính ",new String[]{"Nam","Nữ"} ,300, 50);
+        chucvuTextfield = new InputField("Chức vụ",new String[]{"Quản lý tuyến tàu điện","Nhân viên soát vé","Nhân viên lái tàu","Nhân viên bảo trì","Nhân viên bán vé"} ,300, 50);
 
         contentPanel.add(tennvTextfield);
         contentPanel.add(sodienthoaiTextfield);
@@ -171,17 +125,17 @@ public class NhanVienDialog extends JDialog {
         if (nhanvienduocchon != null) {
             this.getTennvTextfield().getTxtInput().setText(nhanvienduocchon.getTennv());
             this.getSodienthoaiTextfield().getTxtInput().setText(nhanvienduocchon.getSdtnv());
-            this.getGioitinhTextfield().getTxtInput().setText(nhanvienduocchon.getGioitinh());
-            this.getChucvuTextfield().getTxtInput().setText(nhanvienduocchon.getChucvu());
+            this.getGioitinhTextfield().getCombobox().setSelectedItem(nhanvienduocchon.getGioitinh());
+            this.getChucvuTextfield().getCombobox().setSelectedItem(nhanvienduocchon.getChucvu());
         }
         if (tennvTextfield != null)
             tennvTextfield.getTxtInput().setEnabled(enabled);
         if (sodienthoaiTextfield != null)
             sodienthoaiTextfield.getTxtInput().setEnabled(enabled);
         if (gioitinhTextfield != null)
-            gioitinhTextfield.getTxtInput().setEnabled(enabled);
+            gioitinhTextfield.getCombobox().setEnabled(enabled);
         if (chucvuTextfield != null)
-            chucvuTextfield.getTxtInput().setEnabled(enabled);
+            chucvuTextfield.getCombobox().setEnabled(enabled);
     }
 
     public InputField getManvTextfield() {

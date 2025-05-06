@@ -29,6 +29,9 @@ public class PhanQuyenService {
     public static List<ChiTietPhanQuyenModel> getChiTietPhanQuyen(int manv){
            return ctqDAO.getQuyen(manv);
     }
+    public static List<ChiTietPhanQuyenModel> getChiTietPhanQuyenByManhomQuyen(int manhomquyen){
+        return ctqDAO.getQuyenByNhomquyen(manhomquyen);
+    }
     public static List<NhomChucNangModel> getNhomChucNang(){
         return ncnDAO.selectAll();
     }
@@ -66,6 +69,13 @@ public class PhanQuyenService {
     }
     public static boolean updateChiTietNhomQuyen(ChiTietPhanQuyenModel chiTietPhanQuyenModel) {
         if(ctqDAO.update(chiTietPhanQuyenModel) > 0) return true;
+        return false;
+    }
+
+    public static boolean deleteNhomquyen(int manhomquyen) {
+        if(nqDAO.delete(manhomquyen) > 0) {
+            return true;
+        }
         return false;
     }
 }

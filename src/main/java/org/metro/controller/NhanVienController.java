@@ -8,69 +8,71 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
+
+import org.metro.util.Helper;
 import org.metro.view.Component.ToolBar;
 import org.metro.view.Dialog.NhanVienDialog;
 import org.metro.model.NhanVienModel;
 import org.metro.service.NhanVienService;
 import org.metro.view.Panel.NhanVien;
 
-public class NhanVienController implements ActionListener, ItemListener, KeyListener {
-    private NhanVien nv;
-    private NhanVienDialog nvdl;
-    private NhanVienModel nvm;
+    public class NhanVienController implements ActionListener, ItemListener, KeyListener {
+        private NhanVien nv;
+        private NhanVienDialog nvdl;
+        private NhanVienModel nvm;
 
-    public NhanVienController(NhanVien nv,NhanVienDialog nvdl) {
-        this.nvdl = nvdl;
-        this.nv = nv;
-    }
+        public NhanVienController(NhanVien nv,NhanVienDialog nvdl) {
+            this.nvdl = nvdl;
+            this.nv = nv;
+        }
 
-    //combobox tim kiem theo id,ten,..
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
-        String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
-        nv.reloadList(NhanVienService.searchByKeyWord(key,word));
-    }
+        //combobox tim kiem theo id,ten,..
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            String key = nv.getSearchfunc().getCbxChoose().getSelectedItem().toString();
+            String word = nv.getSearchfunc().getTxtSearchForm().getText().trim();
+            nv.reloadList(NhanVienService.searchByKeyWord(key,word));
+        }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-       JButton c = (JButton) e.getSource();
-       if(nv != null) {
-           for(String namebtn : nv.getMainfunc().getBtn().keySet()) {
-               ToolBar tb =nv.getMainfunc().getBtn().get(namebtn);
-               if(c.equals(tb)) {
-                   if(namebtn == null || namebtn.trim().isEmpty()) return;
+        @Override
+        public void actionPerformed(ActionEvent e) {
+           JButton c = (JButton) e.getSource();
+           if(nv != null) {
+               for(String namebtn : nv.getMainfunc().getBtn().keySet()) {
+                   ToolBar tb =nv.getMainfunc().getBtn().get(namebtn);
+                   if(c.equals(tb)) {
+                       if(namebtn == null || namebtn.trim().isEmpty()) return;
 
-                   if("create".equals(namebtn)) {
-                       NhanVienDialog nvDialog = new NhanVienDialog(nv.getMf(),namebtn,nv,null);
-                       nvDialog.setVisible(true);
-                   } else {
-                       nvm = nv.getSelectedNhanvien();
-                       if (nvm == null) {
-                           JOptionPane.showMessageDialog(nvdl,"Vui lòng chọn một nhân viên","thông báo ", JOptionPane.ERROR_MESSAGE);
-                           return;
-                       }
-                       if("update".equals(namebtn) || "detail".equals(namebtn)) {
-                          NhanVienDialog nvDialog =  new NhanVienDialog(null,namebtn,nv,nvm);
-                          nvDialog.setVisible(true);
-                       } else if("delete".equals(namebtn)) {
-                           deleteNhanVien();
+                       if("create".equals(namebtn)) {
+                           NhanVienDialog nvDialog = new NhanVienDialog(nv.getMf(),namebtn,nv,null);
+                           nvDialog.setVisible(true);
+                       } else {
+                           nvm = nv.getSelectedNhanvien();
+                           if (nvm == null) {
+                               JOptionPane.showMessageDialog(nvdl,"Vui lòng chọn một nhân viên","thông báo ", JOptionPane.ERROR_MESSAGE);
+                               return;
+                           }
+                           if("update".equals(namebtn) || "detail".equals(namebtn)) {
+                              NhanVienDialog nvDialog =  new NhanVienDialog(null,namebtn,nv,nvm);
+                              nvDialog.setVisible(true);
+                           } else if("delete".equals(namebtn)) {
+                               deleteNhanVien();
+                           }
                        }
                    }
                }
            }
-       }
        if(nvdl != null) {
            String namebtn = e.getActionCommand();
            if(c instanceof JButton) {
                if("Thêm".equals(namebtn)) {
-                   String ten = String.valueOf(nvdl.getTennvTextfield().getTxtInput().getText().trim());
-                   String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getTxtInput().getText().trim());
-                   String gt = String.valueOf(nvdl.getGioitinhTextfield().getTxtInput().getText().trim());
-                   String cv = String.valueOf(nvdl.getChucvuTextfield().getTxtInput().getText().trim());
+                   String ten = String.valueOf(nvdl.getTennvTextfield().getTxtInput().getText());
+                   String sdt = String.valueOf(nvdl.getSodienthoaiTextfield().getTxtInput().getText());
+                   String gt = String.valueOf(nvdl.getGioitinhTextfield().getCombobox().getSelectedItem());
+                   String cv = String.valueOf(nvdl.getChucvuTextfield().getCombobox().getSelectedItem());
 
-                   if(ten.isEmpty() || sdt.isEmpty() || gt.isEmpty() || cv.isEmpty()) {
-                       JOptionPane.showMessageDialog(nvdl,"Vui lòng nhập đầy đủ thông tin","thông báo", JOptionPane.ERROR_MESSAGE);
+                   if(!Helper.isValidName(ten) || !Helper.isValidPhoneNumber(sdt) || !Helper.isNotEmpty(gt) || !Helper.isNotEmpty(cv)) {
+                       JOptionPane.showMessageDialog(nvdl,"Vui lòng nhập đúng giá trị của các trường nhập","thông báo", JOptionPane.ERROR_MESSAGE);
                        return;
                    }
                    NhanVienModel newnv = new NhanVienModel(ten,sdt,gt,cv);
@@ -101,14 +103,14 @@ public class NhanVienController implements ActionListener, ItemListener, KeyList
                            System.out.println("da chon nhan vien" + nvm.getManv());
                             nvm.setTennv(nvdl.getTennvTextfield().getTxtInput().getText().trim());
                             nvm.setSdtnv(nvdl.getSodienthoaiTextfield().getTxtInput().getText().trim());
-                            nvm.setGioitinh(nvdl.getGioitinhTextfield().getTxtInput().getText().trim());
-                            nvm.setChucvu(nvdl.getChucvuTextfield().getTxtInput().getText().trim());
+                            nvm.setGioitinh(nvdl.getGioitinhTextfield().getCombobox().getSelectedItem().toString());
+                            nvm.setChucvu(nvdl.getChucvuTextfield().getCombobox().getSelectedItem().toString());
                             int ma = nvm.getManv();
                             String ten = nvm.getTennv();
                             String sdt = nvm.getSdtnv();
                             String gt = nvm.getGioitinh();
                             String cv = nvm.getChucvu();
-                           if(ten.isEmpty() || sdt.isEmpty() || gt.isEmpty() || cv.isEmpty()) {
+                           if(!Helper.isValidName(ten) || !Helper.isValidPhoneNumber(sdt) || !Helper.isNotEmpty(gt) || !Helper.isNotEmpty(cv)) {
                                JOptionPane.showMessageDialog(nvdl,"Vui lòng nhập đầy đủ thông tin","thông báo", JOptionPane.ERROR_MESSAGE);
                                return;
                            }

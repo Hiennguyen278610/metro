@@ -52,6 +52,7 @@ public class  MainFunction extends JToolBar {
         if (getComponentCount() > 0) {
             remove(getComponentCount() - 1);
         }
+        refreshQuyen();
     }
 
     public void initData() {

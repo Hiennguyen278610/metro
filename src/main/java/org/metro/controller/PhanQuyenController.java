@@ -1,9 +1,11 @@
 package org.metro.controller;
 
+import org.metro.DAO.PhanQuyenDAO.NhomQuyenDAO;
 import org.metro.model.PhanQuyenModel.ChiTietPhanQuyenModel;
 import org.metro.model.PhanQuyenModel.NhomChucNangModel;
 import org.metro.model.PhanQuyenModel.NhomQuyenModel;
 import org.metro.service.PhanQuyenService;
+import org.metro.util.Helper;
 import org.metro.util.SessionManager;
 import org.metro.view.Component.ToolBar;
 import org.metro.view.Dialog.NhanVienDialog;
@@ -54,6 +56,8 @@ public class PhanQuyenController implements ActionListener {
                         } else if("detail".equals(namebtn)) {
                             PhanQuyenDialog phanQuyenDialog = new PhanQuyenDialog(namebtn,pq,nqm.getTennhomquyen(),mf);
                             phanQuyenDialog.setVisible(true);
+                        } else if("delete".equals(namebtn)) {
+                            delelenhomquyen();
                         }
                     }
                 }
@@ -81,7 +85,7 @@ public class PhanQuyenController implements ActionListener {
         NhomQuyenModel nqm = new NhomQuyenModel();
         String tnq = pqDialog.getTextfieldQuyen().getText();
         nqm.setTennhomquyen(tnq);
-        if(tnq == null || tnq.trim().isEmpty()) {
+        if(!Helper.isValidName(tnq)) {
             JOptionPane.showMessageDialog(null,"Vui lòng nhập tên nhóm quyền","thông báo",JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -120,12 +124,13 @@ public class PhanQuyenController implements ActionListener {
             }
             if(xoa) {
                 System.out.println("co xoa");
-                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"xoa"));
+                listctpqm.add(new ChiTietPhanQuyenModel(mnq,ncnm.getMachucnang(),"delete"   ));
             }
         }
         if(PhanQuyenService.insertChiTietPhanQuyen(listctpqm)) {
             JOptionPane.showMessageDialog(null,"Thêm quyền thành công","thông báo",JOptionPane.INFORMATION_MESSAGE);
             pq.reloadData();
+            SessionManager.reloadQuyen();
             pqDialog.dispose();
         } else {
             JOptionPane.showMessageDialog(null,"Thêm quyền thất bại","thông báo",JOptionPane.INFORMATION_MESSAGE);
@@ -137,7 +142,7 @@ public class PhanQuyenController implements ActionListener {
         NhomQuyenModel nqm = pq.getSelectedPhanquyen();
         int mnq= nqm.getManhomquyen();
         String tennhomquyen = pqDialog.getTextfieldQuyen().getText().toString();
-        if(tennhomquyen.trim().isEmpty()) {
+        if(!Helper.isValidName(tennhomquyen) && tennhomquyen.equals("Nhập tên nhóm quyền....")) {
             JOptionPane.showMessageDialog(null,"vui lòng cập nhật tên nhóm quyền","thông báo",JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -233,7 +238,24 @@ public class PhanQuyenController implements ActionListener {
             dtm.addRow(new Object[]{tenchucnang, them, sua, chitiet, xoa});
         }
         pqDialog.getTable().setEnabled(false);
-
     }
+    public void delelenhomquyen() {
+        NhomQuyenModel nqm = pq.getSelectedPhanquyen();
+        if (nqm == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn một nhóm quyền", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa nhóm quyền này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        if (PhanQuyenService.deleteNhomquyen(nqm.getManhomquyen())) {
+            JOptionPane.showMessageDialog(null, "Xóa nhóm quyền thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            pq.reloadData();
+        } else {
+            JOptionPane.showMessageDialog(null, "Xóa nhóm quyền thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
 

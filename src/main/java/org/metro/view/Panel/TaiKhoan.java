@@ -10,6 +10,7 @@ import org.metro.service.TaiKhoanService;
 import org.metro.view.Component.IntegratedSearch;
 import org.metro.view.Component.MainFunction;
 import org.metro.view.Dialog.TaiKhoanDialog;
+import org.metro.view.MainFrame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -33,6 +34,8 @@ public class TaiKhoan extends JPanel {
     private IntegratedSearch search;
     private ArrayList<TaiKhoanModel> listtk;
     private TaiKhoanController action = new TaiKhoanController(this,null);
+    private MainFrame mf;
+
 
     public TaiKhoan() {
         listtk = new ArrayList<>();
@@ -113,7 +116,6 @@ public class TaiKhoan extends JPanel {
 
     public TaiKhoanModel getSelectedTaiKhoan() {
         int row = taiKhoanTable.getSelectedRow();
-
         if (row >= 0) {
             return TaiKhoanService.loadData().get(row);
         }
@@ -198,5 +200,12 @@ public class TaiKhoan extends JPanel {
 
     public void setAction(TaiKhoanController action) {
         this.action = action;
+    }
+    public MainFrame getMf() {
+        return mf;
+    }
+
+    public void setMf(MainFrame mf) {
+        this.mf = mf;
     }
 }

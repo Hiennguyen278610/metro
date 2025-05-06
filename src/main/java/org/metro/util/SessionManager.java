@@ -15,7 +15,7 @@ public class SessionManager {
     public static void setCurrentUser(TaiKhoanModel user) {
         currentUser = user;
         if(user != null) {
-            listQuyenCurrentUser = PhanQuyenService.getChiTietPhanQuyen(user.getManv());
+            listQuyenCurrentUser = PhanQuyenService.getChiTietPhanQuyenByManhomQuyen(user.getNqm().getManhomquyen());
             System.out.println(user.getManv() + " " + listQuyenCurrentUser.size());
         } else listQuyenCurrentUser = null;
     }
