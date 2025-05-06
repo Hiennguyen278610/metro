@@ -36,22 +36,42 @@ public class TramDialog extends JDialog {
         this.tram = tram;
         action = new TramController(tram, this);
         this.tramModel = tramModel;
-        tenField = new InputField("Tên trạm", 300, 60);
-        addressField = new InputField("Địa chỉ", 300, 60);
-        xField = new InputField("Nhập tọa độ x", 300, 60);
-        yField = new InputField("Nhập tọa độ y", 300, 60);
-        chiphi = new InputField("Chi phí", 300, 60);
+        if(type.equals("detail")){
+            maField = new InputField("Mã trạm:", String.valueOf(tramModel.getMatram()), 590, 10,"tram");
+            tenField = new InputField("Tên trạm:", tramModel.getTentram(), 590, 10,"tram");
+            addressField = new InputField("Địa chỉ:",tramModel.getDiachi(), 590, 10,"tram");
+            xField = new InputField("Nhập tọa độ x:", String.valueOf(tramModel.getX()),590, 10,"tram");
+            yField = new InputField("Nhập tọa độ y:", String.valueOf(tramModel.getY()),590, 10,"tram");
+            chiphi = new InputField("Chi phí:", String.valueOf(tramModel.getChiphitram()),590, 10,"tram");
+        }else{
+            tenField = new InputField("Tên trạm", 300, 60);
+            addressField = new InputField("Địa chỉ", 300, 60);
+            xField = new InputField("Nhập tọa độ x", 300, 60);
+            yField = new InputField("Nhập tọa độ y", 300, 60);
+            chiphi = new InputField("Chi phí", 300, 60);
+        }
         init(type);
     }
 
     public void init(String type) {
-        this.setSize(400, 340);
+        if(type.equals("detail")){
+            this.setSize(600, 390);
+        }
+        else{
+            this.setSize(450,370);
+        }
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout(0, 0));
 
         contentPanel = new JPanel();
-        contentPanel.setPreferredSize(new Dimension(400, 280));
-        contentPanel.setLayout(new GridLayout(5, 1));
+        contentPanel.setPreferredSize(new Dimension(400, 330));
+        contentPanel.setBorder(BorderFactory.createLineBorder(Color.white));
+        if(type.equals("detail")){
+            contentPanel.setLayout(new GridLayout(6, 1));
+            contentPanel.add(maField);
+        }else{
+            contentPanel.setLayout(new GridLayout(5, 1));
+        }    
 
         contentPanel.add(tenField);
         contentPanel.add(addressField);

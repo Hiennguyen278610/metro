@@ -47,12 +47,12 @@ public class LichBaoTriDialog extends JDialog {
         this.lbt = lbt;
         action = new LichBaoTriController(lbt, this);
         if (type.equals("detail")) {
-            mabaotriField = new InputField("Mã bảo trì:", Integer.toString(lbtModel.getMabaotri()), 250, 10);
-            matauField = new InputField("Mã tàu:", Integer.toString(lbtModel.getMatau()), 250, 10);
-            timeField = new InputField("Ngày bảo trì:", lbtModel.convertLocalDate(), 250, 10);
-            statusField = new InputField("Trạng thái bảo trì:", lbtModel.getTrangthaibaotri(), 250, 10);
-            chiphibaotri = new InputField("Chi phí bảo trì: ", String.valueOf(lbtModel.getChiphibaotri()), 250, 10);
-            createAt = new InputField("Ngày tạo", lbtModel.convertLocalDateTime(), 200, 10);
+            mabaotriField = new InputField("Mã bảo trì:", Integer.toString(lbtModel.getMabaotri()), 250, 10,"baotri");
+            matauField = new InputField("Mã tàu:", Integer.toString(lbtModel.getMatau()), 250, 10,"baotri");
+            timeField = new InputField("Ngày bảo trì:", lbtModel.convertLocalDate(), 250, 10,"baotri");
+            statusField = new InputField("Trạng thái:", lbtModel.getTrangthaibaotri(), 250, 10,"baotri");
+            chiphibaotri = new InputField("Chi phí: ", String.valueOf(lbtModel.getChiphibaotri()), 250, 10,"baotri");
+            createAt = new InputField("Ngày tạo", lbtModel.convertLocalDateTime(), 200, 10,"baotri");
         } else if (type.equals("update")) {
             selectMaTau = new SelectInput("Mã tàu", lbt.getLbtService().getMaTau(), 380, 50);
             selectMaTau.getCboChoose().setSelectedItem(String.valueOf(lbtModel.getMatau()));

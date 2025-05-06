@@ -106,6 +106,16 @@ public class TramController implements MouseListener, ItemListener, KeyListener 
             tram.getSearch().getTxtSearchForm().setText("");
             tram.loadData(tram.getTramService().getDsTram());
 
+        }else if(e.getSource() == tram.getMainFunction().btn.get("detail")){
+            int index = tram.getTramTable().getSelectedRow();
+            if(index != -1){
+                TramModel tramModel = tram.getTramService().getDsTram().get(index);
+                tramDialog = new TramDialog(null, "Chi tiết trạm", "detail", tram, tramModel);
+            }
+            else{
+                JOptionPane.showMessageDialog(tram, "Chọn trạm cần xem chi tiết", "THÔNG BÁO",
+                            JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
 
