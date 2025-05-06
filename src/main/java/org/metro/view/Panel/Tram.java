@@ -40,7 +40,7 @@ public class Tram extends JPanel {
         search.getTxtSearchForm().addKeyListener(action);
         search.getBtnReset().addMouseListener(action);
 
-        String[] optMainFunc = { "create", "delete", "update" };
+        String[] optMainFunc = { "create", "delete", "detail","update" };
         mainFunction = new MainFunction(machucnang_tram,optMainFunc);
         for (String opt : optMainFunc) {
             if(mainFunction.getBtn().get(opt) != null) {

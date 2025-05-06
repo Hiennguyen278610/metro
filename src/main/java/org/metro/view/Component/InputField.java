@@ -3,6 +3,7 @@ package org.metro.view.Component;
 import org.metro.model.PhanQuyenModel.NhomQuyenModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
@@ -46,10 +47,12 @@ public class InputField extends JPanel {
         this.init(w, h);
         // this.setBorder(BorderFactory.createLineBorder(Color.RED));
         lbContent = new JLabel(label);
-        lbContent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        lbContent.setFont(new Font("Segoe UI", Font.BOLD, 15));
         lbData = new JLabel(data);
         lbData.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        lbData.setPreferredSize(new Dimension(150, 30));
+        if(!type.equals("tram")){
+            lbData.setPreferredSize(new Dimension(250, 30));
+        }
         this.add(lbContent);
         this.add(lbData);
     }
@@ -67,6 +70,7 @@ public class InputField extends JPanel {
         comboboxnhomquyen.setPreferredSize(new Dimension(250, 30));
         this.add(lbContent);
         this.add(comboboxnhomquyen);
+        // this.setBorder(BorderFactory.createLineBorder(Color.RED));
     }
 
     public InputField(String label, String[] cbx, int w, int h) {
