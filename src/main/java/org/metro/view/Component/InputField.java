@@ -42,7 +42,7 @@ public class InputField extends JPanel {
 
 
 
-    public InputField(String label, String data, int w, int h) {
+    public InputField(String label, String data, int w, int h,String type) {
         this.setLayout(new FlowLayout(0, 7, 0));
         this.init(w, h);
         // this.setBorder(BorderFactory.createLineBorder(Color.RED));

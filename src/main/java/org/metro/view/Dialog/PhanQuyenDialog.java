@@ -15,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,9 +58,25 @@ public class PhanQuyenDialog extends JDialog {
     }
 
     private void init() {
+        this.requestFocusInWindow();
         tenQuyen = new JLabel("Tên nhóm quyền: ");
         tenQuyen.setFont(new Font("Tahoma", Font.PLAIN, 16));
         textfieldQuyen = new JTextField(20);
+        textfieldQuyen.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(textfieldQuyen.getText().equals("Nhập tên nhóm quyền....")) {
+                    textfieldQuyen.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                    if(textfieldQuyen.getText().equals("")) {
+                        textfieldQuyen.setText("Nhập tên nhóm quyền....");
+                    }
+            }
+        });
         textfieldQuyen.setFont(new Font("Tahoma", Font.PLAIN, 13));
         textfieldQuyen.setPreferredSize(new Dimension(150, 40));
         textfieldQuyen.setText(getTennhomquyen());
