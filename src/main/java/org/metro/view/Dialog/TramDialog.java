@@ -114,6 +114,7 @@ public class TramDialog extends JDialog {
                 setxField(tramModel.getX());
                 setyField(tramModel.getY());
                 setChiphi(tramModel.getChiphitram());
+                break;
             default:
                 break;
         }
