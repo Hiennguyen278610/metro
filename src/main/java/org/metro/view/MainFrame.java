@@ -9,6 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
+import org.metro.DAO.KhachHangDAO;
+import org.metro.DAO.TauDAO;
+import org.metro.DAO.TuyenDAO;
 import org.metro.controller.MainController;
 import org.metro.controller.PhanQuyenController;
 import org.metro.service.SetLogoService;
@@ -20,6 +23,7 @@ import org.metro.util.SessionManager;
 import org.metro.view.Component.MenuTaskbar;
 import org.metro.view.Component.RoundedPanel;
 import org.metro.view.Dialog.UserInfoDialog;
+import org.metro.view.Panel.KhachHang;
 import org.metro.view.Panel.PhanQuyenPackage.PhanQuyen;
 
 public class MainFrame extends JFrame {
@@ -39,7 +43,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         pq = new PhanQuyen(this);
-        pqc = new PhanQuyenController(pq,null,this);
+        pqc = new PhanQuyenController(pq, null, this);
         setSize(1200, 800);
         setTitle("Quan ly Metro");
         setLocationRelativeTo(null);
@@ -163,7 +167,7 @@ public class MainFrame extends JFrame {
         leftPanel.add(ChucNangPanel);
 
         // Thêm MenuTaskbar vào CENTER
-        if(SessionManager.getCurrentUser() != null) {
+        if (SessionManager.getCurrentUser() != null) {
             menuTaskbar = new MenuTaskbar(this);
             menuTaskbar.setBorder(new LineBorder(Color.black, 2));
             ChucNangPanel.add(menuTaskbar, BorderLayout.CENTER);
@@ -205,16 +209,22 @@ public class MainFrame extends JFrame {
         TrangChuPanel.add(ThongKePanel);
 
         RoundedPanel SoTauPanel = new RoundedPanel(20);
-        SoTauPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        SoTauPanel.setLayout(null);
         SoTauPanel.setBackground(Color.decode("#93BFCF"));
         SoTauPanel.setPreferredSize(new Dimension(250, 350));
         SoTauPanel.setBorder(new LineBorder(Color.black, 2));
         ThongKePanel.add(SoTauPanel);
 
-        JLabel SoTauLabel = new JLabel("Số tàu", JLabel.CENTER);
+        JLabel SoTauLabel = new JLabel(new TauDAO().selectAll().size() + " TÀU METRO", JLabel.CENTER);
         SoTauLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        SoTauLabel.setBounds(0, 200, 250, 50);
         SoTauLabel.setForeground(Color.black);
         SoTauPanel.add(SoTauLabel);
+
+        FlatSVGIcon SoTauIcon = new FlatSVGIcon(getClass().getResource("/svg/train2.svg")).derive(150, 150);
+        JLabel TauIcon = new JLabel(SoTauIcon, JLabel.CENTER);
+        TauIcon.setBounds(50, 30, 150, 150);
+        SoTauPanel.add(TauIcon);
 
         RoundedPanel SoNguoiSuDungPanel = new RoundedPanel(20);
         SoNguoiSuDungPanel.setLayout(null);
@@ -223,7 +233,7 @@ public class MainFrame extends JFrame {
         SoNguoiSuDungPanel.setBorder(new LineBorder(Color.black, 2));
         ThongKePanel.add(SoNguoiSuDungPanel);
 
-        JLabel SoNguoiSuDungLabel = new JLabel("696 HÀNH KHÁCH", JLabel.CENTER);
+        JLabel SoNguoiSuDungLabel = new JLabel(new KhachHangDAO().getAll().size() + " HÀNH KHÁCH", JLabel.CENTER);
         SoNguoiSuDungLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         SoNguoiSuDungLabel.setBounds(0, 200, 250, 50);
         SoNguoiSuDungLabel.setForeground(Color.black);
@@ -241,7 +251,7 @@ public class MainFrame extends JFrame {
         SoTuyenDuongPanel.setBorder(new LineBorder(Color.black, 2));
         ThongKePanel.add(SoTuyenDuongPanel);
 
-        JLabel SoTuyenDuongLabel = new JLabel("7749 TUYẾN ĐƯỜNG", JLabel.CENTER);
+        JLabel SoTuyenDuongLabel = new JLabel(new TuyenDAO().selectAll().size() + " TUYẾN ĐƯỜNG", JLabel.CENTER);
         SoTuyenDuongLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         SoTuyenDuongLabel.setBounds(0, 200, 250, 50);
         SoTuyenDuongLabel.setForeground(Color.black);

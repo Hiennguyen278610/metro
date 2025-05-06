@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.metro.DAO.TuyenDAO;
 import org.metro.model.TuyenDuongModel;
 import org.metro.view.Component.ToolBar;
 import org.metro.view.Dialog.TuyenDuongDialog;
@@ -111,6 +112,13 @@ public class TuyenDuongController implements ItemListener, MouseListener, Action
                         TuyenDuongModel route = tuyenDuong.getSelectedTuyenDuong();
                         if (route == null) {
                             JOptionPane.showMessageDialog(tuyenDuong, "Vui lòng chọn một tuyến đường", "Thông báo",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        boolean hihi = new TuyenDAO().checkTrangThai(route.getMatuyen());
+                        System.out.println(hihi);
+                        if (hihi) {
+                            JOptionPane.showMessageDialog(tuyenDuong, "Tuyến đường đã ngừng hoạt động", "Thông báo",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }

@@ -49,7 +49,7 @@ public class TuyenDAO implements IBaseDAO<TuyenDuongModel> {
 
     @Override
     public int delete(int id) {
-        String query = "DELETE FROM tuyen WHERE matuyen = ?";
+        String query = "UPDATE tuyen SET trangthai = 'Ngừng hoạt động' WHERE matuyen = ?";
         try (Connection conn = DatabaseUtils.getConnection();
                 PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setInt(1, id);
@@ -57,6 +57,23 @@ public class TuyenDAO implements IBaseDAO<TuyenDuongModel> {
         } catch (SQLException e) {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    public boolean checkTrangThai(int id) {
+        String query = "SELECT trangthai FROM tuyen WHERE matuyen = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+            prs.setInt(1, id);
+            ResultSet rs = prs.executeQuery();
+            if (rs.next()) {
+                System.out.println(rs.getString("trangthai") + ' ');
+                return rs.getString("trangthai").equals("Ngừng hoạt động");
+            } else
+                return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -82,7 +99,7 @@ public class TuyenDAO implements IBaseDAO<TuyenDuongModel> {
     public TuyenDuongModel selectById(int id) {
         String query = "SELECT * FROM tuyen WHERE matuyen = ?";
         try (Connection conn = DatabaseUtils.getConnection();
-             PreparedStatement prs = conn.prepareStatement(query)) {
+                PreparedStatement prs = conn.prepareStatement(query)) {
             prs.setInt(1, id);
             ResultSet rs = prs.executeQuery();
             if (rs.next()) {
