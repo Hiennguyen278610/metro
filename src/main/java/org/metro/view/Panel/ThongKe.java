@@ -383,15 +383,15 @@ public class ThongKe extends JPanel {
         tabs.addTab("Tổng quan", overviewPanel);
 
         // Tab: Tần suất tuyến
-        JPanel freqPanel = new JPanel(new BorderLayout(10, 10));
-        freqPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JTable freqTable = new JTable();
-        ctrl.loadFrequencyPerRoute(freqTable);
-        JSplitPane freqSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, factory.createBarChart("Tần suất tuyến", "Tuyến", "Số tuyến trên ngày", svc::getFrequencyPerRoute), new JScrollPane(freqTable));
-        freqSplit.setResizeWeight(SPLIT_WEIGHT);
-        freqSplit.setDividerLocation(DIVIDER_LOCATION);
-        freqPanel.add(freqSplit, BorderLayout.CENTER);
-        tabs.addTab("Tần suất tuyến", freqPanel);
+//        JPanel freqPanel = new JPanel(new BorderLayout(10, 10));
+//        freqPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//        JTable freqTable = new JTable();
+//        ctrl.loadFrequencyPerRoute(freqTable);
+//        JSplitPane freqSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, factory.createBarChart("Tần suất tuyến", "Tuyến", "Số tuyến trên ngày", svc::getFrequencyPerRoute), new JScrollPane(freqTable));
+//        freqSplit.setResizeWeight(SPLIT_WEIGHT);
+//        freqSplit.setDividerLocation(DIVIDER_LOCATION);
+//        freqPanel.add(freqSplit, BorderLayout.CENTER);
+//        tabs.addTab("Tần suất tuyến", freqPanel);
 
         // Tab: Đúng/Trễ giờ
         JPanel otdPanel = new JPanel(new BorderLayout(10, 10));
