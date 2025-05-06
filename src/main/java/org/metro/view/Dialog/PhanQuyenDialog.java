@@ -139,9 +139,9 @@ public class PhanQuyenDialog extends JDialog {
         }
     }
 
-    public void dataTable(DefaultTableModel dtmodal,int manv) {
+    public void dataTable(DefaultTableModel dtmodal,int manhomquyen) {
         dtmodal.setRowCount(0);
-        List<ChiTietPhanQuyenModel> listctpqm = PhanQuyenService.getChiTietPhanQuyen(manv);
+        List<ChiTietPhanQuyenModel> listctpqm = PhanQuyenService.getChiTietPhanQuyenByManhomQuyen(manhomquyen);
         NhomQuyenModel nqm = pq.getSelectedPhanquyen();
         for(NhomChucNangModel ncnm :listncnm) {
             boolean them = false;

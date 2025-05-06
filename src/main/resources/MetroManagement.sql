@@ -52,6 +52,7 @@ VALUES ('Nguyễn Văn Anh', '0387913347', 1),
 CREATE TABLE nhomquyen (
     manhomquyen INT NOT NULL AUTO_INCREMENT,
     tennhomquyen VARCHAR(100) NOT NULL,
+    isVisible BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (manhomquyen)
 );
 INSERT INTO nhomquyen (manhomquyen, tennhomquyen)
@@ -180,6 +181,7 @@ CREATE TABLE nhanvien (
     sodienthoai VARCHAR(15) NOT NULL,
     gioitinh VARCHAR(50) NOT NULL,
     chucvu VARCHAR(100) NOT NULL,
+    isVisible BOOLEAN NOT NULL DEFAULT 1,
     PRIMARY KEY (manv)
 );
 INSERT INTO nhanvien (tennv, sodienthoai, gioitinh, chucvu)
@@ -254,7 +256,6 @@ VALUES (
         'Nữ',
         'Quản lý tuyến tàu điện'
     ),
-    ('Nguyễn Văn Q', '0907890123', 'Nam', 'Thu ngân'),
     (
         'Trần Thị R',
         '0908901234',
@@ -266,8 +267,7 @@ VALUES (
         '0909012345',
         'Nam',
         'Quản lý tuyến tàu điện'
-    ),
-    ('Phạm Thị T', '0900123456', 'Nữ', 'Thu ngân');
+    );
 -- ----------------------------------------------------------------
 -- Bảng TAIKHOAN
 CREATE TABLE taikhoan (
@@ -282,7 +282,9 @@ CREATE TABLE taikhoan (
 INSERT INTO taikhoan (manv, matkhau, manhomquyen, trangthai)
 VALUES (1, '0000', 1, 1),
     (2, '0000', 2, 1),
-    (3, '0000', 3, 1);
+    (3, '0000', 3, 1),
+    (4,'0000',4,1),
+    (5,'0000',5,1);
 -- ----------------------------------------------------------------
 -- Tạo tram
 CREATE TABLE tram (

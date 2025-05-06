@@ -95,4 +95,21 @@ public class ChiTietQuyenDAO implements IBaseDAO<ChiTietPhanQuyenModel> {
             }
             return listquyenchucnang;
     }
+    public List<ChiTietPhanQuyenModel> getQuyenByNhomquyen(int manhomquyen) {
+            List<ChiTietPhanQuyenModel> lst = new ArrayList();
+            String query = "select ctq.manhomquyen,ctq.machucnang,ctq.hanhdong\n" +
+                    "from chitietquyen ctq join nhomquyen on ctq.manhomquyen = nhomquyen.manhomquyen\n" +
+                    "where ctq.manhomquyen = ?";
+            try(Connection c = DatabaseUtils.getConnection();
+            PreparedStatement prs = c.prepareStatement(query);) {
+                prs.setInt(1,manhomquyen);
+                ResultSet rs = prs.executeQuery();
+                while(rs.next()) {
+                    lst.add(new ChiTietPhanQuyenModel(rs.getInt("manhomquyen"),rs.getInt("machucnang"),rs.getString("hanhdong")));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return lst;
+    }
 }

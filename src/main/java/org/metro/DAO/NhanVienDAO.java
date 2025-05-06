@@ -14,7 +14,7 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public int insert(NhanVienModel t) {
-        String queryInsert = "insert into nhanvien(tennv,sodienthoai,gioitinh,chucvu) values(?,?,?,?)";
+        String queryInsert = "insert into nhanvien(tennv,sodienthoai,gioitinh,chucvu,isVisible) values(?,?,?,?,1)";
         try(Connection c = DatabaseUtils.getConnection();
             PreparedStatement prs = c.prepareStatement(queryInsert);) {
             prs.setString(1,t.getTennv());
@@ -47,7 +47,7 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public int delete(int id) {
-        String query = "delete from nhanvien where manv = ?";
+        String query = "UPDATE nhanvien SET isVisible = 0 WHERE manv = ?";
         try(Connection c = DatabaseUtils.getConnection();
         PreparedStatement prs = c.prepareStatement(query);) {
             prs.setInt(1,id);
@@ -61,7 +61,7 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
     @Override
     public List<NhanVienModel> selectAll() {
         List<NhanVienModel> listnv = new ArrayList<>();
-        String query = "select * from nhanvien;";
+        String query = "select * from nhanvien where isVisible = 1";
         try(Connection c = DatabaseUtils.getConnection();
             PreparedStatement prs = c.prepareStatement(query);
             ResultSet rs = prs.executeQuery()){
@@ -80,7 +80,7 @@ public class NhanVienDAO implements IBaseDAO<NhanVienModel> {
 
     @Override
     public NhanVienModel selectById(int id) {
-        String query = "select * from nhanvien where manv = ?";
+        String query = "SELECT * FROM nhanvien WHERE manv = ? AND isVisible = 1";
         try(Connection c = DatabaseUtils.getConnection();
             PreparedStatement prs = c.prepareStatement(query); ) {
             prs.setInt(1,id);
