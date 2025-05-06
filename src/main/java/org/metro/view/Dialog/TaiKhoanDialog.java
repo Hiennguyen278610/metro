@@ -34,10 +34,12 @@ public class TaiKhoanDialog extends  JDialog{
         pqs = new PhanQuyenService();
         tkController = new TaiKhoanController(tk,this);
         this.setTitle(titleDialog());
-        this.setSize(700,400);
+        this.setSize(500,400);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
-        centerPanel = new JPanel(new GridLayout(4,2,10,10));
+        centerPanel = new JPanel(new GridLayout(4,2,10,5));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 40));
+        centerPanel.setBackground(Color.WHITE);
         bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,5,5));
         this.init();
 //        setEdit();
@@ -94,19 +96,19 @@ public class TaiKhoanDialog extends  JDialog{
         }
     }
     private void init() {
-        manvTextfield = new InputField("Mã nhân viên ",200,10);
+        manvTextfield = new InputField("Mã nhân viên ",300,10);
         centerPanel.add(manvTextfield);
-        matkhauTextfield = new InputField("Mật khẩu ",200,10);
+        matkhauTextfield = new InputField("Mật khẩu ",300,10);
         centerPanel.add(matkhauTextfield);
 
         ArrayList<NhomQuyenModel> listnq = new ArrayList<>();
         listnq.addAll(pqs.getAllNhomquyen());
         System.out.println(listnq);
-        nhomquyenTextfield = new InputField("Tên nhóm quyền: ", listnq,200,20);
+        nhomquyenTextfield = new InputField("Tên nhóm quyền: ", listnq,300,20);
         centerPanel.add(nhomquyenTextfield);
 
         String[] trangthai = new String[]{"Hoạt động","Ngừng hoạt động"};
-        trangThaiTextfield = new InputField("Trạng thái: ", trangthai,200,20);
+        trangThaiTextfield = new InputField("Trạng thái: ", trangthai,300,20);
         centerPanel.add(trangThaiTextfield);
 
         this.add(centerPanel, BorderLayout.CENTER);

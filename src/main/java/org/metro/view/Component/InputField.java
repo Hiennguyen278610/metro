@@ -42,28 +42,29 @@ public class InputField extends JPanel {
     }
 
     public InputField(String label, ArrayList<NhomQuyenModel> itemCbx, int w, int h) {
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new FlowLayout(2,7,0));
         this.init(w, h);
         lbContent = new JLabel(label);
-        lbContent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        lbContent.setFont(new Font("Segoe UI", Font.BOLD, 15));
         comboboxnhomquyen = new JComboBox<>();
         for (NhomQuyenModel NQM : itemCbx) {
             comboboxnhomquyen.addItem(NQM);
         }
         comboboxnhomquyen.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        comboboxnhomquyen.setPreferredSize(new Dimension(150, 30));
+        comboboxnhomquyen.setPreferredSize(new Dimension(250, 30));
         this.add(lbContent);
         this.add(comboboxnhomquyen);
+        // this.setBorder(BorderFactory.createLineBorder(Color.RED));
     }
 
     public InputField(String label, String[] trangthai, int w, int h) {
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new FlowLayout(2,7,0));
         this.init(w, h);
         lbContent = new JLabel(label);
-        lbContent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        lbContent.setFont(new Font("Segoe UI", Font.BOLD, 15));
         comboboxtrangthai = new JComboBox<>(trangthai);
         comboboxtrangthai.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        comboboxtrangthai.setPreferredSize(new Dimension(150, 30));
+        comboboxtrangthai.setPreferredSize(new Dimension(250, 30));
         this.add(lbContent);
         this.add(comboboxtrangthai);
     }
