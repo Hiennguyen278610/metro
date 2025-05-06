@@ -55,12 +55,12 @@ public class InputField extends JPanel {
         this.add(comboboxnhomquyen);
     }
 
-    public InputField(String label, String[] trangthai, int w, int h) {
+    public InputField(String label, String[] item, int w, int h) {
         this.setLayout(new GridLayout(2, 1));
         this.init(w, h);
         lbContent = new JLabel(label);
         lbContent.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        comboboxtrangthai = new JComboBox<>(trangthai);
+        comboboxtrangthai = new JComboBox<>(item);
         comboboxtrangthai.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         comboboxtrangthai.setPreferredSize(new Dimension(150, 30));
         this.add(lbContent);

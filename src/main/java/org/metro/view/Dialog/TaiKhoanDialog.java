@@ -101,7 +101,6 @@ public class TaiKhoanDialog extends  JDialog{
 
         ArrayList<NhomQuyenModel> listnq = new ArrayList<>();
         listnq.addAll(pqs.getAllNhomquyen());
-        System.out.println(listnq);
         nhomquyenTextfield = new InputField("Tên nhóm quyền: ", listnq,200,20);
         centerPanel.add(nhomquyenTextfield);
 
