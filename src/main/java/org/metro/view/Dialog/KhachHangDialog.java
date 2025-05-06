@@ -9,11 +9,15 @@ import java.util.regex.Pattern;
 
 public class KhachHangDialog {
     private static final Pattern PHONE_PATTERN = Pattern.compile("^0\\d{9}$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[\\p{L} ]+$");
     private boolean isValidPhoneNumber(String phone) {
         if (phone == null || phone.isEmpty()) return false;
         return PHONE_PATTERN.matcher(phone).matches();
     }
-
+    private boolean isValidName(String name) {
+        if(name == null || name.trim().isEmpty()) return false;
+        return NAME_PATTERN.matcher(name).matches();
+    }
     // Dialog thêm khách hàng mới
     public void showAddKhachHangDialog(Component parent, Runnable updateCallback) {
         showAddKhachHangDialog(parent, "", updateCallback);
@@ -53,8 +57,11 @@ public class KhachHangDialog {
             String solanStr = txtSolan.getText().trim();
             
             // Kiểm tra các trường dữ liệu nhập vào
-            if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
+            if (!isValidName(tenKh)) {
+                JOptionPane.showMessageDialog(dialog, "Tên khách hàng không hợp lệ! Tên chỉ chứa chữ cái và dấu cách",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                txtTenKh.requestFocus();
                 return;
             }
             
@@ -135,9 +142,12 @@ public class KhachHangDialog {
             String tenKh = txtTenKh.getText().trim();
             String sdt = txtSdt.getText().trim();
             String solanStr = txtSolan.getText().trim();
-        
-            if (tenKh.isEmpty() || sdt.isEmpty() || solanStr.isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập đầy đủ thông tin!");
+
+            if (!isValidName(tenKh)) {
+                JOptionPane.showMessageDialog(dialog, "Tên chỉ chứa chữ cái và dấu cách",
+                        "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                txtTenKh.requestFocus();
                 return;
             }
             
