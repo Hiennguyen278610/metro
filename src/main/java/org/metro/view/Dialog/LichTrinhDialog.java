@@ -87,7 +87,8 @@ public class LichTrinhDialog extends JDialog {
         handleComponents.addLabelGBL(contentPanel, "Mã tàu:", 0, startRow + 2, gbc);
         handleComponents.addLabelGBL(contentPanel, "Hướng đi:", 0, startRow + 3, gbc);
         handleComponents.addLabelGBL(contentPanel, "Thời gian khởi hành:", 0, startRow + 4, gbc);
-        handleComponents.addLabelGBL(contentPanel, "Thời gian đến thực tế:", 0, startRow + 5, gbc);
+        String tgDenLabel = ("create".equals(type)) ? "Thời gian đến dự kiến:" : "Thời gian đến thực tế:";
+        handleComponents.addLabelGBL(contentPanel, tgDenLabel, 0, startRow + 5, gbc);
         handleComponents.addLabelGBL(contentPanel, "Trạng thái lịch trình:", 0, startRow + 6, gbc);
 
         manvComboBoxModel = new DefaultComboBoxModel<>();
@@ -142,6 +143,21 @@ public class LichTrinhDialog extends JDialog {
         tgkhTimeComboBox = new JComboBox<>(DateTimeUtil.timeOptions);
         tgkhTimeComboBox.setSelectedItem("05:00");
 
+        // Lắng nghe sự kiện thay đổi thời gian khởi hành để cập nhật thời gian đến thực tế
+        ActionListener updateArrivalTimeListener = e -> {
+            LocalDateTime tgkh = DateTimeUtil.getTimeComponents(tgkhJDateChooser, tgkhTimeComboBox);
+            LocalDateTime tgtt = tgkh.plusMinutes(30);
+            tgdenthucteTextField.setText(tgtt.format(displayFormatter));
+        };
+        tgkhTimeComboBox.addActionListener(updateArrivalTimeListener);
+        tgkhJDateChooser.getDateEditor().addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                LocalDateTime tgkh = DateTimeUtil.getTimeComponents(tgkhJDateChooser, tgkhTimeComboBox);
+                LocalDateTime tgtt = tgkh.plusMinutes(30);
+                tgdenthucteTextField.setText(tgtt.format(displayFormatter));
+            }
+        });
+
         tgkhPanel.add(tgkhJDateChooser);
         tgkhPanel.add(tgkhTimeComboBox);
 
@@ -151,9 +167,11 @@ public class LichTrinhDialog extends JDialog {
 
         tgdenthucteTextField = new JTextField(20);
         tgdenthucteTextField.setEditable(false);
-        
         if ("create".equals(type)) {
-            tgdenthucteTextField.setText("Sẽ được tự động tính");
+            // Khởi tạo giá trị ban đầu dựa trên thời gian khởi hành hiện tại
+            LocalDateTime tgkh = DateTimeUtil.getTimeComponents(tgkhJDateChooser, tgkhTimeComboBox);
+            LocalDateTime tgtt = tgkh.plusMinutes(30);
+            tgdenthucteTextField.setText(tgtt.format(displayFormatter));
         }
 
         gbc.gridx = 1;

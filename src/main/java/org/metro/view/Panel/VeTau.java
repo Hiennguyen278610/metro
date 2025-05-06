@@ -157,4 +157,10 @@ public class VeTau extends JPanel {
     public void setSearchTimer(Timer timer) {
         this.searchTimer = timer;
     }
+    
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        loadDataTable(); // Luôn load lại dữ liệu khi panel được hiển thị
+    }
 }
