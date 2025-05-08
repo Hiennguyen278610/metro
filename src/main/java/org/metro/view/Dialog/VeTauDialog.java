@@ -32,11 +32,8 @@ public class VeTauDialog extends JDialog {
     private VeTauModel vetauModel;
     private VeTauController action;
     private KhachHangDialog khachHangDialog;
-    
-    // Đơn giá vé: 500 VNĐ/phút di chuyển
-    private static final double DONGIAVE = 500;
+    private static final double DONGIAVE = 500; // Đơn giá vé: 500 VNĐ/phút di chuyển
 
-    // Dialog thêm, sửa, chi tiết vé tàu
     public VeTauDialog(Frame parent, String type, VeTau veTau, VeTauModel vetauModel) {
         super(parent, true);
         this.veTau = veTau;
@@ -58,24 +55,16 @@ public class VeTauDialog extends JDialog {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 20, 5, 20);
-
-        // Labels
         handleComponents.addLabelGBL(contentPanel, "Mã chuyến:", 0, 0, gbc);
         handleComponents.addLabelGBL(contentPanel, "Số điện thoại khách:", 0, 1, gbc);
         handleComponents.addLabelGBL(contentPanel, "Giá vé:", 0, 2, gbc);
 
-        // Khởi tạo tất cả các trường nhập liệu trước
         sdtKhachTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 1, gbc);
         giaveTextField = handleComponents.addTextFieldGBL(contentPanel, 20, 1, 2, gbc);
-        
-        // Vô hiệu hóa việc chỉnh sửa giá vé
         giaveTextField.setEditable(false);
 
-        // Khởi tạo combobox
         machuyenComboBoxModel = new DefaultComboBoxModel<>();
         machuyenComboBox = new JComboBox<>(machuyenComboBoxModel);
-        
-        // Thêm ItemListener để cập nhật giá vé khi chọn chuyến
         machuyenComboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -88,32 +77,43 @@ public class VeTauDialog extends JDialog {
         gbc.gridx = 1;
         gbc.gridy = 0;
         contentPanel.add(machuyenComboBox, gbc);
+        JLabel noTripsLabel = new JLabel("Không có chuyến đi hợp lệ hôm nay", JLabel.CENTER);
+        noTripsLabel.setForeground(Color.RED);
+        noTripsLabel.setVisible(false);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        contentPanel.add(noTripsLabel, gbc);
         
-        // Sau khi đã khởi tạo các trường giao diện, tiến hành nạp dữ liệu
-        // Lấy danh sách lịch trình và lọc theo điều kiện
         Supplier<List<LichTrinhModel>> lichTrinhSupplier = ComboBoxUtil.getDataSupplier(LichTrinhModel.class);
         if (lichTrinhSupplier != null) {
             List<LichTrinhModel> allLichTrinh = lichTrinhSupplier.get();
-            LocalDate today = LocalDate.now();
-
-            List<LichTrinhModel> filteredLichTrinh = allLichTrinh.stream()
-                .filter(lt -> "Chờ khởi hành".equals(lt.getTrangthailichtrinh()))
-                .filter(lt -> lt.getTgkhoihanh() != null && lt.getTgkhoihanh().toLocalDate().isEqual(today))
-                .collect(Collectors.toList());
-
-            machuyenComboBoxModel.removeAllElements(); // Xóa các item cũ (nếu có)
-            
-            // Chỉ thêm các phần tử nếu danh sách không rỗng
-            if (!filteredLichTrinh.isEmpty()) {
-                for (LichTrinhModel lt : filteredLichTrinh) {
+            machuyenComboBoxModel.removeAllElements();
+            if ("create".equals(type)) {
+                LocalDate today = LocalDate.now();
+                List<LichTrinhModel> filteredLichTrinh = allLichTrinh.stream()
+                    .filter(lt -> "Chờ khởi hành".equals(lt.getTrangthailichtrinh()))
+                    .filter(lt -> lt.getTgkhoihanh() != null && lt.getTgkhoihanh().toLocalDate().isEqual(today))
+                    .collect(Collectors.toList());
+                if (!filteredLichTrinh.isEmpty()) {
+                    for (LichTrinhModel lt : filteredLichTrinh) {
+                        machuyenComboBoxModel.addElement(lt);
+                    }
+                } else {
+                    giaveTextField.setText("0");
+                    machuyenComboBox.setEnabled(false);
+                    noTripsLabel.setVisible(true); 
+                    if (ok != null) {
+                        ok.setEnabled(false);
+                    }
+                    System.out.println("Không có lịch trình nào phù hợp để thêm vé trong ngày hôm nay");
+                }
+            } else {
+                // Nếu là update hoặc detail, nạp tất cả lịch trình để có thể tìm kiếm lịch trình cũ
+                for (LichTrinhModel lt : allLichTrinh) {
                     machuyenComboBoxModel.addElement(lt);
                 }
-                // Gọi updateGiaVe sau khi đã nạp dữ liệu vào combobox
-                updateGiaVe();
-            } else {
-                // Đặt giá trị mặc định cho giá vé nếu không có lịch trình nào
-                giaveTextField.setText("0");
             }
+            updateGiaVe();
         } else {
             System.err.println("Không thể lấy danh sách lịch trình.");
             // Đặt giá trị mặc định cho giá vé
@@ -122,14 +122,15 @@ public class VeTauDialog extends JDialog {
 
         // Buttons - Đặt text chính xác cho mỗi loại dialog
         gbc.gridwidth = 1;
+        gbc.gridy = 4;  // Đẩy các nút xuống một dòng để nhường chỗ cho thông báo
         if ("create".equals(type)) {
-            ok = handleComponents.addButtonGBL(contentPanel, "THÊM", 0, 3, gbc);
-            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 3, gbc);
+            ok = handleComponents.addButtonGBL(contentPanel, "THÊM", 0, gbc.gridy, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, gbc.gridy, gbc);
         } else if ("update".equals(type)) {
-            ok = handleComponents.addButtonGBL(contentPanel, "CẬP NHẬT", 0, 3, gbc);
-            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, 3, gbc);
+            ok = handleComponents.addButtonGBL(contentPanel, "CẬP NHẬT", 0, gbc.gridy, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "HỦY", 1, gbc.gridy, gbc);
         } else {
-            cancel = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, 3, gbc);
+            cancel = handleComponents.addButtonGBL(contentPanel, "ĐÓNG", 0, gbc.gridy, gbc);
         }
 
         if (ok != null) {ok.addActionListener(action);}
@@ -264,8 +265,6 @@ public class VeTauDialog extends JDialog {
             // Kiểm tra SĐT khách hàng có tồn tại trong DB không
             String sdtKhach = sdtKhachTextField.getText().trim();
             KhachHangModel khachHang = checkSdtKhachHang(sdtKhach);
-
-            // Nếu không tìm thấy khách hàng, hiển thị dialog thêm khách hàng mới
             if (khachHang == null) {
                 int choice = JOptionPane.showConfirmDialog(this,
                         "Số điện thoại này chưa có trong hệ thống. Hãy thêm khách hàng mới",
@@ -290,7 +289,11 @@ public class VeTauDialog extends JDialog {
                 giaveTextField.requestFocus();
                 return null;
             }
-            return new VeTauModel(0, machuyen, khachHang.getMaKh(), giave);
+            int mave = 0;
+            if ("update".equals(type) && vetauModel != null) {
+                mave = vetauModel.getMave();
+            }
+            return new VeTauModel(mave, machuyen, khachHang.getMaKh(), giave);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
