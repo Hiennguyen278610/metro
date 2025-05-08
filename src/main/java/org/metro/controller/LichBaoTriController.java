@@ -8,8 +8,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JFrame;
@@ -101,13 +104,18 @@ public class LichBaoTriController implements MouseListener, ItemListener, KeyLis
                 && lbtDialog.validInformation()) {
             int mabaotri = lbt.getLbtService().getNextID();
             int matau = Integer.parseInt(lbtDialog.getSelectMaTau().getCboChoose().getSelectedItem().toString());
-            String chuanHoaNgayBaoTri = lbtDialog.chuanHoaNgay(lbtDialog.getTimeField());
-            LocalDate ngaybaotri = LocalDate.parse(chuanHoaNgayBaoTri, formatTime);
+            // String chuanHoaNgayBaoTri = lbtDialog.chuanHoaNgay(lbtDialog.getTimeField());
+            Date ngaybaotri = lbtDialog.getTimeField().getDate();
+
+            Instant instant = ngaybaotri.toInstant();
+            ZoneId zoneId = ZoneId.systemDefault();
+            LocalDate localDate = instant.atZone(zoneId).toLocalDate();
+
             String trangthaibaotri = lbtDialog.getSelectTrangThai().getCboChoose().getSelectedItem()
                     .toString();
             double chiphibaotri = Double.parseDouble(lbtDialog.getChiphibaotri());
             LocalDateTime now = LocalDateTime.now();
-            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, ngaybaotri, trangthaibaotri, now,
+            LichBaoTriModel newlbt = new LichBaoTriModel(mabaotri, matau, localDate, trangthaibaotri, now,
                     chiphibaotri);
             if (lbt.getLbtService().insert(newlbt)) {
                 JOptionPane.showMessageDialog(lbt, "Thêm thành công", "THÔNG BÁO",
