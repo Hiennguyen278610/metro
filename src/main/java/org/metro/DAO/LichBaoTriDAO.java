@@ -130,4 +130,32 @@ public class LichBaoTriDAO implements IBaseDAO<LichBaoTriModel> {
         return -1;
     }
 
+    public boolean updateStatusAfterMaintenance(int ma, String status) {
+        String newStatus;
+        switch (status) {
+            case "Đang bảo trì":
+                newStatus = "Đang bảo trì";
+                break;
+            case "Hoàn thành":
+                newStatus = "Đang hoạt động";
+                break;
+            default:
+                System.err.println("Trạng thái không hợp lệ: " + status);
+                return false;
+        }
+
+        String query = "UPDATE tau SET trangthaitau = ? WHERE matau = ?";
+        try (Connection conn = DatabaseUtils.getConnection();
+                PreparedStatement prs = conn.prepareStatement(query)) {
+
+            prs.setString(1, newStatus);
+            prs.setInt(2, ma);
+
+            return prs.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

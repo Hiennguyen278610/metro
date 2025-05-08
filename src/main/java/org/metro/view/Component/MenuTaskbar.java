@@ -19,45 +19,45 @@ import java.util.List;
 
 public class MenuTaskbar extends JPanel {
     private List<itemTaskbar> list;
-    private HashMap<String,JPanel> hm;
+    private HashMap<String, JPanel> hm;
     private MainFrame mainFrame;
     private PhanQuyenService pqs = new PhanQuyenService();
     String[][] getSt = {
-            {"Tàu", "train.svg", "1"},
-            {"Trạm", "station.svg", "2"},
-            {"Tuyến đường", "route.svg", "3"},
-            {"Lịch trình", "schedule.svg", "4"},
-            {"Vé tàu", "ticket.svg", "5"},
-            {"Bảo trì", "maintenance.svg", "6"},
-            {"Khách hàng", "customer.svg", "7"},
-            {"Nhân viên", "staff.svg", "8"},
-            {"Tài khoản", "account.svg", "9"},
-            {"Phân quyền", "permission.svg", "10"},
-            {"Thống kê", "statistics.svg", "11"},
+            { "Tàu", "train.svg", "1" },
+            { "Trạm", "station.svg", "2" },
+            { "Tuyến đường", "route.svg", "3" },
+            { "Lịch trình", "schedule.svg", "4" },
+            { "Vé tàu", "ticket.svg", "5" },
+            { "Bảo trì", "maintenance.svg", "6" },
+            { "Khách hàng", "customer.svg", "7" },
+            { "Nhân viên", "staff.svg", "8" },
+            { "Tài khoản", "account.svg", "9" },
+            { "Phân quyền", "permission.svg", "10" },
+            { "Thống kê", "statistics.svg", "11" },
     };
     JPanel pnCenter;
 
     Color FontColor = new Color(0, 0, 0);
-    Color DefaultColor = new Color(148,183,205);
+    Color DefaultColor = new Color(148, 183, 205);
     Color HoverFontColor = new Color(200, 222, 231);
-    Color HoverBackgroundColor = new Color(80,138,170);
+    Color HoverBackgroundColor = new Color(80, 138, 170);
 
     public MenuTaskbar(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         list = new ArrayList<>();
         hm = new HashMap<>();
 
-        hm.put("1",new Tau());
-        hm.put("2",new Tram());
-        hm.put("3",new TuyenDuong());
-        hm.put("4",new LichTrinh());
+        hm.put("1", new Tau());
+        hm.put("2", new Tram());
+        hm.put("3", new TuyenDuong());
+        hm.put("4", new LichTrinh());
         hm.put("5", new VeTau());
-        hm.put("6",new LichBaoTri());
-        hm.put("7",new KhachHang());
-        hm.put("8",new NhanVien());
-        hm.put("9",new TaiKhoan());
-        hm.put("10",new PhanQuyen(mainFrame));
-        hm.put("11",new ThongKe());
+        hm.put("6", new LichBaoTri());
+        hm.put("7", new KhachHang());
+        hm.put("8", new NhanVien());
+        hm.put("9", new TaiKhoan());
+        hm.put("10", new PhanQuyen(mainFrame));
+        hm.put("11", new ThongKe());
 
         initComponent();
     }
@@ -73,22 +73,22 @@ public class MenuTaskbar extends JPanel {
 
         List<NhomChucNangModel> listncnm = PhanQuyenService.getNhomChucNang();
 
-        for(NhomChucNangModel ncnm : listncnm) {
+        for (NhomChucNangModel ncnm : listncnm) {
             String machucnang = String.valueOf(ncnm.getMachucnang());
-            if(SessionManager.checkAnyQuyenCurrentUser(ncnm.getMachucnang())) {
+            if (SessionManager.checkAnyQuyenCurrentUser(ncnm.getMachucnang())) {
                 String icon = getIcon(machucnang);
-                itemTaskbar i = new itemTaskbar(icon,ncnm.getTenchucnang(),machucnang);
+                itemTaskbar i = new itemTaskbar(icon, ncnm.getTenchucnang(), machucnang);
                 i.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        if(e.getSource() == i) {
+                        if (e.getSource() == i) {
                             i.setBackground(HoverBackgroundColor);
                             i.getLblContent().setForeground(HoverFontColor);
                         } else {
                             i.setBackground(DefaultColor);
                             i.getLblContent().setForeground(FontColor);
                         }
-                        if(hm.containsKey(machucnang)) {
+                        if (hm.containsKey(machucnang)) {
                             mainFrame.setPanel(hm.get(machucnang));
                         }
                     }
@@ -128,6 +128,7 @@ public class MenuTaskbar extends JPanel {
                 return "khong tim thay icon";
         }
     }
+
     public void refresh() {
         pnCenter.removeAll();
         initComponent();

@@ -193,7 +193,8 @@ public class Tau extends JPanel {
 
         for (int i = 0; i < listTau.size(); i++) {
             RoundedPanel panel = createTauPanel(listTau.get(i));
-            if (panel != null) DanhSachTauPanel.add(panel);
+            if (panel != null)
+                DanhSachTauPanel.add(panel);
         }
 
         JScrollPane DanhSachTauScrollPane = new JScrollPane(DanhSachTauPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -232,7 +233,8 @@ public class Tau extends JPanel {
         this.TongSoTauLabel.setText("Tổng số tàu (" + listTau.size() + ")");
         for (int i = 0; i < listTau.size(); i++) {
             RoundedPanel panel = createTauPanel(listTau.get(i));
-            if (panel != null) DanhSachTauPanel.add(panel);
+            if (panel != null)
+                DanhSachTauPanel.add(panel);
         }
         this.DanhSachTauPanel.revalidate();
         this.DanhSachTauPanel.repaint();

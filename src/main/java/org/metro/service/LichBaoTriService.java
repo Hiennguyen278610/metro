@@ -8,6 +8,7 @@ import org.metro.DAO.LichBaoTriDAO;
 import org.metro.model.LichBaoTriModel;
 import org.metro.model.TauModel;
 import org.metro.view.Panel.LichBaoTri;
+import org.metro.view.Panel.Tau;
 
 public class LichBaoTriService {
     private LichBaoTriDAO lbtDAO = new LichBaoTriDAO();
@@ -28,7 +29,22 @@ public class LichBaoTriService {
 
     public boolean insert(LichBaoTriModel lbtModel) {
         if (lbtDAO.insert(lbtModel) > 0) {
-            dsBaoTri.add(lbtModel);
+            String newStatus;
+            switch (lbtModel.getTrangthaibaotri()) {
+                case "Đang bảo trì":
+                    newStatus = "Đang bảo trì";
+                    break;
+                case "Hoàn thành":
+                    newStatus = "Đang hoạt động";
+                    break;
+                default:
+                    System.err.println("Trạng thái không hợp lệ: ");
+                    return false;
+            }
+            if (lbtDAO.updateStatusAfterMaintenance(lbtModel.getMatau(), lbtModel.getTrangthaibaotri())) {
+                updateStatusTau(lbtModel.getMatau(), newStatus);
+                dsBaoTri.add(lbtModel);
+            }
             return true;
         }
         return false;
@@ -48,7 +64,24 @@ public class LichBaoTriService {
 
     public boolean update(LichBaoTriModel lbtModel) {
         if (lbtDAO.update(lbtModel) > 0) {
-            dsBaoTri.set(getIndexByMaBaoTri(lbtModel.getMabaotri()), lbtModel);
+            // System.out.println(lbtModel.getMabaotri());
+            // System.out.println(lbtModel.getTrangthaibaotri());
+            String newStatus;
+            switch (lbtModel.getTrangthaibaotri()) {
+                case "Đang bảo trì":
+                    newStatus = "Đang bảo trì";
+                    break;
+                case "Hoàn thành":
+                    newStatus = "Đang hoạt động";
+                    break;
+                default:
+                    System.err.println("Trạng thái không hợp lệ: ");
+                    return false;
+            }
+            if (lbtDAO.updateStatusAfterMaintenance(lbtModel.getMatau(), lbtModel.getTrangthaibaotri())) {
+                updateStatusTau(lbtModel.getMatau(), newStatus);
+                dsBaoTri.set(getIndexByMaBaoTri(lbtModel.getMabaotri()), lbtModel);
+            }
             return true;
         }
         return false;
@@ -104,6 +137,16 @@ public class LichBaoTriService {
                 break;
         }
         return result;
+    }
+
+    public void updateStatusTau(int ma, String status) {
+        Tau tau = new Tau();
+        for (TauModel t : tau.getListTau()) {
+            if (t.getMatau() == ma) {
+                t.setTrangthaitau(status);
+            }
+        }
+        tau.initComponent();
     }
 
     public int getNextID() {
